@@ -90,7 +90,7 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 			//this.out=socket.getOutputStream();
 			line = "XDDDDDDDDD" ;
 			output.writeBytes(S) ;
-			String inputline = input.readLine() ;
+			//String inputline = input.readLine() ;
 			System.out.println(S);
 			
 			
@@ -133,6 +133,11 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 			
 			System.out.println("ClientRequestManager:Request timeout");
 			throw e;
+		}
+		catch(Exception e)
+		{
+			throw e;
+		
 		}
 		finally
 		{
