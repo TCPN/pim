@@ -41,7 +41,7 @@
         android:layout_alignRight="@+id/show02"
         android:layout_below="@+id/show02"
         android:layout_marginTop="20dp"
-        android:text="Button" />
+        android:text="Read" />
 
     <EditText
         android:id="@+id/editText1"
@@ -54,5 +54,14 @@
 
         <requestFocus />
     </EditText>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_alignRight="@+id/editText1"
+        android:layout_below="@+id/editText1"
+        android:text="Write" />
 
 </RelativeLayout>

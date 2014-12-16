@@ -1,6 +1,8 @@
 package com.example.androidclient;
 
-public class PJMB {
+import java.io.Serializable;
+
+public class PJMB implements Serializable {
 	
 	//ATTRIBUTES:
 	

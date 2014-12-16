@@ -14,18 +14,19 @@ class PJMB{}
 class MM{}
 class MMinfo{}
 */
-public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implements API
+public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implements API , Serializable
 //extends Async
 {
 	
 	final String validateString = "imvalidate";
     Socket socket = null ;
-	BufferedReader input;
-	DataOutputStream output;
+	ObjectInputStream input;
+	ObjectOutputStream output;
 	String Address ;
 	int Port ;
 	InputStream in = null ;
 	OutputStream out = null ;
+
 
 
     public ClientRequestManager(String address, int port) 
@@ -71,10 +72,13 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 		
 	  
   }
-    public void doSomething(String S) throws Exception //莱赣эΘ private void write_and_read礛implement–API程常call硂
+  //public boolean sendReadRequest
+  
+  
+  public Object sendRequest(Request R) throws Exception //莱赣эΘ private void write_and_read礛implement–API程常call硂
 	{
-		System.out.println("doSomething ... ");
-		
+		System.out.println("doSomething ......... ");
+		//if(R instanceof ReadRequest) S = 
 		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));	// read from standard_input
 		String line = "";
 		System.out.println("ClientRequestManager:Start connect...");
@@ -84,21 +88,20 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 			
 			setupAll() ;
 			socket.connect(new InetSocketAddress(Address, Port), 15000) ;
-			this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.output = new DataOutputStream(socket.getOutputStream());
-			//this.in=socket.getInputStream();
-			//this.out=socket.getOutputStream();
-			line = "XDDDDDDDDD" ;
-			S = S + "\n" ;
-			output.writeBytes(S) ;
-			output.flush();
-			String inputline = input.readLine() ;
-			//int inputint = input.read();
-			System.out.println(S);
 			
-			System.out.println(inputline);
+			this.output = new ObjectOutputStream(socket.getOutputStream());
+			PJ  R0 = new PJ(3370, "eclipsesucks", "write", "doge", null, null)  ;
+			output.writeObject(R) ;
+			output.flush();
+			this.input = new ObjectInputStream(socket.getInputStream());
+			Object sentobject = input.readObject() ;
+			//int inputint = input.read();
+			//System.out.println(R);
+			
+			//System.out.println(inputline);
 			//System.out.println(inputint) ;
 			System.out.println("Connected!!");
+			return sentobject ;
 			/*
 			byte[] rebyte = new byte[18];
 	    	in.read(rebyte);
@@ -140,6 +143,7 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace() ;
 			throw e;
 		
 		}
@@ -151,6 +155,22 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
         
 	}
 	
+  boolean createPJ(PJ pj) throws Exception
+  {
+	  CreateRequest createPJRequest = new CreateRequest("CREATE_PJ", pj) ;
+	  boolean success = (Boolean) sendRequest(createPJRequest) ;
+	  return success ;
+  }
+  
+ PJ readPJ(int pjID) throws Exception
+  {
+	  //Request readPJRequest = new CreateRequest("READ_PJ", pjID) ;
+	  //PJ retpj = (PJ) sendRequest(readPJRequest) ;
+	  //return retpj ;
+	 return null ;
+  }
+
+
 	boolean validateConnection(Socket socket) throws Exception	//not used yet
 	{
 		byte[] buffer = new byte[validateString.length()];

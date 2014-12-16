@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -21,11 +23,11 @@ import android.widget.TextView;
 
 	static EditText ed;
 	static TextView tv1,tv2;
-	static Button btn ;
+	static Button btn, btn2 ;
 	static String str1="0",str2="0";
 	
-	ClientRequestManager CRM = new ClientRequestManager("220.134.20.34", 9999) ;	
-	//ClientRequestManager CRM = new ClientRequestManager("10.0.2.2", 5566) ;
+	//ClientRequestManager CRM = new ClientRequestManager("220.134.20.34", 9999) ;	
+	ClientRequestManager CRM = new ClientRequestManager("10.0.2.2", 5566) ;
 	
 
     @Override
@@ -44,7 +46,8 @@ import android.widget.TextView;
         tv1 = (TextView) findViewById(R.id.show01);
         tv2 = (TextView) findViewById(R.id.show02);
         btn = (Button) findViewById(R.id.btn);
-        
+        btn2 = (Button) findViewById(R.id.button1) ;
+        final PJ pj = new PJ(3370, "eclipsesucks", "write", "doge", null, null) ;
         //撰寫一個按鈕事件，當按下按鈕時，才啟動一些功能
         btn.setOnClickListener(new OnClickListener() 
         {
@@ -60,7 +63,8 @@ import android.widget.TextView;
         		String s = ed.getText().toString() ;
         		
         		try {
-					CRM.doSomething(s) ;
+					boolean pj_ret = CRM.createPJ(pj) ;
+					
 				} 
         		catch(UnknownHostException e)
         		{

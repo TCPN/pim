@@ -1,7 +1,8 @@
 package com.example.androidclient;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
-public class PJ {
+public class PJ implements Serializable{
 	
 	//ATTRIBUTES:
 	
