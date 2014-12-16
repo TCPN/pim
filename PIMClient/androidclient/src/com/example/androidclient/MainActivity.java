@@ -24,7 +24,8 @@ import android.widget.TextView;
 	static Button btn ;
 	static String str1="0",str2="0";
 	
-	ClientRequestManager CRM = new ClientRequestManager("10.0.2.2", 5566) ;	
+	ClientRequestManager CRM = new ClientRequestManager("220.134.20.34", 9999) ;	
+	//ClientRequestManager CRM = new ClientRequestManager("10.0.2.2", 5566) ;
 	
 
     @Override

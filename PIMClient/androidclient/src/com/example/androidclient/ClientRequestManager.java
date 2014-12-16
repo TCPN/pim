@@ -89,11 +89,15 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 			//this.in=socket.getInputStream();
 			//this.out=socket.getOutputStream();
 			line = "XDDDDDDDDD" ;
+			S = S + "\n" ;
 			output.writeBytes(S) ;
-			//String inputline = input.readLine() ;
+			output.flush();
+			String inputline = input.readLine() ;
+			//int inputint = input.read();
 			System.out.println(S);
 			
-			
+			System.out.println(inputline);
+			//System.out.println(inputint) ;
 			System.out.println("Connected!!");
 			/*
 			byte[] rebyte = new byte[18];
