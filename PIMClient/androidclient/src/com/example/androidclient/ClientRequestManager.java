@@ -15,7 +15,6 @@ class MM{}
 class MMinfo{}
 */
 public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implements API , Serializable
-//extends Async
 {
 	
 	final String validateString = "imvalidate";
@@ -27,8 +26,6 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 	InputStream in = null ;
 	OutputStream out = null ;
 
-
-
     public ClientRequestManager(String address, int port) 
 	{
     	
@@ -36,6 +33,7 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 		this.Port = port ;
         
     }
+    
   private void setupAll()
     {
     	if(this.socket==null) setupSocket() ;
@@ -47,40 +45,16 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
     	}
     	
     }
+  
   private void setupSocket()
   {
-	  this.socket = new Socket() ;
-	 
-	  /*
-	  try 
-	  {
-		  this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-	  } 
-	  catch (IOException e) 
-	  {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-	  }
-	  try 
-	  {
-		  this.output = new DataOutputStream(socket.getOutputStream());
-	  } catch (IOException e) 
-	  {
-			// TODO Auto-generated catch block
-		  e.printStackTrace();
-	  }*/
-		
-	  
+	  this.socket = new Socket() ;		 
   }
-  //public boolean sendReadRequest
-  
+
   
   public Object sendRequest(Request R) throws Exception //應該改成 private void write_and_read，然後implement每個API時，最後都call這個
 	{
 		System.out.println("doSomething ......... ");
-		//if(R instanceof ReadRequest) S = 
-		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));	// read from standard_input
-		String line = "";
 		System.out.println("ClientRequestManager:Start connect...");
 		try
 		{
@@ -90,45 +64,13 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 			socket.connect(new InetSocketAddress(Address, Port), 15000) ;
 			
 			this.output = new ObjectOutputStream(socket.getOutputStream());
-			PJ  R0 = new PJ(3370, "eclipsesucks", "write", "doge", null, null)  ;
 			output.writeObject(R) ;
 			output.flush();
 			this.input = new ObjectInputStream(socket.getInputStream());
-			Object sentobject = input.readObject() ;
-			//int inputint = input.read();
-			//System.out.println(R);
-			
-			//System.out.println(inputline);
-			//System.out.println(inputint) ;
-			System.out.println("Connected!!");
-			return sentobject ;
-			/*
-			byte[] rebyte = new byte[18];
-	    	in.read(rebyte);
-	    	//str2 ="Text:"+ new String(new String(rebyte));
-	    	//String str = "2222";
-	    	//str1 = "Text:" + str;
-	    	byte[] sendstr = new byte[21];
-	    	System.arraycopy(S.getBytes(), 0, sendstr, 0, S.length());
-	    	out.write(sendstr);
-			
-			do
-			{
-				System.out.println("type anything:");
-				line = stdin.readLine();
-				output.writeBytes(line + "\r\n");
-				line = input.readLine();
-				System.out.println(line);
-				
-				if(validateConnection(socket) == false)
-				{
-					socket.close();
-					continue;
-				}
-				
+			Object receivedobject = input.readObject() ;
 
-			}while(line!="EXIT");*/
-			
+			System.out.println("Connected!!");
+			return receivedobject ;
 		}
 		catch(UnknownHostException e)
 		{
@@ -154,7 +96,8 @@ public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implemen
 		
         
 	}
-	
+
+  ////createPJ and readPJ for test
   boolean createPJ(PJ pj) throws Exception
   {
 	  CreateRequest createPJRequest = new CreateRequest("CREATE_PJ", pj) ;
