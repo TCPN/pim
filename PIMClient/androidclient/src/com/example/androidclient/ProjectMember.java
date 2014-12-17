@@ -2,7 +2,7 @@ package com.example.androidclient;
 
 import java.io.Serializable;
 
-public class PJMB implements Serializable {
+public class ProjectMember implements Serializable {
 	
 	//ATTRIBUTES:
 	
@@ -11,10 +11,12 @@ public class PJMB implements Serializable {
 	String mbName;
 	String mbEmail;
 	String pjmbRole;
+	String role;
+	boolean isManager;
 	
 	//CONSTRUCTOR:
 	
-	public PJMB(int pjID, int mbID, String mbName, String mbEmail, String pjmbRole){
+	public ProjectMember(int pjID, int mbID, String mbName, String mbEmail, String pjmbRole){
 		this.pjID = pjID;
 		this.mbID = mbID;
 		this.mbName = mbName;
@@ -26,10 +28,6 @@ public class PJMB implements Serializable {
 	
 	public int getPjID() {
 		return pjID;
-	}
-
-	public int getMbID() {
-		return mbID;
 	}
 
 	public String getMbName() {
@@ -45,26 +43,6 @@ public class PJMB implements Serializable {
 	}
 
 	//SETTERS:
-	
-	public void setPjID(int pjID) {
-		this.pjID = pjID;
-	}
-
-	public void setMbID(int mbID) {
-		this.mbID = mbID;
-	}
-
-	public void setMbName(String mbName) {
-		this.mbName = mbName;
-	}
-
-	public void setMbEmail(String mbEmail) {
-		this.mbEmail = mbEmail;
-	}
-
-	public void setPjmbRole(String pjmbRole) {
-		this.pjmbRole = pjmbRole;
-	}
 	
 }
 

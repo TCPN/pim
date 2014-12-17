@@ -1,38 +1,27 @@
 package com.example.androidclient;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.sql.Date;
-import java.sql.Timestamp;
-
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
+
 
 @SuppressLint("NewApi") public class MainActivity extends Activity 
 {
 
-	static EditText ed;
-	static TextView tv1,tv2;
-	static Button btn, btn2 ;
-	static String str1="0",str2="0";
+	EditText ed;
+	TextView tv1;
+	Button btn ;
+	String str1="0", str2="0";
 	
-	//ClientRequestManager CRM = new ClientRequestManager("220.134.20.34", 9999) ;	
-	ClientRequestManager CRM = new ClientRequestManager("10.0.2.2", 5566) ;
-	
+	ClientRequestManager crm = null;
+	//ClientRequestManager crm = new ClientRequestManager("220.134.20.34", 9999) ;	
+	//ClientRequestManager crm = new ClientRequestManager("10.0.2.2", 5566) ;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) 
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
@@ -41,55 +30,40 @@ import android.widget.TextView;
             StrictMode.setThreadPolicy(policy);
         } //tmp
         
-        //¥ı«Ø¥ß¦n»PXMLªº¤¸¥ó³sµ²
-        final EditText ed = (EditText) findViewById(R.id.editText1);
-        tv1 = (TextView) findViewById(R.id.show01);
-        tv2 = (TextView) findViewById(R.id.show02);
-        btn = (Button) findViewById(R.id.btn);
-        btn2 = (Button) findViewById(R.id.button1) ;
-        final PJ pj = new PJ(3370, "eclipsesucks", "write", "doge", null, null) ;
-        //¼¶¼g¤@­Ó«ö¶s¨Æ¥ó¡A·í«ö¤U«ö¶s®É¡A¤~±Ò°Ê¤@¨Ç¥\¯à
-        btn.setOnClickListener(new OnClickListener() 
+        //å…ˆå»ºç«‹å¥½èˆ‡XMLçš„å…ƒä»¶é€£çµ
+        ed = (EditText) findViewById(R.id.editText);
+        tv1 = (TextView) findViewById(R.id.textView);
+        btn = (Button) findViewById(R.id.button);
+		
+        crm = new ClientRequestManager("220.134.20.34", 9999);		
+        final Project pj = new Project(3370, "eclipsesucks", "write", 1, "doge", null) ;
+		
+        //æ’°å¯«ä¸€å€‹æŒ‰éˆ•äº‹ä»¶ï¼Œç•¶æŒ‰ä¸‹æŒ‰éˆ•æ™‚ï¼Œæ‰å•Ÿå‹•ä¸€äº›åŠŸèƒ½
+        btn.setOnClickListener(new View.OnClickListener() 
         {
-        	
-        	
-        	
-        	int i ;
-        	
-        	//String s = "QQ" ;
-        	
+            boolean ret = true;
         	public void onClick(View arg0) 
         	{
-        		String s = ed.getText().toString() ;
-        		
-        		try {
-					boolean pj_ret = CRM.createPJ(pj) ;
-					
-				} 
-        		catch(UnknownHostException e)
-        		{
-        			System.out.println("ClientRequestManager:Unknown Host");
-        			
-        		}
-        		catch(SocketTimeoutException e)
-        		{
-        			System.out.println("ClientRequestManager:Request timeout");
-        			
-        		}catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+        		String input = ed.getText().toString();        		
+        		try { // for test
+					boolean pj_ret = crm.createPJ(pj);
+					//ret = crm.forget_password(input);
+                    //ret = crm.update_old_MM(0,0,null,"",null);					
+				} catch (Exception e) {
+                    System.out.println(e.toString());
+                    e.printStackTrace();
+					ret = false;
+                }
 
-            //¤§«á¦bÅı¥¦Åã¥Ü¦b»È¹õ¤W¡A¦³®Éºô¸ô¤£°÷Ã­®É¡A¶Ç¿é·|¸ûºC¡A¦Ó¾É­P¶Ç»w»P±µ¦¬³£©|¥¼§¹¦¨¡A«KÅã¥Ü¨ì»È¹õ¤W¤F
+				//ä¹‹å¾Œåœ¨è®“å®ƒé¡¯ç¤ºåœ¨éŠ€å¹•ä¸Šï¼Œæœ‰æ™‚ç¶²è·¯ä¸å¤ ç©©æ™‚ï¼Œå‚³è¼¸æœƒè¼ƒæ…¢ï¼Œè€Œå°è‡´å‚³èª¦èˆ‡æ¥æ”¶éƒ½å°šæœªå®Œæˆï¼Œä¾¿é¡¯ç¤ºåˆ°éŠ€å¹•ä¸Šäº†
         		System.out.println("Finish fetching...");
-        		tv1.setText(str1);
-        		tv2.setText(str2);
-        		System.out.printf("str2: %s", str2);
+                tv1.setText(ret ? "true" : "false");
+                System.out.printf("str2: %s", ret ? "true" : "false");
         		System.out.println("Finish fetching...");
         	}
         });    
     }
-    
+    /*
     class thread extends Thread
     {
     	public void run() 
@@ -119,16 +93,38 @@ import android.widget.TextView;
     			in.read(rebyte);
     			str2 =new String(new String(rebyte));
     			String str = "android client string";
-   				str1 = "(Clientºİ)¶Ç°eªº¤å¦r:"+str;
+   				str1 = "(Clientç«¯)å‚³é€çš„æ–‡å­—:"+str;
    				byte[] sendstr = new byte[21];
    				System.arraycopy(str.getBytes(), 0, sendstr, 0, str.length());
    				System.out.printf("%s", rebyte);
-   				out.write(sendstr);*/
+   				out.write(sendstr);/*
     		}
     		catch(Exception e)
     		{
     			System.out.println("Error: "+e.getMessage());
     		}
       }
+    }*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }	
 }

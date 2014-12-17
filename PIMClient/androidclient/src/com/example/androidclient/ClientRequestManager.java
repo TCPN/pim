@@ -4,249 +4,173 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import android.os.AsyncTask;
-import android.os.StrictMode ; //tmp
-/*
-class MB{}
-class MBinfo{}
-class PJ{}
-class PJMB{}
-class MM{}
-class MMinfo{}
-*/
-public class ClientRequestManager extends AsyncTask<Socket, Void, Void> implements API , Serializable
-{
-	
-	final String validateString = "imvalidate";
-    Socket socket = null ;
+
+public class ClientRequestManager implements API {
+    final String validateString = "imvalidate";
+    Socket socket = null;
 	ObjectInputStream input;
 	ObjectOutputStream output;
-	String Address ;
-	int Port ;
-	InputStream in = null ;
-	OutputStream out = null ;
+    String address;
+    int port;
 
-    public ClientRequestManager(String address, int port) 
-	{
-    	
-		this.Address = address ;
-		this.Port = port ;
-        
+    public ClientRequestManager(String address, int port) {
+        this.address = address;
+        this.port = port;
     }
-    
-  private void setupAll()
-    {
-    	if(this.socket==null) setupSocket() ;
-    	else
-    	{
-    		System.out.println("Waiting...") ;
-    		while(this.socket.isClosed()==false) ;
-    		setupSocket() ;
-    	}
-    	
+
+    private void getConnection() throws Exception{
+		if(this.socket != null && !this.socket.isClosed()) {
+			this.socket.close();
+		}
+		this.socket = new Socket();
+		this.socket.connect(new InetSocketAddress(address, port), 15000) ;
+		this.output = new ObjectOutputStream(socket.getOutputStream());
+        InputStream i = socket.getInputStream();
+		this.input = new ObjectInputStream(i);
     }
   
-  private void setupSocket()
-  {
-	  this.socket = new Socket() ;		 
-  }
-
-  
-  public Object sendRequest(Request R) throws Exception //應該改成 private void write_and_read，然後implement每個API時，最後都call這個
+	private Object sendRequest(Request request) throws Exception
 	{
-		System.out.println("doSomething ......... ");
 		System.out.println("ClientRequestManager:Start connect...");
 		try
 		{
+			getConnection();
+			System.out.println("Connected.");
 			
+			output.writeObject(request) ;
+            socket.shutdownOutput();
+			System.out.println("Request sent.");
 			
-			setupAll() ;
-			socket.connect(new InetSocketAddress(Address, Port), 15000) ;
-			
-			this.output = new ObjectOutputStream(socket.getOutputStream());
-			output.writeObject(R) ;
-			output.flush();
-			this.input = new ObjectInputStream(socket.getInputStream());
 			Object receivedobject = input.readObject() ;
-
-			System.out.println("Connected!!");
-			return receivedobject ;
-		}
-		catch(UnknownHostException e)
-		{
-			System.out.println("ClientRequestManager:Unknown Host");
-			throw e;
-		}
-		catch(SocketTimeoutException e)
-		{
+			System.out.println("Response received.");
 			
-			System.out.println("ClientRequestManager:Request timeout");
-			throw e;
+			socket.close();
+			return receivedobject;
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace() ;
+			System.out.println(e.toString());
+			e.printStackTrace();
 			throw e;
-		
 		}
-		finally
-		{
-			socket.close() ;
-		}
-		
-        
 	}
 
-  ////createPJ and readPJ for test
-  boolean createPJ(PJ pj) throws Exception
-  {
-	  CreateRequest createPJRequest = new CreateRequest("CREATE_PJ", pj) ;
-	  boolean success = (Boolean) sendRequest(createPJRequest) ;
-	  return success ;
-  }
-  
- PJ readPJ(int pjID) throws Exception
-  {
-	  //Request readPJRequest = new CreateRequest("READ_PJ", pjID) ;
-	  //PJ retpj = (PJ) sendRequest(readPJRequest) ;
-	  //return retpj ;
-	 return null ;
-  }
+	////createPJ and readPJ for test
+	boolean createPJ(Project pj) throws Exception
+	{
+        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+        parameters.add(new Parameter<Integer>("mbID", 5566));
+        parameters.add(new Parameter<String>("pjName", "My Project"));
+        parameters.add(new Parameter<String>("pjGoal", "Reach it"));
+        parameters.add(new Parameter<Date>("pjDeadline", new Date()));
+        Request createPJRequest = new Request("abc", parameters);
+		boolean success = (Boolean) sendRequest(createPJRequest) ;
+		return success ;
+	}
+
+	Project readPJ(int pjID) throws Exception
+	{
+		//Request readPJRequest = new CreateRequest("READ_PJ", pjID) ;
+		//Project retpj = (Project) sendRequest(readPJRequest) ;
+		//return retpj ;
+		return null ;
+	}
 
 
 	boolean validateConnection(Socket socket) throws Exception	//not used yet
 	{
 		byte[] buffer = new byte[validateString.length()];
 		socket.getInputStream().read(buffer, 0, validateString.length());
-		return (new String(buffer) == validateString);
+		return (new String(buffer).equals(validateString));
 	}
 	
 	// implement the APIs
-	
-	public MB login(String userEmail, String userPassword)
-	{
-		//return new MB();
-		return null ;
-	}
-	public boolean forget_password(String userEmail)
-	{
-		return true;
-	}
-	public boolean register(String userEmail, String userPassword, String userName)
-	{
-		return true;
-	}
-	public MB enter_member_setting(int mbID)
-	{
-		//return new MB();
-		return null ;
-	}
-	public boolean update_member_setting(int mbID, String mbEmail, String mbPassword, String mbName)
-	{
-		return true;
-	}
-	public PJ create_new_project(int mbID, String pjName, String pjGoal, String pjDeadline, int pjManager)
-	{
-		//return new PJ();
-		return null ;
-	}
-	public PJ update_project_setting(int pjID, int mbID, String pjName, String pjGoal, String pjDeadline, int pjManagerID)
-	{
-		//return new PJ();
-		return null ;
-	}
-	public MBinfo find_member_with_email(String userEmail)
-	{
-		return new MBinfo();
-	}
-	public boolean invite(int mbID, int pjID)
-	{
-		return true;
-	}
-	public boolean respond_to_invitation(int mbID, int pjID, boolean accept)
-	{
-		return true;
-	}
-	public ArrayList<MMinfo> enter_timeline(int pjID)
-	{
-		return new ArrayList<MMinfo>();
-	}
-	public Message create_new_mm(int pjID, String mmContent, String mmObjective, Date mmMmeetingDate)
-	{
-		return API.Message.SUCCESS;
-	}
-	public Message update_old_mm(int pjID, int mmID, String mmContent, String mmObjective, Date mmMeetingDate)
-	{
-		return API.Message.SUCCESS;
-	}
-	public MM read_exist_MM(int pjID, int mmID) throws Exception
-	{
-		System.out.println("ClientRequestManager:Start connect...");
-		try
-		{
-			socket.connect(new InetSocketAddress(Address, Port), 5000) ;
-		}
-		catch(UnknownHostException e)
-		{
-			System.out.println("ClientRequestManager:Unknown Host");
-			throw e;
-		}
-		catch(SocketTimeoutException e)
-		{
-			System.out.println("ClientRequestManager:Request timeout");
-			throw e;
-		}
-        System.out.println("ClientRequestManager:connected ...");
-		return new MM();
-	}
-	public ArrayList<PJMB> select_project_member(int pjID)
-	{
-		return new ArrayList<PJMB>();
+
+    @Override
+    public Member login(String userEmail, String userPassword) {
+        // just for test
+        Member mb= new Member(123456789, userEmail, "Adam");
+        return mb;
+    }
+
+    @Override
+    public boolean forget_password(String userEmail) throws Exception {
+        return true;
+    }
+
+    @Override
+    public boolean register(String userEmail, String userPassword, String userName) {
+        return true;
+    }
+
+    @Override
+    public Member get_member_setting(int mbID) {
+        return new Member();
+    }
+
+    @Override
+    public boolean update_member_setting(int mbID, String mbEmail, String mbPassword, String mbName) {
+        return true;
+    }
+
+    @Override
+    public ArrayList<Project> get_project_List(int mbID) throws Exception{
+        return new ArrayList<Project>();
+    }
+
+    @Override
+    public Project get_project_setting(int pjID) throws Exception{
+        return new Project(1,"a","b", 2, "aaa", new Date());
+    }
+
+    @Override
+    public boolean create_new_project(int mbID, String pjName, String pjGoal, Date pjDeadline) {
+        return true;
+    }
+
+    @Override
+    public boolean update_project_setting(int pjID, int mbID, String pjName, String pjGoal, Date pjDeadline, int pjManagerID) {
+        return true;
+    }
+
+    @Override
+    public Member find_member_with_email(String userEmail) {
+        return new Member();
+    }
+
+    @Override
+    public boolean invite(int mbID, int pjID) {
+        return true;
+    }
+
+    @Override
+    public boolean respond_to_invitation(int mbID, int pjID, boolean accept) {
+        return true;
+    }
+
+    @Override
+    public ArrayList<MeetingMinutes> get_timeline(int pjID) {
+        return new ArrayList<MeetingMinutes>();
+    }
+
+    @Override
+    public boolean create_new_MM(int pjID, MeetingMinutes mmContent, String mmObjective, Date mmMmeetingDate)  throws Exception{
+        return true;
+    }
+
+    @Override
+    public boolean update_old_MM(int pjID, int mmID, MeetingMinutes mmContent, String mmObjective, Date mmMeetingDate) throws Exception{
+        MeetingMinutes mm = new MeetingMinutes(new Date(1420072200000L), "Here", "me", "you", "Forget Everthing", new ArrayList<Participant>(), "Amanda", "Sue", null);
+        return true;
+    }
+
+    @Override
+    public MeetingMinutes read_MM(int pjID, int mmID) {
+		return new MeetingMinutes(new Date(1420072200000L), "Here", "me", "you", "Forget Everthing", new ArrayList<Participant>(), "Amanda", "Sue", null);
 	}
 
-	@Override
-	public MB get_member_setting(int mbID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<MMinfo> get_timeline(int pjID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean create_new_MM(int pjID, String mmContent,
-			String mmObjective, Date mmMmeetingDate) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean update_old_MM(int pjID, int mmID, String mmContent,
-			String mmObjective, Date mmMeetingDate) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public MM read_MM(int pjID, int mmID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<PJMB> get_project_member(int pjID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	protected Void doInBackground(Socket... arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ArrayList<ProjectMember> get_project_member_list(int pjID) {
+        return new ArrayList<ProjectMember>();
+    }
 }
-
-
-// End of Server.java
