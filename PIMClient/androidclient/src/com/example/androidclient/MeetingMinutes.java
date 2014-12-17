@@ -6,49 +6,24 @@ import java.util.Date;
 
 public class MeetingMinutes implements Serializable {
 
-	public Date dateTime;
-	public String location;
-	public String facilitator;
-	public String recorder;
-	public String objective;
-	public ArrayList<Participant> parList;
-	public String agenda;
-	public String issue;
-	public ArrayList<ActionItem> actList;
-	
-	// ATTRIBUTES for DB storage:
-	int pjID;
-	int mmID;
-	
-	/**
-	 */
+    int pjID;
+    int mmID;
+    Date lastModifyTime;
+	public MeetingMinutesContent content;
 
 	public MeetingMinutes(
-		Date dateTime, 
-		String location,
-		String facilitator,
-		String recorder,
-		String objective,
-		ArrayList<Participant> parList,
-		String agenda,
-		String issue,
-		ArrayList<ActionItem> actList
+        int mmID,
+		int pjID,
+        Date lastModifyTime,
+        MeetingMinutesContent content
 	){
-		this.dateTime = dateTime;
-		this.location = location;
-		this.facilitator = facilitator;
-		this.recorder = recorder;
-		this.objective = objective;
-		this.parList = parList;
-		this.agenda = agenda;
-		this.issue = issue;
-		this.actList = actList;
+        this.mmID = mmID;
+        this.pjID = pjID;
+        this.lastModifyTime = lastModifyTime;
+        this.content = content;
 	}
-	
-	// GETTERS:
-	public int getmmID(){return mmID;}
-	public int getpjID(){return pjID;}
-	// SETTERS:
 
-	
+    public int getpjid() { return pjID; }
+    public int getmmid() { return mmID; }
+    public Date getLastModifyTime() { return lastModifyTime; }
 }

@@ -149,24 +149,24 @@ public class ClientRequestManager implements API {
     }
 
     @Override
-    public ArrayList<MeetingMinutes> get_timeline(int pjID) {
-        return new ArrayList<MeetingMinutes>();
+    public ArrayList<MeetingMinutesAbstract> get_timeline(int pjID) {
+        return new ArrayList<MeetingMinutesAbstract>();
     }
 
     @Override
-    public boolean create_new_MM(int pjID, MeetingMinutes mmContent, String mmObjective, Date mmMmeetingDate)  throws Exception{
+    public boolean create_new_MM(int pjID, MeetingMinutesContent mmContent)  throws Exception{
         return true;
     }
 
     @Override
-    public boolean update_old_MM(int pjID, int mmID, MeetingMinutes mmContent, String mmObjective, Date mmMeetingDate) throws Exception{
-        MeetingMinutes mm = new MeetingMinutes(new Date(1420072200000L), "Here", "me", "you", "Forget Everthing", new ArrayList<Participant>(), "Amanda", "Sue", null);
+    public boolean update_old_MM(int mmID, MeetingMinutesContent mmContent) throws Exception{
         return true;
     }
 
     @Override
-    public MeetingMinutes read_MM(int pjID, int mmID) {
-		return new MeetingMinutes(new Date(1420072200000L), "Here", "me", "you", "Forget Everthing", new ArrayList<Participant>(), "Amanda", "Sue", null);
+    public MeetingMinutes read_MM(int mmID) {
+		return new MeetingMinutes(234,567,new Date(),
+                new MeetingMinutesContent(new Date(),"Here","Me","You","Meeting",new ArrayList<Participant>(),"None","Empty",new ArrayList<ActionItem>()));
 	}
 
     @Override

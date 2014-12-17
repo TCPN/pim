@@ -11,7 +11,6 @@ public class ProjectMember implements Serializable {
 	String mbName;
 	String mbEmail;
 	String pjmbRole;
-	String role;
 	boolean isManager;
 	
 	//CONSTRUCTOR:
@@ -30,6 +29,10 @@ public class ProjectMember implements Serializable {
 		return pjID;
 	}
 
+	public int getMbID() {
+		return mbID;
+	}
+	
 	public String getMbName() {
 		return mbName;
 	}
@@ -40,6 +43,10 @@ public class ProjectMember implements Serializable {
 
 	public String getPjmbRole() {
 		return pjmbRole;
+	}
+	
+	public boolean getIsManager() {
+		return isManager;
 	}
 
 	//SETTERS:
