@@ -64,7 +64,12 @@ public interface API {
     /**[51]*/
     public ArrayList<ProjectMember> get_project_member_list(int pjID) throws Exception;
 
-//[  ]		public ProjectMember get_member_role(int mbID, int pjID) throws Exception;
-//[  ]		public boolean remove_project_member(int mbID, int pjID) throws Exception;
-//[  ]		public boolean set_member_role(int mbID, int pjID, String role, boolean isManager) throws Exception;
+    /**[  ]*/
+//    public ProjectMember get_member_role(int mbID, int pjID) throws Exception;
+
+    /**[  ]*/
+//    public boolean remove_project_member(int mbID, int pjID) throws Exception;
+
+    /**[  ]*/
+//    public boolean set_member_role(int mbID, int pjID, String role, boolean isManager) throws Exception;
 }

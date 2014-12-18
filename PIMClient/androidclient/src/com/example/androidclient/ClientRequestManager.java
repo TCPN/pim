@@ -60,7 +60,7 @@ public class ClientRequestManager implements API {
 	{
         ArrayList<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(new Parameter<Integer>("mbID", 5566));
-        parameters.add(new Parameter<String>("pjName", "My Project"));
+        parameters.add(new Parameter<String>("pjName", SecurityManager.md5Encoder( "My Project")));
         parameters.add(new Parameter<String>("pjGoal", "Reach it"));
         parameters.add(new Parameter<Date>("pjDeadline", new Date()));
         Request createPJRequest = new Request("abc", parameters);
