@@ -26,4 +26,5 @@ public class MeetingMinutes implements Serializable {
     public int getpjid() { return pjID; }
     public int getmmid() { return mmID; }
     public Date getLastModifyTime() { return lastModifyTime; }
+    public MeetingMinutesContent getContent(){return content ;}
 }

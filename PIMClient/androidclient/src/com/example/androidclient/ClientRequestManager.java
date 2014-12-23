@@ -89,6 +89,7 @@ public class ClientRequestManager implements API {
     @Override
     public Member login(String userEmail, String userPassword) {
         // just for test
+    	
         Member mb= new Member(123456789, userEmail, "Adam");
         return mb;
     }
