@@ -27,6 +27,27 @@ public class ServerRequestManager extends Thread implements Serializable
 		}
 	}
 	
+	private ArrayList<Parameter>handleRequest(Request request) throws Exception
+	{
+		/*
+		 * 
+		 * */
+		String reqtype = request.getName() ;
+		ArrayList<Parameter> response = null ;
+		if(reqtype.equals("createProject"))
+		{
+			//Unpack Parameters in Request, call dbconnector
+			//Dbconnector.createProject() ;
+			
+		}
+		//else if...for all DBConnector API
+		else
+		{
+			//for error
+		}
+		return response ;
+	}
+	
     public void run()
 	{
 		try
@@ -36,7 +57,9 @@ public class ServerRequestManager extends Thread implements Serializable
 			String received = "";
 			String returnObject = "return_of_";
 			Request r = null;
-			Object obj = input.readObject();
+			//Object obj = input.readObject();
+			Request req = (Request) input.readObject() ;
+			ArrayList<Parameter> response = handleRequest(req) ;
 			/*
             while (true)
 			{
@@ -51,7 +74,8 @@ public class ServerRequestManager extends Thread implements Serializable
 			//System.out.println(received + "\n");
 			System.out.println("received");
 			
-			output.writeObject(2015);
+			//output.writeObject(2015);
+			output.writeObject(response) ;
 			//output.writeBytes(returnObject + received + "\n");
 			System.out.println("close id:" + id + "\n");
 			this.socket.close();

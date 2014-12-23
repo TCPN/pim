@@ -14,6 +14,14 @@ public class Request implements Serializable {
         this.name = name;
         this.parameterList = parameterList;
     }
+    public String getName()
+    {
+    	return this.name ;
+    }
+    public ArrayList<Parameter> getParameterList()
+    {
+    	return parameterList ;
+    }
 }
 
 /*
