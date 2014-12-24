@@ -1,8 +1,6 @@
-
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import pim.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Date;
 
 public class Server
 {
@@ -34,7 +32,7 @@ public class Server
 
 			while(true)
 			{
-				// 1, 等待一個新的連接請求(Request).
+				// 1, 嚙踝蕭嚙豎一嚙諉新嚙踝蕭嚙編嚙踝蕭嚙請求(Request).
 
 				Socket socket = serverSocket.accept();
 				Date connectTime = new Date() ;
@@ -48,7 +46,7 @@ public class Server
 				}
 				*/
 
-				// 2, 開新Thread處理連接請求.
+				// 2, 嚙罷嚙編Thread嚙畿嚙緲嚙編嚙踝蕭嚙請求.
 				
 				if(this.port == 80)
 				{

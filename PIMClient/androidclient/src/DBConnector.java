@@ -2,11 +2,25 @@
 //package pim;
 
 //############################## START OF DbConnector CLASS #########################################################################
-import java.sql.*;
-import java.io.*;
-import java.util.*;
 
-import pim.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import pim.MeetingMinutes;
+import pim.MeetingMinutesContent;
+import pim.Member;
+import pim.Project;
+import pim.ProjectMember;
 
 
 public class DBConnector {

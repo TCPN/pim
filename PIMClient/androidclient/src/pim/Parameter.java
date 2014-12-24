@@ -1,6 +1,5 @@
 package pim;
 
-import java.lang.reflect.Type;
 import java.io.Serializable;
 
 public class Parameter<T> implements Serializable {

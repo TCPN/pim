@@ -2,7 +2,6 @@ package pim;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Request implements Serializable {
     String name ; //enum? // well, this should not be transient. Transient variables won't be seriazlied.

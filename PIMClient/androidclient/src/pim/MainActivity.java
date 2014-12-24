@@ -1,11 +1,15 @@
 package pim;
 
-import android.os.Bundle;
-import android.os.StrictMode;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.view.*;
-import android.widget.*;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Date;
 
