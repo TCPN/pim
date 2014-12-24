@@ -1,4 +1,4 @@
-package com.example.androidclient;
+package pim;
 
 import android.os.Bundle;
 import android.os.StrictMode;

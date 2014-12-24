@@ -1,4 +1,4 @@
-package com.example.androidclient;
+package pim;
 
 import java.util.ArrayList;
 import java.util.Date;

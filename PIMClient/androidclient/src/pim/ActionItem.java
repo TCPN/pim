@@ -1,14 +1,9 @@
-package com.example.androidclient;
+package pim;
 
 import java.io.Serializable;
 import java.util.Date;
 
 public class ActionItem implements Serializable {
-
-    /**
-     * GENERATED Serial Version ID
-     */
-    private static final long serialVersionUID = 7801183387972982584L;
 
     // 	ATTRIBUTES:
     public String action;

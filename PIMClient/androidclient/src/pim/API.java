@@ -1,4 +1,4 @@
-package com.example.androidclient;
+package pim;
 
 /**
  * last update time: 2014/12/17 03:37 by Daniel

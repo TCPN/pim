@@ -1,4 +1,4 @@
-package com.example.androidclient;
+package pim;
 
 import java.io.Serializable;
 import java.util.Date;

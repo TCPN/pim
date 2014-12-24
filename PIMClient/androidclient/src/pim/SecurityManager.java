@@ -1,4 +1,4 @@
-package com.example.androidclient;
+package pim;
 /*
  For hash encoding and decoding
  WIP
@@ -15,14 +15,14 @@ public class SecurityManager {
 		
 		try {
 			MessageDigest md=MessageDigest.getInstance("MD5");     
-			byte[] barr=md.digest(str.getBytes());  //±N byte °}¦C¥[±K      
-			StringBuffer sb=new StringBuffer();  //±N byte °}¦CÂà¦¨ 16 ¶i¨î      
+			byte[] barr=md.digest(str.getBytes());  //ï¿½N byte ï¿½}ï¿½Cï¿½[ï¿½K      
+			StringBuffer sb=new StringBuffer();  //ï¿½N byte ï¿½}ï¿½Cï¿½à¦¨ 16 ï¿½iï¿½ï¿½      
 			for (int i=0; i < barr.length; i++) 
 			{
 				sb.append(byte2Hex(barr[i]));
 			}
 			String hex=sb.toString();    
-			md5=hex.toUpperCase(); //¤@«ßÂà¦¨¤j¼g      
+			md5=hex.toUpperCase(); //ï¿½@ï¿½ï¿½ï¿½à¦¨ï¿½jï¿½g      
 		}
     
 		catch(Exception e) {e.printStackTrace();}
