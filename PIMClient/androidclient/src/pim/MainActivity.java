@@ -42,6 +42,7 @@ import java.util.Date;
         btn = (Button) findViewById(R.id.button);
 		
         crm = new ClientRequestManager("54.148.152.17", 80);
+        //crm = new ClientRequestManager("220.134.20.34", 9999);
 		
         //撰寫一個按鈕事件，當按下按鈕時，才啟動一些功能
         btn.setOnClickListener(new View.OnClickListener() 
@@ -54,7 +55,7 @@ import java.util.Date;
         		try { // for test
 					ret = crm.test(pj);
 					//ret = crm.forget_password(input);
-                    //ret = crm.update_old_MM(0,0,null,"",null);					
+                    //ret = crm.update_old_MM(0,0,null,"",null);
 				} catch (Exception e) {
                     System.out.println(e.toString());
                     e.printStackTrace();

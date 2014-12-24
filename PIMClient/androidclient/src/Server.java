@@ -7,22 +7,26 @@ public class Server
 	
 	final String validateString = "imvalidate";
     ServerSocket serverSocket = null ;
+	String protocol;
 	int port = 0;
 	int connectCount = 0;
 	
     public static void main(String args[]) throws Exception
 	{
-		if(args.length > 0)
-			(new Server(Integer.parseInt(args[0]))).run();	// take argument as port
+		if(args.length >= 2)
+			(new Server(Integer.parseInt(args[0]), args[1])).run();	// take argument as port
+		if(args.length >= 1)
+			(new Server(Integer.parseInt(args[0]), "object")).run();	// take argument as port
 		else
-			(new Server(80)).run();							// HTTP port
+			(new Server(80, "object")).run();							// HTTP port
     }
 	
-    public Server(int port) throws Exception
+    public Server(int port, String protocol) throws Exception
 	{
+		this.protocol = protocol;
 		this.port = port;
         serverSocket = new ServerSocket(this.port) ;
-        System.out.println("Start Server at " + this.port + " ...");
+        System.out.println("Start " + this.protocol + " Server at " + this.port + " ...");
     }
 
     public void run()
@@ -48,7 +52,7 @@ public class Server
 
 				// 2, �}�sThread�B�z�s���ШD.
 				
-				if(this.port == 80)
+				if(this.protocol.equals("http"))
 				{
 					System.out.println("A http request handler on");
 					(new HttpRequestHandler(socket)).start();

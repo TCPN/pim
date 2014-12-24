@@ -3,6 +3,7 @@ package pim;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class ClientRequestManager implements API {
 	{
         ArrayList<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(new Parameter<Integer>("mbID", 5566));
-        parameters.add(new Parameter<String>("pjName", SecurityManager.md5Encoder( "My Project")));
+        parameters.add(new Parameter<String>("pjName", SecurityManager.md5Encoder("My Project")));
         parameters.add(new Parameter<String>("pjGoal", "Reach it"));
         parameters.add(new Parameter<Date>("pjDeadline", new Date()));
         parameters.add(new Parameter<Project>("pjObject", pj));

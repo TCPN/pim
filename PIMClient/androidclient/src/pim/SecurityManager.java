@@ -1,10 +1,7 @@
-﻿package pim;
-/*
- For hash encoding and decoding
- WIP
- last version by Kevin 12/18 1:22pm
- */
+package pim;
+
 import java.security.MessageDigest;
+
 public class SecurityManager {
 	//MD5 for password
 	//AES/SHA1 for the rest
