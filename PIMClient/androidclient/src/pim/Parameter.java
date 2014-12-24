@@ -10,12 +10,4 @@ public class Parameter<T> implements Serializable {
         this.name = name;
         this.value = value;
     }
-    public Object findValue(String inputname)
-    {
-    	if(this.name.equals(inputname))
-    		return this.value ;
-    	else
-    		return null ;
-    	
-    }
 }

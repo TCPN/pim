@@ -1,4 +1,4 @@
-package pim;
+﻿package pim;
 /*
  For hash encoding and decoding
  WIP
@@ -15,14 +15,14 @@ public class SecurityManager {
 		
 		try {
 			MessageDigest md=MessageDigest.getInstance("MD5");     
-			byte[] barr=md.digest(str.getBytes());  //�N byte �}�C�[�K      
-			StringBuffer sb=new StringBuffer();  //�N byte �}�C�ন 16 �i��      
+			byte[] barr=md.digest(str.getBytes());
+			StringBuffer sb=new StringBuffer();
 			for (int i=0; i < barr.length; i++) 
 			{
 				sb.append(byte2Hex(barr[i]));
 			}
 			String hex=sb.toString();    
-			md5=hex.toUpperCase(); //�@���ন�j�g      
+			md5=hex.toUpperCase();
 		}
     
 		catch(Exception e) {e.printStackTrace();}

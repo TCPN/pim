@@ -14,6 +14,15 @@ public class Request implements Serializable {
         this.name = name;
         this.parameterList = parameterList;
     }
+    public Object findValue(String inputname)
+    {
+        for(int i = 0; i < this.parameterList.size(); i ++)
+        {
+            if(parameterList.get(i).name.equals(inputname))
+                return parameterList.get(i).value ;
+        }
+        return null ;
+    }
     public String getName()
     {
     	return this.name ;

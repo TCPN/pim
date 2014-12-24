@@ -1,5 +1,5 @@
 
-//package pim;
+package pim;
 
 //############################## START OF DbConnector CLASS #########################################################################
 import java.sql.Connection;
@@ -14,7 +14,6 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;	// for Date		// 這個現在不用了;
 import java.util.ArrayList;
-import java.util.List;
 import java.io.Serializable;		// for Serialization
 import java.io.ObjectOutputStream;	// for Serialization
 import java.io.ObjectInputStream;	// for Serialization
@@ -24,7 +23,7 @@ import java.io.InputStream;
 import java.io.IOException;
 
 
-public class DbConnector {
+public class DBConnector {
 
 ////ATTRIBUTES FOR CONNECTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 0. 設定連線變數
@@ -56,16 +55,16 @@ public class DbConnector {
 	//-------------------------------------------------------------------------------------------------------------------------------------
 	Member mb;								// [12]	Button Name: [Enter Member Setting] --> DB return: MEMBER OBJECT
 	//-------------------------------------------------------------------------------------------------------------------------------------
-	List<List<Project>> pjCombinedList;		// [01]	Button Name: [Submit Email & Password] --> DB return: MIXED PROJECT OBJECT LIST
+    ArrayList<ArrayList<Project>> pjCombinedList;		// [01]	Button Name: [Submit Email & Password] --> DB return: MIXED PROJECT OBJECT LIST
 	//-------------------------------------------------------------------------------------------------------------------------------------
-	List<MeetingMinutes> mmList;					// [34]	Button Name: [Accept Invitation] --> DB return: MM BOJECT LIST
+    ArrayList<MeetingMinutes> mmList;					// [34]	Button Name: [Accept Invitation] --> DB return: MM BOJECT LIST
 										// [41]	Button Name: [Enter Timeline View] --> DB return: MM OBJECT LIST
 	//-------------------------------------------------------------------------------------------------------------------------------------
-	List<ProjectMember> pjmbList;				// [51]	Button Name: [Select Project Member] --> DB return: PJMB OBJECT LIST (PJMB = Project Member)
+    ArrayList<ProjectMember> pjmbList;				// [51]	Button Name: [Select Project Member] --> DB return: PJMB OBJECT LIST (PJMB = Project Member)
 	//-------------------------------------------------------------------------------------------------------------------------------------
 
 ////CONSTRUCTOR //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public DbConnector(String JdbcURL, String User, String Password /*, String UseUnicode, String CharacterEncoding*/) {
+	public DBConnector(String JdbcURL, String User, String Password /*, String UseUnicode, String CharacterEncoding*/) {
 		this.jdbcURL = JdbcURL;		// jdbcURL = localhost:3306/pim
 		this.user = User;			// User = root
 		this.password = Password;	// Password = cliurcp
@@ -235,10 +234,10 @@ public class DbConnector {
 	// METHOD: 在 pjTable 中 [取得] pjID
 	///////////////////////////////////////////////////////	
 	
-	public List<Integer> getPJidList(int MBid) /*throws SQLException*/ {
+	public ArrayList<Integer> getPJidList(int MBid) /*throws SQLException*/ {
 		
 		//建立一個用來存放 pjID 的 List
-		List<Integer> pjidList = new ArrayList<Integer>();
+        ArrayList<Integer> pjidList = new ArrayList<Integer>();
 		int tempNum = 0;
 		
 		try {
@@ -416,7 +415,7 @@ public class DbConnector {
 			
 			}
 			//System.out.println("before");
-			this.mb = new Member(mbID, mbEmail, mbPassword, mbName, mbLastModified);
+			//this.mb = new Member(mbID, mbEmail, mbPassword, mbName, mbLastModified);
 			mbID = mb.getMbID();
 			//System.out.println(mbID);
 			//System.out.println("after");
@@ -717,13 +716,13 @@ public class DbConnector {
 	///////////////////////////////////////////////////////
 	// METHOD: 在pjmbTable 中 [取得] pjmbIdList
 	///////////////////////////////////////////////////////
-	public List<Integer> getPjmbIdList(int PJid) throws SQLException {												// 查 project
+	public ArrayList<Integer> getPjmbIdList(int PJid) throws SQLException {												// 查 project
 		String query = "SELECT mbID FROM pjmbTable WHERE (pjID = ?)";
 		PreparedStatement pStm = conn.prepareStatement(query);
 		pStm.setInt(1, PJid);
 		ResultSet rs = pStm.executeQuery();
-		
-		List<Integer> pjmbIdList = new ArrayList<Integer>(); 
+
+        ArrayList<Integer> pjmbIdList = new ArrayList<Integer>(); 
 		while(rs.next()) {
 			pjmbIdList.add(rs.getInt("mbID"));
 		}
@@ -734,13 +733,13 @@ public class DbConnector {
 	///////////////////////////////////////////////////////
 	// METHOD: 在pjmbTable 中 [取得] project id list
 	///////////////////////////////////////////////////////
-	public List<Integer> getPjIdList(int MBid) throws SQLException {												// 查 project
+	public ArrayList<Integer> getPjIdList(int MBid) throws SQLException {												// 查 project
 		String query = "SELECT pjID FROM pjmbTable WHERE (mbID = ?)";
 		PreparedStatement pStm = conn.prepareStatement(query);
 		pStm.setInt(1, MBid);
 		ResultSet rs = pStm.executeQuery();
-		
-		List<Integer> pjIdList = new ArrayList<Integer>(); 
+
+        ArrayList<Integer> pjIdList = new ArrayList<Integer>(); 
 		while(rs.next()) {
 			pjIdList.add(rs.getInt("pjID"));
 		}
@@ -882,8 +881,8 @@ public class DbConnector {
 	///////////////////////////////////////////////////////
 	// METHOD: 在 mmTable 中 [取得] MMcontent
 	///////////////////////////////////////////////////////	
-	public Object getMMcontent(int MMid) {
-		Object mmblob = null;
+	public MeetingMinutesContent getMMcontent(int MMid) {
+        MeetingMinutesContent mmblob = null;
 		try {
 			String query = "SELECT mmContent FROM mmTable WHERE (mmID = ?)";
 			PreparedStatement pStm = conn.prepareStatement(query);
@@ -901,7 +900,7 @@ public class DbConnector {
 				{
 				
 					try{
-						mmblob = ois.readObject();
+						mmblob = (MeetingMinutesContent)ois.readObject();
 					} catch(IOException ex)
 					{return null;}catch(ClassNotFoundException ex){return null;}
 				}
@@ -972,10 +971,10 @@ public class DbConnector {
 	// METHOD: 在 mmTable 中 [取得] MM ID list
 	///////////////////////////////////////////////////////	
 	
-	public List<Integer> getMMidList(int PJid) {
+	public ArrayList<Integer> getMMidList(int PJid) {
 		
 		int tempNum = 0;
-		List<Integer> MMidList = new ArrayList<Integer>();
+        ArrayList<Integer> MMidList = new ArrayList<Integer>();
 		
 		try {
 			String query = "SELECT mmID FROM mmTable WHERE (pjID = ?)";

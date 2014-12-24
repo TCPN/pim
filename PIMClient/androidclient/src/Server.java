@@ -2,7 +2,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import com.example.androidclient.*;
+import pim.*;
 
 public class Server
 {
@@ -37,7 +37,8 @@ public class Server
 				// 1, 等待一個新的連接請求(Request).
 
 				Socket socket = serverSocket.accept();
-				System.out.println("A connection from ["+ socket.getInetAddress().getHostAddress() +"] comes...");
+				Date connectTime = new Date() ;
+				System.out.println(connectTime +"\tA connection from ["+ socket.getInetAddress().getHostAddress() +"] comes...");
 				connectCount ++;
 				/*
 				if(validateConnection(socket) == false)
@@ -56,8 +57,8 @@ public class Server
 				}
 				else
 				{
-					System.out.println("A message handler on");
-					(new ServerRequestManager(socket, connectCount)).start();
+					System.out.println("An object message handler on");
+					(new ServerRequestManager(socket, connectCount, connectTime)).start();
 				}
 				System.out.println("New Thread " + connectCount + " is started to handle it...");
 

@@ -41,11 +41,11 @@ public class ClientRequestManager implements API {
             socket.shutdownOutput();
 			System.out.println("Request sent.");
 			
-			Object receivedobject = input.readObject() ;
-			System.out.println("Response received.");
+			Object receivedObject = input.readObject() ;
+			System.out.println("Response received. Type:" + receivedObject.getClass().toString());
 			
 			socket.close();
-			return receivedobject;
+			return receivedObject;
 		}
 		catch(Exception e)
 		{
@@ -55,15 +55,16 @@ public class ClientRequestManager implements API {
 		}
 	}
 
-	////createPJ and readPJ for test
-	boolean createPJ(Project pj) throws Exception
+	////test and readPJ for test
+	boolean test(Project pj) throws Exception
 	{
         ArrayList<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(new Parameter<Integer>("mbID", 5566));
         parameters.add(new Parameter<String>("pjName", SecurityManager.md5Encoder( "My Project")));
         parameters.add(new Parameter<String>("pjGoal", "Reach it"));
         parameters.add(new Parameter<Date>("pjDeadline", new Date()));
-        Request createPJRequest = new Request("abc", parameters);
+        parameters.add(new Parameter<Project>("pjObject", pj));
+        Request createPJRequest = new Request("test", parameters);
 		boolean success = (Boolean) sendRequest(createPJRequest) ;
 		return success ;
 	}

@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.view.*;
 import android.widget.*;
 
+import java.util.Date;
+
 
 @SuppressLint("NewApi") public class MainActivity extends Activity 
 {
@@ -35,8 +37,7 @@ import android.widget.*;
         tv1 = (TextView) findViewById(R.id.textView);
         btn = (Button) findViewById(R.id.button);
 		
-        crm = new ClientRequestManager("220.134.20.34", 9999);		
-        final Project pj = new Project(3370, "eclipsesucks", "write", 1, "doge", null) ;
+        crm = new ClientRequestManager("54.148.152.17", 80);
 		
         //撰寫一個按鈕事件，當按下按鈕時，才啟動一些功能
         btn.setOnClickListener(new View.OnClickListener() 
@@ -44,9 +45,10 @@ import android.widget.*;
             boolean ret = true;
         	public void onClick(View arg0) 
         	{
-        		String input = ed.getText().toString();        		
+                Project pj = new Project(3370, "eclipsesucks", "write", 5566, "", new Date()) ;
+        		pj.pjManagerName = ed.getText().toString() + " san";
         		try { // for test
-					boolean pj_ret = crm.createPJ(pj);
+					ret = crm.test(pj);
 					//ret = crm.forget_password(input);
                     //ret = crm.update_old_MM(0,0,null,"",null);					
 				} catch (Exception e) {
