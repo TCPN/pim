@@ -1,26 +1,12 @@
 
-package pim;
+//package pim;
 
 //############################## START OF DbConnector CLASS #########################################################################
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-//import java.sql.Date;		// 這裡要用 java.util.Date;
-import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;	// for Date		// 這個現在不用了;
-import java.util.ArrayList;
-import java.io.Serializable;		// for Serialization
-import java.io.ObjectOutputStream;	// for Serialization
-import java.io.ObjectInputStream;	// for Serialization
-import java.util.GregorianCalendar;
-import java.util.Calendar;
-import java.io.InputStream;
-import java.io.IOException;
+import java.sql.*;
+import java.io.*;
+import java.util.*;
+
+import pim.*;
 
 
 public class DBConnector {
@@ -113,7 +99,7 @@ public class DBConnector {
 	///////////////////////////////////////////////////////
 	// METHOD: 在 pjTable 中 [新增] 一整列資料(row)
 	///////////////////////////////////////////////////////
-	public int createProject(String PJname, String PJgoal, String PJmanager, Date PJdeadline) /*throws SQLException*/ {						// 增 project
+	public int createProject(String PJname, String PJgoal, String PJmanager, java.util.Date PJdeadline) /*throws SQLException*/ {						// 增 project
 		
 		int tempNum = 0;
 		int last_inserted_pjID = -1;
