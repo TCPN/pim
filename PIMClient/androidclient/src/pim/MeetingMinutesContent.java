@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MeetingMinutesContent {
+
     public Date meetingTime;
     public String location;
     public String facilitator;
@@ -13,6 +14,7 @@ public class MeetingMinutesContent {
     public String agenda;
     public String issue;
     public ArrayList<ActionItem> actList;
+	
     public MeetingMinutesContent(
         Date meetingTime,
         String location,

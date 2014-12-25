@@ -1,3 +1,5 @@
+package pim.server;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
@@ -26,7 +28,7 @@ public class Server
 		this.protocol = protocol;
 		this.port = port;
         serverSocket = new ServerSocket(this.port) ;
-        System.out.println("Start " + this.protocol + " Server at " + this.port + " ...");
+        System.out.println("Start " + this.protocol + " pim.server.Server at " + this.port + " ...");
     }
 
     public void run()
@@ -78,8 +80,8 @@ public class Server
 		socket.getInputStream().read(buffer, 0, validateString.length());
 		return (new String(buffer) == validateString);
 	}
-	
+
 }
 
 
-// End of Server.java
+// End of pim.server.Server.java

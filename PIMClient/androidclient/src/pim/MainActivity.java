@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -41,8 +42,8 @@ import java.util.Date;
         tv1 = (TextView) findViewById(R.id.textView);
         btn = (Button) findViewById(R.id.button);
 		
-        crm = new ClientRequestManager("54.148.152.17", 80);
-        //crm = new ClientRequestManager("220.134.20.34", 9999);
+        //crm = new ClientRequestManager("54.148.152.17", 80);
+        crm = new ClientRequestManager("220.134.20.34", 9999);
 		
         //撰寫一個按鈕事件，當按下按鈕時，才啟動一些功能
         btn.setOnClickListener(new View.OnClickListener() 
@@ -50,10 +51,14 @@ import java.util.Date;
             boolean ret = true;
         	public void onClick(View arg0) 
         	{
-                Project pj = new Project(3370, "eclipsesucks", "write", 5566, "", new Date()) ;
-        		pj.pjManagerName = ed.getText().toString() + " san";
+                Project pj = new Project(9876, "TestProject", "Goal!!", 1234, "NoNameMember", new Date()) ;
+                Member mb = new Member(1234, "NoNameMember", "myEmail@where.com") ;
+        		pj.pjManagerName = ed.getText().toString() + " San(JPN)";
         		try { // for test
-					ret = crm.test(pj);
+					//ret = crm.test(pj);
+                    //ret = crm.respondInvitation(mb, pj, true);
+                    ArrayList<MeetingMinutes> mms = crm.getMeetingMinutesList(pj);
+                    ret = !mms.isEmpty();
 					//ret = crm.forget_password(input);
                     //ret = crm.update_old_MM(0,0,null,"",null);
 				} catch (Exception e) {

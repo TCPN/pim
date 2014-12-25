@@ -1,3 +1,5 @@
+package pim.server;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -48,7 +50,7 @@ public class ServerRequestManager extends Thread implements Serializable
 		 
 		String aMethod = "myMethod";
 
-		Object iClass = ServerRequestManager.newInstance();
+		Object iClass = pim.server.ServerRequestManager.newInstance();
 		// get the method
 		Method thisMethod = this.getDeclaredMethod(aMethod, params);
 		// call the method
@@ -136,6 +138,99 @@ public class ServerRequestManager extends Thread implements Serializable
 		{
 			
 		}
+        else if(reqtype.equals("logIn"))
+        {
+            System.out.println("userEmail: " + request.findValue("userEmail").toString());
+            System.out.println("userPassword: " + request.findValue("userPassword").toString());
+            return new Member(789,request.findValue("userEmail").toString(), "name");
+        }
+        else if(reqtype.equals("createAccount"))
+        {
+            System.out.println("userEmail: " + request.findValue("userEmail").toString());
+            System.out.println("userPassword: " + request.findValue("userPassword").toString());
+            return true;
+        }
+        else if(reqtype.equals("getMemberProjectList"))
+        {
+            Member member = (Member)request.findValue("member");
+            System.out.println("member: " + member.toString() +" "+  member.mbEmail +" "+ member.mbName +" "+ member.getMbID());
+            ArrayList<Project> ret = new ArrayList<>();
+            ret.add(new Project(1111, "pj1", "goal1", 1101, "mgr1", new Date(111111111)));
+            ret.add(new Project(2222, "pj2", "goal2", 2202, "mgr2", new Date(222222222)));
+            ret.add(new Project(3333, "pj3", "goal3", 3303, "mgr3", new Date(333333333)));
+            return ret;
+        }
+        else if(reqtype.equals("getMeetingMinutesList"))
+        {
+            Project project = (Project)request.findValue("project");
+            System.out.println("project: " + project.getPjID()
+                    +" "+project.getPjName()+" "+project.getPjGoal()+" "+project.getPjManager()+" "+project.getPjDeadline());
+            ArrayList<MeetingMinutes> ret = new ArrayList<>();
+            ret.add(new MeetingMinutes(project.getPjID()+1, project.getPjID(), new Date(199999999), null));
+            ret.add(new MeetingMinutes(project.getPjID()+2, project.getPjID(), new Date(299999999), null));
+            ret.add(new MeetingMinutes(project.getPjID()+4, project.getPjID(), new Date(499999999), null));
+            return ret;
+        }
+        else if(reqtype.equals("getMemberInvitationList"))
+        {
+            Member member = (Member)request.findValue("member");
+            System.out.println("member: " + member.toString() +" "+  member.mbEmail +" "+ member.mbName +" "+ member.getMbID());
+            ArrayList<Project> ret = new ArrayList<>();
+            ret.add(new Project(4444, "hello1", "goal1", 1101, "mgr1", new Date(111111111)));
+            ret.add(new Project(5555, "world2", "goal2", 2202, "mgr2", new Date(222222222)));
+            ret.add(new Project(6666, "Please3", "goal3", 3303, "mgr3", new Date(333333333)));
+            return ret;
+        }
+        else if(reqtype.equals("respondInvitation"))
+        {
+            Member member = (Member)request.findValue("member");
+            System.out.println("member: "+member.mbEmail +" "+ member.mbName +" "+ member.getMbID());
+            Project project = (Project)request.findValue("project");
+            System.out.println("project: " + project.getPjID()
+                    +" "+project.getPjName()+" "+project.getPjGoal()+" "+project.getPjManager()+" "+project.getPjDeadline());
+            System.out.println("accept: " + request.findValue("accept").toString());
+            return true;
+        }
+        else if(reqtype.equals("createProject"))
+        {
+            Project project = (Project)request.findValue("newProject");
+            System.out.println("newProject: " + project.getPjID()
+                    +" "+project.getPjName()+" "+project.getPjGoal()+" "+project.getPjManager()+" "+project.getPjDeadline());
+            return true;
+        }
+        else if(reqtype.equals("createProjectMemberList"))
+        {
+            ArrayList<String> email = (ArrayList<String>)request.findValue("email");
+            System.out.println("email: ");
+            for(int i = 0; i < email.size(); i ++)
+            {
+                System.out.println(i+" "+email.get(i));
+            }
+            return true;
+        }
+        else if(reqtype.equals("createMeetingMinutes"))
+        {
+            MeetingMinutes minutes = (MeetingMinutes)request.findValue("newMeetingMinutes");
+            System.out.println("newMeetingMinutes: " + "mmID:" + minutes.getmmid()
+                    + "pjID:" + minutes.getpjid() +" "+ minutes.getLastModifyTime()
+                    +" "+minutes.content.objective+" "+minutes.content.recorder+" "+minutes.content.actList.get(1).action);
+            return true;
+        }
+        else if(reqtype.equals("modifyProject"))
+        {
+            Project project = (Project)request.findValue("project");
+            System.out.println("project: " + project.getPjID()
+                    +" "+project.getPjName()+" "+project.getPjGoal()+" "+project.getPjManager()+" "+project.getPjDeadline());
+            return true;
+        }
+        else if(reqtype.equals("modifyMeetingMinutes"))
+        {
+            MeetingMinutes minutes = (MeetingMinutes)request.findValue("newMeetingMinutes");
+            System.out.println("newMeetingMinutes: " + "mmID:" + minutes.getmmid()
+                    + "pjID:" + minutes.getpjid() +" "+ minutes.getLastModifyTime()
+                    +" "+minutes.content.objective+" "+minutes.content.recorder+" "+minutes.content.actList.get(1).action);
+            return true;
+        }
 		//else if...for all DbConnector API
 		else
 		{
