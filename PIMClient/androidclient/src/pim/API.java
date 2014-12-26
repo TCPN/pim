@@ -13,17 +13,10 @@ package pim;
 import java.util.ArrayList;
 import java.util.Date;
 
-import pim.MeetingMinutes;
-import pim.MeetingMinutesAbstract;
-import pim.MeetingMinutesContent;
-import pim.Member;
-import pim.Project;
-import pim.ProjectMember;
-
 public interface API {
     /**[01] will "No Matched" be an Exception ????????? */
     public Member login(String userEmail, String userPassword) throws Exception;
-
+	
     /**[02] */
     public boolean forget_password(String userEmail) throws Exception;
 
