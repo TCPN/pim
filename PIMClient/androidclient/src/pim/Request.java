@@ -5,14 +5,17 @@ import java.util.ArrayList;
 
 public class Request implements Serializable {
     String name ; //enum? // well, this should not be transient. Transient variables won't be seriazlied.
-    ArrayList<Parameter> parameterList = null;
+    //ArrayList<Parameter> parameterList = null;
+    Object parameterList[] = null ;
     public Request (String name) {
         this.name = name;
     }
-    public Request (String name, ArrayList<Parameter> parameterList) {
+    public Request (String name, Object... params) {
+    	
         this.name = name;
-        this.parameterList = parameterList;
+        this.parameterList = params;
     }
+    /*
     public Object findValue(String inputname)
     {
         for(int i = 0; i < this.parameterList.size(); i ++)
@@ -22,11 +25,12 @@ public class Request implements Serializable {
         }
         return null ;
     }
+    */
     public String getName()
     {
     	return this.name ;
     }
-    public ArrayList<Parameter> getParameterList()
+    public Object[] getParameterList()
     {
     	return parameterList ;
     }
