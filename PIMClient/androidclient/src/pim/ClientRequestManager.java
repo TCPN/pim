@@ -93,95 +93,151 @@ public class ClientRequestManager implements API, ClientAPI {
     //implements ClientAPI
 
     @Override
-    public Member logIn(String userEmail, String userPassword) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<String>("userEmail", userEmail));
-        parameters.add(new Parameter<String>("userPassword", SecurityManager.md5Encoder(userPassword)));
-        Request request = new Request("logIn", parameters);
+    public Member logIn(String userEmail, String userPassword) throws Exception 
+    {
+        Request request = new Request(
+        		"logIn",
+        		userEmail, 
+        		SecurityManager.md5Encoder(userPassword)
+        		);
         return (Member) sendRequest(request) ;
     }
 
     @Override
-    public boolean createAccount(String userEmail, String userPassword) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<String>("userEmail", userEmail));
-        parameters.add(new Parameter<String>("userPassword", SecurityManager.md5Encoder(userPassword)));
-        Request request = new Request("createAccount", parameters);
-        return (boolean) sendRequest(request) ;
+    public Boolean forgetPassword(String userEmail) throws Exception
+    {
+    	Request request = new Request(
+    			"forgetPassword", 
+    			userEmail
+    			) ;
+    	return (Boolean) sendRequest(request) ;
+    }
+    
+    @Override
+    public Boolean createAccount(String userEmail, String userPassword, String userName) throws Exception 
+    {
+        Request request = new Request(
+        		"createAccount",
+        		userEmail, 
+        		SecurityManager.md5Encoder(userPassword), 
+        		userName
+        		); 
+        return (Boolean) sendRequest(request) ;
     }
 
     @Override
-    public ArrayList<Project> getMemberProjectList(Member member) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<Member>("member", member));
-        Request request = new Request("getMemberProjectList", parameters);
+    public ArrayList<Project> getMemberProjectList(Member member) throws Exception 
+    {
+        Request request = new Request(
+        		"getMemberProjectList",
+        		member.getMbID()
+        		);
         return (ArrayList<Project>) sendRequest(request) ;
     }
 
     @Override
-    public ArrayList<MeetingMinutes> getMeetingMinutesList(Project project) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<Project>("project", project));
-        Request request = new Request("getMeetingMinutesList", parameters);
+    public ArrayList<MeetingMinutes> getMeetingMinutesList(Project project) throws Exception 
+    {
+        Request request = new Request(
+        		"getMeetingMinutesList",
+        		project.getPjID()
+        		);
         return (ArrayList<MeetingMinutes>) sendRequest(request) ;
     }
 
     @Override
-    public ArrayList<Project> getMemberInvitationList(Member member) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<Member>("member", member));
-        Request request = new Request("getMemberInvitationList", parameters);
+    public ArrayList<Project> getInvitationListForMember(Member member) throws Exception 
+    {
+        Request request = new Request(
+        		"getInvitationListForMember", 
+        		member.getMbID()
+        		);
         return (ArrayList<Project>) sendRequest(request) ;
     }
 
     @Override
-    public boolean respondInvitation(Member member, Project project, Boolean accept) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<Member>("member", member));
-        parameters.add(new Parameter<Project>("project", project));
-        parameters.add(new Parameter<Boolean>("accept", accept));
-        Request request = new Request("respondInvitation", parameters);
-        return (boolean) sendRequest(request) ;
+    public Boolean respondInvitation(Member member, Project project, Boolean accept) throws Exception 
+    {
+        Request request = new Request(
+        		"respondInvitation", 
+        		member.getMbID(), 
+        		project.getPjID(), 
+        		accept
+        		);
+        return (Boolean) sendRequest(request) ;
     }
 
     @Override
-    public boolean createProject(Project newProject) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<Project>("newProject", newProject));
-        Request request = new Request("createProject", parameters);
-        return (boolean) sendRequest(request) ;
+    public Boolean createProject(Member member, Project newProject, ArrayList<String> emailList) throws Exception 
+    {
+        Request request = new Request(
+        		"createProject", 
+        		member.getMbID(), 
+        		newProject.getPjName(),
+        		newProject.getPjGoal(), 
+        		newProject.getPjDeadline(), 
+        		emailList
+        		);
+        return (Boolean) sendRequest(request) ;
     }
 
     @Override
-    public boolean createProjectMemberList(ArrayList<String> email) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<ArrayList<String>>("email", email));
-        Request request = new Request("createProjectMemberList", parameters);
-        return (boolean) sendRequest(request) ;
+    public ArrayList<ProjectMember> getProjectMemberList(Project project) throws Exception 
+    {
+        Request request = new Request(
+        		"getProjectMemberList", 
+        		project.getPjID()
+        		);
+        return (ArrayList<ProjectMember>) sendRequest(request) ;
+    }
+    
+    @Override
+    public ArrayList<ProjectMember> getProjectInvitationList(Project project) throws Exception
+    {
+    	Request request = new Request(
+    			"getProjectInvitationList", 
+    			project.getPjID()
+    			);
+        return ( ArrayList<ProjectMember>) sendRequest(request) ;
     }
 
     @Override
-    public boolean createMeetingMinutes(MeetingMinutes newMeetingMinutes) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<MeetingMinutes>("newMeetingMinutes", newMeetingMinutes));
-        Request request = new Request("createMeetingMinutes", parameters);
-        return (boolean) sendRequest(request) ;
+    public Boolean createMeetingMinutes(Project project, MeetingMinutes newMeetingMinutes) throws Exception 
+    {
+        Request request = new Request(
+        		"createMeetingMinutes", 
+        		project.getPjID(), 
+        		newMeetingMinutes.getContent()
+        		);
+        return (Boolean) sendRequest(request) ;
+    }
+    
+
+
+    @Override
+    public Boolean modifyProject(Member member, Project project) throws Exception 
+    {
+        Request request = new Request(
+        		"modifyProject", 
+        		project.getPjID(), 
+        		member.getMbID(), 
+        		project.getPjName(), 
+        		project.getPjGoal(), 
+        		project.getPjDeadline(), 
+        		project.getPjManager()
+        		);
+        return (Boolean) sendRequest(request) ;
     }
 
     @Override
-    public boolean modifyProject(Project project) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<Project>("project", project));
-        Request request = new Request("modifyProject", parameters);
-        return (boolean) sendRequest(request) ;
-    }
-
-    @Override
-    public boolean modifyMeetingMinutes(MeetingMinutes minutes) throws Exception {
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<MeetingMinutes>("minutes", minutes));
-        Request request = new Request("modifyMeetingMinutes", parameters);
-        return (boolean) sendRequest(request) ;
+    public Boolean modifyMeetingMinutes(MeetingMinutes meetingMinutes) throws Exception 
+    {
+        Request request = new Request(
+        		"modifyMeetingMinutes", 
+        		meetingMinutes.getmmid(), 
+        		meetingMinutes.getContent()
+        		);
+        return (Boolean) sendRequest(request) ;
     }
 
     // implement the APIs
