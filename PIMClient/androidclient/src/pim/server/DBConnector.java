@@ -101,8 +101,6 @@ public class DbConnector {
 
 ////-----------------------------------------------------------------// pjTable
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int createProject(String PJname, String PJgoal, String PJmanager, java.util.Date PJdeadline) /*throws SQLException*/ {
         int tempNum = 0;
         int last_inserted_pjID = -1;
@@ -140,8 +138,6 @@ public class DbConnector {
         }
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int updateProject(int PJid, String PJname, String PJgoal, String PJmanager, java.sql.Date PJdeadline) /*throws SQLException*/ {
 
         int tempNum = 0;
@@ -170,8 +166,6 @@ public class DbConnector {
         }
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public ResultSet getProjectAsResultSet(int PJid) /*throws SQLException*/ {
 
         int tempNum = 0;
@@ -194,10 +188,6 @@ public class DbConnector {
             return null;
         }
     }
-
-
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
 
     public ArrayList<Integer> getPJidList(int MBid) /*throws SQLException*/ {
 
@@ -228,9 +218,6 @@ public class DbConnector {
         }
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
-
     public String getPjManager(int PJid) {
 
         int tempNum = 0;
@@ -258,8 +245,6 @@ public class DbConnector {
 
 ////-----------------------------------------------------------------// mbTable
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int createMember(String MBemail, String MBpassword, String MBname) /*throws SQLException*/ {
 
         int tempNum = 0;
@@ -296,8 +281,6 @@ public class DbConnector {
 
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int updateMember(int MBid, String MBemail, String MBpassword, String MBname) /*throws SQLException*/ {
 
         int rowAffected = 0;
@@ -319,8 +302,6 @@ public class DbConnector {
         return rowAffected;
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public ResultSet getMemberAsResultSet(int MBid) /*throws SQLException*/ {
 
         int tempNum = 0;
@@ -349,9 +330,7 @@ public class DbConnector {
         }
     }
 
-
-    public Member getMemberAsObject(int MBid) //throws SQLException
-    {
+    public Member getMemberAsObject(int MBid) /*throws SQLException*/  {
         int tempNum = 0;
         ResultSet rSet = null;
 
@@ -406,8 +385,6 @@ public class DbConnector {
         }
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int getMemberID(String USERemail, String USERpassword) /*throws SQLException*/ {
 
         int mbID = 0;
@@ -434,9 +411,6 @@ public class DbConnector {
         }
     }
 
-
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int getMemberIDbyEmail(String MBemail) /*throws SQLException*/ {
 
         int mbID = 0;
@@ -461,8 +435,6 @@ public class DbConnector {
         }
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int getMemberIDbyName(String MBname) /*throws SQLException*/ {
 
         int mbID = 0;
@@ -488,8 +460,6 @@ public class DbConnector {
         }
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public String getPassword(String MBemail) /*throws SQLException*/ {
 
         String mbPassword = "";
@@ -515,9 +485,6 @@ public class DbConnector {
         }
     }
 
-
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public boolean matchEmail(String USERemail) {
 
         int tempNum = 0;
@@ -542,9 +509,6 @@ public class DbConnector {
     }
 
 ////-----------------------------------------------------------------// pjmbTable
-
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
 
     public int createPJMB(int PJid, int MBid, String PJMBrole, int PJMBisActive, int PJMBisManager) /*throws SQLException*/ {
 
@@ -571,8 +535,6 @@ public class DbConnector {
         }
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int updatePJMB(int MBid, int PJid, String PJMBrole) throws SQLException {
         String query = "UPDATE pjmbTable SET pjmbRole = ? WHERE pjID = ? and mbID = ?";
         PreparedStatement pStm = conn.prepareStatement(query);
@@ -584,8 +546,6 @@ public class DbConnector {
         return rowAffected;
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int updatePJMBActivity(int MBid, int PJid, int PJMBActivity) throws SQLException {
         String query = "UPDATE pjmbTable SET pjmbIsActive = ? WHERE pjID = ? and mbID = ?";
         PreparedStatement pStm = conn.prepareStatement(query);
@@ -598,8 +558,6 @@ public class DbConnector {
         return rowAffected;
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public String getPJMB(int PJid, int MBid) throws SQLException {
         String query = "SELECT pjmbRole FROM pjmbTable WHERE (pjID = ? AND mbID = ?)";
         PreparedStatement pStm = conn.prepareStatement(query);
@@ -617,8 +575,6 @@ public class DbConnector {
         return pjmbRole;
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int isManager(int PJid, int MBid) throws SQLException {
         String query = "SELECT pjmbRole FROM pjmbTable WHERE (pjID = ? AND mbID = ?)";
         PreparedStatement pStm = conn.prepareStatement(query);
@@ -630,9 +586,6 @@ public class DbConnector {
         isManager = rs.getInt("pjmbIsManager");
         return isManager;
     }
-
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
 
     public int isActive(int PJid, int MBid) throws SQLException {
         String query = "SELECT pjmbIsActive FROM pjmbTable WHERE (pjID = ? AND mbID = ?)";
@@ -649,8 +602,6 @@ public class DbConnector {
         return isActive;
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public ArrayList<Integer> getPjmbIdList(int PJid) throws SQLException {
         String query = "SELECT mbID FROM pjmbTable WHERE (pjID = ?)";
         PreparedStatement pStm = conn.prepareStatement(query);
@@ -664,8 +615,6 @@ public class DbConnector {
         return pjmbIdList;
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public ArrayList<Integer> getPjIdList(int MBid) throws SQLException {
         String query = "SELECT pjID FROM pjmbTable WHERE (mbID = ?)";
         PreparedStatement pStm = conn.prepareStatement(query);
@@ -679,9 +628,6 @@ public class DbConnector {
         return pjIdList;
     }
 
-    
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int deletePJMB(int PJid, int MBid) /*throws SQLException*/ {
 
         int tempNum = 0;
@@ -706,8 +652,6 @@ public class DbConnector {
 
 ////------------------------------------------------
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public int updateManager(int PJid, int MBid_old, int MBid_new, String PJmanager_new) /*throws SQLException*/ {
 
         int tempNum = 0;
@@ -750,9 +694,6 @@ public class DbConnector {
 
 ////-----------------------------------------------------------------// mbTable
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
-
     public int createMM(int PJid, Object mmContent) {
 
         int last_inserted_mmID = -1;
@@ -778,9 +719,6 @@ public class DbConnector {
         else { return -1; }
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
-
     public boolean updateMM(int MMid, Object mmContent) {
 
         boolean result = false;
@@ -801,8 +739,6 @@ public class DbConnector {
         return result;
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public MeetingMinutesContent getMMcontent(int MMid) {
         MeetingMinutesContent mmblob = null;
         try {
@@ -835,8 +771,6 @@ public class DbConnector {
         return mmblob;
     }
 
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public java.util.Date getMMLastModified(int MMid) {
         java.util.Date date=null;
         try {
@@ -860,9 +794,6 @@ public class DbConnector {
         return date;
     }
 
-
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
     public boolean verifyMMcontent(int MMid) {
         int getpjid=-1;
         try {
@@ -885,10 +816,6 @@ public class DbConnector {
         else
             return false;
     }
-
-
-    ///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////
 
     public ArrayList<Integer> getMMidList(int PJid) {
 
