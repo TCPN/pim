@@ -189,15 +189,16 @@ public class DbConnector {
         }
     }
 
-    public ArrayList<Integer> getPJidList(int MBid) /*throws SQLException*/ {
+    public ArrayList<Integer> getPJidList(int MBid, int MBactivity) /*throws SQLException*/ {
 
         ArrayList<Integer> pjidList = new ArrayList<Integer>();
         int tempNum = 0;
 
         try {
-            String query = "SELECT pjID FROM pjmbTable WHERE (mbID = ?)";
+            String query = "SELECT pjID FROM pjmbTable WHERE (mbID = ? and pjmbIsActive = ?)";
             PreparedStatement pStm = conn.prepareStatement(query);
             pStm.setInt(1, MBid);
+            pStm.setInt(2, MBactivity);
             ResultSet rs = pStm.executeQuery();
 
             while(rs.next()) {
