@@ -1,4 +1,4 @@
-package pim;
+package pim.server;
 
 /**
  * last update time: 2014/12/17 03:37 by Daniel
@@ -12,11 +12,12 @@ package pim;
 
 import java.util.ArrayList;
 import java.util.Date;
+import pim.*;
 
 public interface API {
     /**[01] will "No Matched" be an Exception ????????? */
     public Member login(String userEmail, String userPassword) throws Exception;
-	
+
     /**[02] */
     public boolean forget_password(String userEmail) throws Exception;
 
@@ -31,6 +32,9 @@ public interface API {
 
     /**[01,  ]*/
     public ArrayList<Project> get_project_List(int mbID) throws Exception;
+	
+    /**[01,  ]*/
+    public ArrayList<Project> get_invitation_project_List(int mbID) throws Exception;
 
     /**[  ]*/
     public Project get_project_setting(int pjID) throws Exception;
@@ -64,6 +68,7 @@ public interface API {
 
     /**[51]*/
     public ArrayList<ProjectMember> get_project_member_list(int pjID) throws Exception;
+    public ArrayList<ProjectMember> get_inactive_project_member_list(int pjID) throws Exception;
 
     /**[  ]*/
 //    public ProjectMember get_member_role(int mbID, int pjID) throws Exception;
