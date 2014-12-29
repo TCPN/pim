@@ -45,144 +45,151 @@ public class ServerRequestManager extends Thread implements Serializable
 		}
 	}
 	
-	private Object handleRequest(Request request) throws Exception
+	private Object handleRequest(Request request)
 	{
 		/*
-		  
-		 
 		String aMethod = "myMethod";
-
 		Object iClass = pim.server.ServerRequestManager.newInstance();
 		// get the method
 		Method thisMethod = this.getDeclaredMethod(aMethod, params);
 		// call the method
 		thisMethod.invoke(iClass, paramsObj);*/
-		String reqtype = request.getName() ;
-		Object params[] = request.getParameterList() ;
-		Object response = null ;
-		if(reqtype.equals("test"))
-		{/*
-            System.out.println("pa mbID: " + request.findValue("mbID").toString());
-            System.out.println("pa pjName: " + request.findValue("pjName").toString());
-            System.out.println("pa pjGoal: " + request.findValue("pjGoal").toString());
-            System.out.println("pa pjDeadline: " + request.findValue("pjDeadline").toString());
-            Project pj = (Project)request.findValue("pjObject");
-            System.out.println("pjObject: " + pj.getPjID() + " " + pj.getPjName() + " " + pj.getPjGoal() + " " + pj.getPjManager() + " " + pj.getPjDeadline());
-			boolean success = pj.getPjManager().startsWith("Mr. ");
-            return success;*/
+		try{
+			String reqName = request.getName() ;
+			Object params[] = request.getParameterList() ;
+			if(reqName.equals("test"))
+			{/*
+				System.out.println("pa mbID: " + request.findValue("mbID").toString());
+				System.out.println("pa pjName: " + request.findValue("pjName").toString());
+				System.out.println("pa pjGoal: " + request.findValue("pjGoal").toString());
+				System.out.println("pa pjDeadline: " + request.findValue("pjDeadline").toString());
+				Project pj = (Project)request.findValue("pjObject");
+				System.out.println("pjObject: " + pj.getPjID() + " " + pj.getPjName() + " " + pj.getPjGoal() + " " + pj.getPjManager() + " " + pj.getPjDeadline());
+				boolean success = pj.getPjManager().startsWith("Mr. ");
+				return success;*/
+			}
+			else if(reqName.equals("logIn"))
+			{
+
+				return DBManager.login(
+						(String)params[0], 
+						(String)params[1]
+								) ;
+				
+			}
+			else if(reqName.equals("forgetPassword")) 
+			{
+				return DBManager.forget_password(
+						(String)params[0]
+								) ;
+			}
+			else if(reqName.equals("createAccount"))
+			{
+				return DBManager.register(
+						(String)params[0], 
+						(String)params[1], 
+						(String)params[2]
+								) ;
+			}
+			else if(reqName.equals("getProjectList"))
+			{
+				return DBManager.get_project_List(
+						(Integer)params[0]
+								);
+			}
+			else if(reqName.equals("getInvitingProjectList"))
+			{
+				return DBManager.get_invitation_project_List(
+						(Integer)params[0]
+							);
+				
+			}
+			else if(reqName.equals("getMeetingMinutesList"))
+			{
+				ArrayList<MeetingMinutesAbstract> mmablist = DBManager.get_timeline(
+						(Integer)params[0]
+								) ;
+				ArrayList<MeetingMinutes> mmlist = new ArrayList<MeetingMinutes>() ;
+				for(MeetingMinutesAbstract mmab : mmablist)
+				{
+					mmlist.add(new MeetingMinutes(mmab)) ;
+				}
+
+				return mmlist ;
+			}
+			else if(reqName.equals("respondInvitation"))
+			{
+				return DBManager.respond_to_invitation(
+						(Integer)params[0], 
+						(Integer)params[1], 
+						(Boolean)params[2]
+								) ;
+			}
+			else if(reqName.equals("createProject"))
+			{
+				int pjID = DBManager.create_new_project(
+						(Integer)params[0], 
+						(String)params[1], 
+						(String)params[2], 
+						(Date)params[3],
+								) ;
+				
+				ArrayList<String> emaillist = (ArrayList<String>)params[4];
+				for(String email:emaillist)
+				{
+					int invitedmbID = DBManager.getMemberIDbyEmail(email) ;
+					if(invitedmbID!=-1) invite(invitedmbID, pjID) ;
+				}
+				
+			}
+			else if(reqName.equals("getMemberList"))
+			{
+				return DBManager.get_active_project_member_list(
+						(Integer)params[0]
+								) ;
+			}
+			else if(reqName.equals("getInvitingMemberList"))
+			{
+				return DBManager.get_inactive_project_member_list(
+						(Integer)params[0]
+								) ;
+			}
+			else if(reqName.equals("createMeetingMinutes"))
+			{
+				return DBManager.create_new_MM(
+						(Integer)params[0],
+						(MeetingMinutesContent)params[1]
+								);
+			}
+			else if(reqName.equals("modifyProject"))
+			{
+				return DBManager.update_project_setting(
+						(Integer)params[0], 
+						(Integer)params[1], 
+						(String)params[2], 
+						(String)params[3], 
+						(Date)params[4], 
+						(String)params[5]
+							) ;
+			}
+			else if(reqName.equals("modifyMeetingMinutes"))
+			{
+				return DBManager.update_old_MM(
+						(Integer)params[0], 
+						(MeetingMinutesContent)params[1]
+								) ;
+			}
+			//else if...for all DbConnector API
+			else
+			{
+				//for error
+				return new Exception("Request Name No Match.");
+			}
 		}
-        else if(reqtype.equals("logIn"))
-        {
-
-            return DBManager.login(
-            		(String)params[0], 
-            		(String)params[1]
-            				) ;
-            
-        }
-        else if(reqtype.equals("forgetPassword")) 
-        {
-        	return DBManager.forget_password(
-        			(String)params[0]
-        					) ;
-        }
-        else if(reqtype.equals("createAccount"))
-        {
-        	return DBManager.register(
-        			(String)params[0], 
-        			(String)params[1], 
-        			(String)params[2]
-        					) ;
-        }
-        else if(reqtype.equals("getMemberProjectList"))
-        {
-        	return DBManager.get_project_List(
-        			(Integer)params[0]
-        					);
-        }
-        else if(reqtype.equals("getMeetingMinutesList"))
-        {
-        	ArrayList<MeetingMinutesAbstract> mmablist = DBManager.get_timeline(
-        			(Integer)params[0]
-        					) ;
-        	ArrayList<MeetingMinutes> mmlist = new ArrayList<MeetingMinutes>() ;
-        	for(MeetingMinutesAbstract mmab : mmablist)
-        	{
-        		mmlist.add(new MeetingMinutes(mmab)) ;
-        	}
-
-        	return mmlist ;
-        }
-        else if(reqtype.equals("getInvitationListForMember"))
-        {
-            return DBManager.getInvitationList(
-            		(Integer)params[0]
-            			);
-        	
-        }
-        else if(reqtype.equals("respondInvitation"))
-        {
-        	return DBManager.respond_to_invitation(
-        			(Integer)params[0], 
-        			(Integer)params[1], 
-        			(Boolean)params[2]
-        					) ;
-        }
-        else if(reqtype.equals("createProject"))
-        {
-            return DBManager.create_new_project(
-            		(Integer)params[0], 
-            		(String)params[1], 
-            		(String)params[2], 
-            		(Date)params[3],
-            		(ArrayList<String>)params[4]
-            				) ;
-
-            
-        }
-        else if(reqtype.equals("getProjectMemberList"))
-        {
-            return DBManager.get_active_project_member_list(
-            		(Integer)params[0]
-            				) ;
-        }
-        else if(reqtype.equals("getProjectInvitationList"))
-        {
-            return DBManager.get_inactive_project_member_list(
-            		(Integer)params[0]
-            				) ;
-        }
-        else if(reqtype.equals("createMeetingMinutes"))
-        {
-            return DBManager.create_new_MM(
-            		(Integer)params[0],
-            		(MeetingMinutesContent)params[1]
-            				);
-        }
-        else if(reqtype.equals("modifyProject"))
-        {
-            return DBManager.update_project_setting(
-            		(Integer)params[0], 
-            		(Integer)params[1], 
-            		(String)params[2], 
-            		(String)params[3], 
-            		(Date)params[4], 
-            		(String)params[5]
-            			) ;
-        }
-        else if(reqtype.equals("modifyMeetingMinutes"))
-        {
-            return DBManager.update_old_MM(
-            		(Integer)params[0], 
-            		(MeetingMinutesContent)params[1]
-            				) ;
-        }
-		//else if...for all DbConnector API
-		else
-		{
-			//for error
+		catch(Exception e){
+			System.out.println(e.toString());
+			return e;
 		}
-		return response ;
 	}
 /*
 	private Member logIn(String userEmail, String userPassword)
