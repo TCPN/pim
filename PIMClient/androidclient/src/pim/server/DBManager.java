@@ -1,5 +1,5 @@
-﻿package pim;
-
+﻿package pim.server;
+import pim.* ;
 
 import java.sql.Connection;
 import java.sql.Date;	//import java.util.Date;
@@ -63,7 +63,7 @@ import java.util.Properties;
  *
  */
 
-public class MAIN {
+public class DBManager {
 	public interface API {
 	    /**[01] will "No Matched" be an Exception ????????? */
 	    public Member login(String userEmail, String userPassword) throws Exception;
@@ -87,7 +87,7 @@ public class MAIN {
 	    public Project get_project_setting(int pjID) throws Exception;
 
 	    /**[21] parameter int pjManager deleted */
-	    public boolean create_new_project(int mbID, String pjName, String pjGoal, Date pjDeadline) throws Exception;
+	    public int create_new_project(int mbID, String pjName, String pjGoal, Date pjDeadline) throws Exception;
 
 	    /**[22] return boolean or Project ???????????*/
 	    public boolean update_project_setting(int pjID, int mbID, String pjName, String pjGoal, Date pjDeadline, int newPjManagerID) throws Exception;
@@ -276,8 +276,40 @@ public class MAIN {
 		return pjID;
 	}
 	
-	public static boolean update_project_setting(int pjID, int mbID, String pjName, String pjGoal, java.util.Date pjDeadline, int newPjManagerID){
+	//create project with member added at same time
+	public static int create_new_project(int mbID, String pjName, String pjGoal, java.util.Date pjDeadline, ArrayList<String> emaillist){
 		Member mb;
+		mb = db.getMemberAsObject(mbID);
+		if(mb==null)
+			return -1;
+		/*Calendar utilDeadline = new GregorianCalendar(2015 ,9 , 26); // yyyy, M, dd
+		java.sql.Date sqlDeadline = new java.sql.Date(utilDeadline.getTimeInMillis());*/
+					// 不要使用 Date Constructor (如下):	
+					// Date deadline = new Date(2015,9,26);
+					// Date Constructor 已經被 deprecate 了。	
+		Calendar deadline = Calendar.getInstance();
+		deadline.setTime(pjDeadline);
+		java.sql.Date sqlDeadline = new java.sql.Date(deadline.getTimeInMillis());
+		
+		int pjID = db.createProject(pjName, pjGoal, mb.getMbName(), sqlDeadline);
+		//int pjID = db.createProject(pjName, pjGoal, pjManager, sqlDeadline);
+		
+		if (pjID != -1) {
+			// PP1b.	[同步新增] 一筆 pjmbTable 資料 (pjID, mbID, pjmbRole, pjmbIsManager)
+			//				return 1
+			int result = db.createPJMB(pjID, mbID, "Project Manager", 0, 1);
+		}
+		//PJ newPJ = getPJ(pjID);
+		for(String email:emaillist)
+		{
+			int invitedmbID = db.getMemberIDbyEmail(email) ;
+			if(invitedmbID!=-1) invite(invitedmbID, pjID) ;
+		}
+		return pjID;
+	}
+	public static boolean update_project_setting(int pjID, int mbID, String pjName, String pjGoal, java.util.Date pjDeadline, String newPjManager){
+		Member mb;
+		int newPjManagerID = db.getMemberIDbyEmail(newPjManager) ;
 		mb = db.getMemberAsObject(mbID);
 		if(mb==null)
 			return false;

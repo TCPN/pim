@@ -23,7 +23,7 @@ import pim.Project;
 import pim.ProjectMember;
 
 
-public class DBConnector {
+public class DbConnector {
 
     ////ATTRIBUTES FOR CONNECTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Connection conn = null;
@@ -62,7 +62,7 @@ public class DBConnector {
     //-------------------------------------------------------------------------------------------------------------------------------------
 
     ////CONSTRUCTOR //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public DBConnector(String JdbcURL, String User, String Password /*, String UseUnicode, String CharacterEncoding*/) {
+    public DbConnector(String JdbcURL, String User, String Password /*, String UseUnicode, String CharacterEncoding*/) {
         this.jdbcURL = JdbcURL;		// jdbcURL = localhost:3306/pim
         this.user = User;			// User = root
         this.password = Password;	// Password = cliurcp
