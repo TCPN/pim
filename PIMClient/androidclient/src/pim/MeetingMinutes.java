@@ -25,6 +25,7 @@ public class MeetingMinutes implements Serializable {
 	{
 		this.lastModifyTime = mmab.getLastModifyTime() ;
 		this.content.meetingTime = mmab.getMeetingTime() ;
+        this.content.objective = mmab.getObjective() ;
 		this.mmID = mmab.getmmid() ;
 		this.pjID = mmab.getpjid() ;
 	}
