@@ -532,8 +532,22 @@ public class DBManager {
 		return list;
 	}
 	
-	
-	
+	//adtional method for invitation list
+	public static ArrayList<Project> getInvitationList(int mbID)
+	{
+		ArrayList<Integer> pjIDlist = db.getPjIdList(mbID) ;
+		ArrayList<Project> pjlist = new ArrayList<Project>() ;
+		for(Integer pjID:pjIDlist)
+		{
+			if(-1!=db.isActive(pjID, mbID))
+			{
+				pjlist.add(getPJ(pjID)) ;
+			}
+				
+		}
+		return pjlist ;
+		
+	}
 
 	
 	public static void main(String[] args) {

@@ -115,7 +115,10 @@ public class ServerRequestManager extends Thread implements Serializable
         }
         else if(reqtype.equals("getInvitationListForMember"))
         {
-            //to be done in DbConnector
+            return DBManager.getInvitationList(
+            		(Integer)params[0]
+            			);
+        	
         }
         else if(reqtype.equals("respondInvitation"))
         {

@@ -679,7 +679,7 @@ public class DbConnector {
         return pjIdList;
     }
 
-
+    
     ///////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////
     public int deletePJMB(int PJid, int MBid) /*throws SQLException*/ {
