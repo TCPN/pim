@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class ClientRequestManager implements API, ClientAPI {
+public class ClientRequestManager implements /*API,*/ ClientAPI {
     final String validateString = "imvalidate";
     Socket socket = null;
 	ObjectInputStream input;
@@ -50,6 +50,9 @@ public class ClientRequestManager implements API, ClientAPI {
 			System.out.println("Response received. Type:" + receivedObject.getClass().toString());
 			
 			socket.close();
+            if(receivedObject.getClass().equals(Exception.class))
+                throw (Exception)receivedObject;
+
 			return receivedObject;
 		}
 		catch(Exception e)
@@ -61,27 +64,11 @@ public class ClientRequestManager implements API, ClientAPI {
 	}
 
 	////test and readPJ for test
-	boolean test(Project pj) throws Exception
+	public String test(String str) throws Exception
 	{
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter<Integer>("mbID", 5566));
-        parameters.add(new Parameter<String>("pjName", SecurityManager.md5Encoder("My Project")));
-        parameters.add(new Parameter<String>("pjGoal", "Reach it"));
-        parameters.add(new Parameter<Date>("pjDeadline", new Date()));
-        parameters.add(new Parameter<Project>("pjObject", pj));
-        Request createPJRequest = new Request("test", parameters);
-		boolean success = (Boolean) sendRequest(createPJRequest) ;
-		return success ;
+        Request request = new Request("Nothing","parameter");
+        return (String) sendRequest(request) ;
 	}
-
-	Project readPJ(int pjID) throws Exception
-	{
-		//Request readPJRequest = new CreateRequest("READ_PJ", pjID) ;
-		//Project retpj = (Project) sendRequest(readPJRequest) ;
-		//return retpj ;
-		return null ;
-	}
-
 
 	boolean validateConnection(Socket socket) throws Exception	//not used yet
 	{
@@ -126,12 +113,22 @@ public class ClientRequestManager implements API, ClientAPI {
     }
 
     @Override
-    public ArrayList<Project> getMemberProjectList(Member member) throws Exception 
+    public ArrayList<Project> getProjectList(Member member) throws Exception
     {
         Request request = new Request(
-        		"getMemberProjectList",
+        		"getProjectList",
         		member.getMbID()
         		);
+        return (ArrayList<Project>) sendRequest(request) ;
+    }
+
+    @Override
+    public ArrayList<Project> getInvitingProjectList(Member member) throws Exception
+    {
+        Request request = new Request(
+                "getInvitingProjectList",
+                member.getMbID()
+        );
         return (ArrayList<Project>) sendRequest(request) ;
     }
 
@@ -143,16 +140,6 @@ public class ClientRequestManager implements API, ClientAPI {
         		project.getPjID()
         		);
         return (ArrayList<MeetingMinutes>) sendRequest(request) ;
-    }
-
-    @Override
-    public ArrayList<Project> getInvitationListForMember(Member member) throws Exception 
-    {
-        Request request = new Request(
-        		"getInvitationListForMember", 
-        		member.getMbID()
-        		);
-        return (ArrayList<Project>) sendRequest(request) ;
     }
 
     @Override
@@ -182,20 +169,20 @@ public class ClientRequestManager implements API, ClientAPI {
     }
 
     @Override
-    public ArrayList<ProjectMember> getProjectMemberList(Project project) throws Exception 
+    public ArrayList<ProjectMember> getMemberList(Project project) throws Exception
     {
         Request request = new Request(
-        		"getProjectMemberList", 
+        		"getMemberList",
         		project.getPjID()
         		);
         return (ArrayList<ProjectMember>) sendRequest(request) ;
     }
     
     @Override
-    public ArrayList<ProjectMember> getProjectInvitationList(Project project) throws Exception
+    public ArrayList<ProjectMember> getInvitingMemberList(Project project) throws Exception
     {
     	Request request = new Request(
-    			"getProjectInvitationList", 
+    			"getInvitingMemberList",
     			project.getPjID()
     			);
         return ( ArrayList<ProjectMember>) sendRequest(request) ;
@@ -211,8 +198,6 @@ public class ClientRequestManager implements API, ClientAPI {
         		);
         return (Boolean) sendRequest(request) ;
     }
-    
-
 
     @Override
     public Boolean modifyProject(Member member, Project project) throws Exception 
@@ -224,7 +209,7 @@ public class ClientRequestManager implements API, ClientAPI {
         		project.getPjName(), 
         		project.getPjGoal(), 
         		project.getPjDeadline(), 
-        		project.getPjManager()
+        		project.pjManagerID
         		);
         return (Boolean) sendRequest(request) ;
     }
@@ -241,7 +226,7 @@ public class ClientRequestManager implements API, ClientAPI {
     }
 
     // implement the APIs
-
+/*
     @Override
     public Member login(String userEmail, String userPassword) {
         // just for test
@@ -330,5 +315,5 @@ public class ClientRequestManager implements API, ClientAPI {
     public ArrayList<ProjectMember> get_project_member_list(int pjID) {
         return new ArrayList<ProjectMember>();
     }
-
+*/
 }

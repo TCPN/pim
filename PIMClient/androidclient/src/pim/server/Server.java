@@ -38,7 +38,6 @@ public class Server
 
 			while(true)
 			{
-				// 1, ���ݤ@�ӷs���s���ШD(Request).
 
 				Socket socket = serverSocket.accept();
 				Date connectTime = new Date() ;
@@ -52,7 +51,6 @@ public class Server
 				}
 				*/
 
-				// 2, �}�sThread�B�z�s���ШD.
 				
 				if(this.protocol.equals("http"))
 				{

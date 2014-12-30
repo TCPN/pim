@@ -11,9 +11,16 @@ public class Request implements Serializable {
         this.name = name;
     }
     public Request (String name, Object... params) {
-    	
         this.name = name;
         this.parameterList = params;
+    }
+    public String getName()
+    {
+    	return this.name ;
+    }
+    public Object[] getParameterList()
+    {
+    	return parameterList ;
     }
     /*
     public Object findValue(String inputname)
@@ -26,14 +33,6 @@ public class Request implements Serializable {
         return null ;
     }
     */
-    public String getName()
-    {
-    	return this.name ;
-    }
-    public Object[] getParameterList()
-    {
-    	return parameterList ;
-    }
 }
 
 /*

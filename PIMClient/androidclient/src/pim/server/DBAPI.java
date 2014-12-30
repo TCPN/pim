@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import pim.*;
 
-public interface API {
+public interface DBAPI {
     /**[01] will "No Matched" be an Exception ????????? */
     public Member login(String userEmail, String userPassword) throws Exception;
 
@@ -67,7 +67,7 @@ public interface API {
     public MeetingMinutes read_MM(int mmID) throws Exception;
 
     /**[51]*/
-    public ArrayList<ProjectMember> get_project_member_list(int pjID) throws Exception;
+    public ArrayList<ProjectMember> get_active_project_member_list(int pjID) throws Exception;
     public ArrayList<ProjectMember> get_inactive_project_member_list(int pjID) throws Exception;
 
     /**[  ]*/

@@ -12,15 +12,18 @@ public class ProjectMember implements Serializable {
 	String mbEmail;
 	String pjmbRole;
 	boolean isManager;
+    boolean isActive;
 	
 	//CONSTRUCTOR:
 	
-	public ProjectMember(int pjID, int mbID, String mbName, String mbEmail, String pjmbRole){
+	public ProjectMember(int pjID, int mbID, String mbName, String mbEmail, String pjmbRole, boolean isManager, boolean isActive){
 		this.pjID = pjID;
 		this.mbID = mbID;
 		this.mbName = mbName;
 		this.mbEmail = mbEmail;
 		this.pjmbRole = pjmbRole;
+        this.isManager = isManager;
+        this.isActive = isActive;
 	}
 
 	//GETTERS:
@@ -49,7 +52,11 @@ public class ProjectMember implements Serializable {
 		return isManager;
 	}
 
-	//SETTERS:
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    //SETTERS:
 	
 }
 

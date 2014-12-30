@@ -67,11 +67,12 @@ public class ServerRequestManager extends Thread implements Serializable
 				System.out.println("pjObject: " + pj.getPjID() + " " + pj.getPjName() + " " + pj.getPjGoal() + " " + pj.getPjManager() + " " + pj.getPjDeadline());
 				boolean success = pj.getPjManager().startsWith("Mr. ");
 				return success;*/
+                return "this is Test Request";
 			}
 			else if(reqName.equals("logIn"))
 			{
 
-				return DBManager.login(
+				return dbcn.login(
 						(String)params[0], 
 						(String)params[1]
 								) ;
@@ -79,13 +80,13 @@ public class ServerRequestManager extends Thread implements Serializable
 			}
 			else if(reqName.equals("forgetPassword")) 
 			{
-				return DBManager.forget_password(
+				return dbcn.forget_password(
 						(String)params[0]
 								) ;
 			}
 			else if(reqName.equals("createAccount"))
 			{
-				return DBManager.register(
+				return dbcn.register(
 						(String)params[0], 
 						(String)params[1], 
 						(String)params[2]
@@ -93,20 +94,20 @@ public class ServerRequestManager extends Thread implements Serializable
 			}
 			else if(reqName.equals("getProjectList"))
 			{
-				return DBManager.get_project_List(
+				return dbcn.get_project_List(
 						(Integer)params[0]
 								);
 			}
 			else if(reqName.equals("getInvitingProjectList"))
 			{
-				return DBManager.get_invitation_project_List(
+				return dbcn.get_invitation_project_List(
 						(Integer)params[0]
 							);
 				
 			}
 			else if(reqName.equals("getMeetingMinutesList"))
 			{
-				ArrayList<MeetingMinutesAbstract> mmablist = DBManager.get_timeline(
+				ArrayList<MeetingMinutesAbstract> mmablist = dbcn.get_timeline(
 						(Integer)params[0]
 								) ;
 				ArrayList<MeetingMinutes> mmlist = new ArrayList<MeetingMinutes>() ;
@@ -119,7 +120,7 @@ public class ServerRequestManager extends Thread implements Serializable
 			}
 			else if(reqName.equals("respondInvitation"))
 			{
-				return DBManager.respond_to_invitation(
+				return dbcn.respond_to_invitation(
 						(Integer)params[0], 
 						(Integer)params[1], 
 						(Boolean)params[2]
@@ -127,54 +128,47 @@ public class ServerRequestManager extends Thread implements Serializable
 			}
 			else if(reqName.equals("createProject"))
 			{
-				int pjID = DBManager.create_new_project(
+				return dbcn.create_new_project(
 						(Integer)params[0], 
 						(String)params[1], 
 						(String)params[2], 
 						(Date)params[3],
+                        (ArrayList<String>)params[4]
 								) ;
-				
-				ArrayList<String> emaillist = (ArrayList<String>)params[4];
-				for(String email:emaillist)
-				{
-					int invitedmbID = DBManager.getMemberIDbyEmail(email) ;
-					if(invitedmbID!=-1) invite(invitedmbID, pjID) ;
-				}
-				
 			}
 			else if(reqName.equals("getMemberList"))
 			{
-				return DBManager.get_active_project_member_list(
+				return dbcn.get_active_project_member_list(
 						(Integer)params[0]
 								) ;
 			}
 			else if(reqName.equals("getInvitingMemberList"))
 			{
-				return DBManager.get_inactive_project_member_list(
+				return dbcn.get_inactive_project_member_list(
 						(Integer)params[0]
 								) ;
 			}
 			else if(reqName.equals("createMeetingMinutes"))
 			{
-				return DBManager.create_new_MM(
+				return dbcn.create_new_MM(
 						(Integer)params[0],
 						(MeetingMinutesContent)params[1]
 								);
 			}
 			else if(reqName.equals("modifyProject"))
 			{
-				return DBManager.update_project_setting(
+				return dbcn.update_project_setting(
 						(Integer)params[0], 
 						(Integer)params[1], 
 						(String)params[2], 
 						(String)params[3], 
 						(Date)params[4], 
-						(String)params[5]
+						(Integer)params[5]
 							) ;
 			}
 			else if(reqName.equals("modifyMeetingMinutes"))
 			{
-				return DBManager.update_old_MM(
+				return dbcn.update_old_MM(
 						(Integer)params[0], 
 						(MeetingMinutesContent)params[1]
 								) ;
@@ -188,7 +182,7 @@ public class ServerRequestManager extends Thread implements Serializable
 		}
 		catch(Exception e){
 			System.out.println(e.toString());
-			return e;
+			return new Exception("Caught Error when Server Handle Request: "+ e.toString(), e);
 		}
 	}
 /*

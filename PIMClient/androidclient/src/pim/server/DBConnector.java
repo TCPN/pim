@@ -23,7 +23,7 @@ import pim.Project;
 import pim.ProjectMember;
 
 
-public class DbConnector {
+public class DBConnector {
 
     ////ATTRIBUTES FOR CONNECTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Connection conn = null;
@@ -62,7 +62,7 @@ public class DbConnector {
     //-------------------------------------------------------------------------------------------------------------------------------------
 
     ////CONSTRUCTOR //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public DbConnector(String JdbcURL, String User, String Password /*, String UseUnicode, String CharacterEncoding*/) {
+    public DBConnector(String JdbcURL, String User, String Password /*, String UseUnicode, String CharacterEncoding*/) {
         this.jdbcURL = JdbcURL;		// jdbcURL = localhost:3306/pim
         this.user = User;			// User = root
         this.password = Password;	// Password = cliurcp
@@ -241,6 +241,31 @@ public class DbConnector {
             return mgr;
         } else {
             return null;
+        }
+    }
+
+    public int getPjManagerID(int PJid) {
+
+        int tempNum = 0;
+        int mgrID = -1;
+        try {
+            String query = "SELECT mbID from pjmbTable where (pjID = ? and pjmbIsManager = 1)";
+            PreparedStatement pStm = conn.prepareStatement(query);
+            pStm.setInt(1, PJid);
+            ResultSet rs = pStm.executeQuery();
+            while (rs.next()){
+                mgrID = rs.getInt("mbID");
+            }
+            tempNum += 1;
+        }
+        catch (SQLException e) {
+            //e.printStackTrace();
+            return -1;
+        }
+        if (tempNum == 1){
+            return mgrID;
+        } else {
+            return -1;
         }
     }
 
@@ -693,7 +718,7 @@ public class DbConnector {
 
 
 
-////-----------------------------------------------------------------// mbTable
+////-----------------------------------------------------------------// mmTable
 
     public int createMM(int PJid, Object mmContent) {
 
@@ -770,6 +795,26 @@ public class DbConnector {
             return null;
         }
         return mmblob;
+    }
+
+    public int getPJIDofMM(int MMid) {
+        int pjID = -1;
+        try {
+            String query = "SELECT pjID FROM mmTable WHERE (mmID = ?)";
+            PreparedStatement pStm = conn.prepareStatement(query);
+            pStm.setInt(1, MMid);
+            pStm.executeQuery();
+
+            ResultSet rs = pStm.executeQuery();
+            while(rs.next()){
+                pjID = rs.getInt("pjID");
+            }
+        }
+        catch (SQLException e) {
+            //e.printStackTrace();
+            return -1;
+        }
+        return pjID;
     }
 
     public java.util.Date getMMLastModified(int MMid) {
