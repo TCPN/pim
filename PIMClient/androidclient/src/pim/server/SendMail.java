@@ -1,19 +1,21 @@
-package pim;
+package pim.server;
 
 import java.lang.String;
-import java.util.Properties;  
-import javax.mail.Authenticator;  
-import javax.mail.Message;  
-import javax.mail.MessagingException;  
-import javax.mail.PasswordAuthentication;  
-import javax.mail.Session;  
-import javax.mail.Transport;  
-import javax.mail.internet.InternetAddress;  
-import javax.mail.internet.MimeMessage;  
-  
-public class SendMail extends java.lang.Thread {  
+import java.util.Properties;
+/*
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+  */
+
+public class SendMail extends java.lang.Thread {
 	public SendMail(String addressee, String mailTitle, String mailContent){
-		
+		/*
       
         final String username = "projectinmotion2014@gmail.com";  
         final String password = "20140923";
@@ -50,7 +52,7 @@ public class SendMail extends java.lang.Thread {
   
         } catch (MessagingException e) {  
             throw new RuntimeException(e);  
-        }
+        }*/
 	}
     public static void main(String[] args) {}  
 }  
