@@ -1,9 +1,10 @@
 package pim;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MeetingMinutesContent {
+public class MeetingMinutesContent implements Serializable{
 
     public Date meetingTime;
     public String location;

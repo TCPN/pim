@@ -93,7 +93,7 @@ public class DBManager implements DBAPI{
 		}
 		else
 		{
-			System.out.println("ID get");
+			System.out.println("ID get: "+ mbID);
 			Member member;
 			member=db.getMemberAsObject(mbID);
 			if(member == null)
@@ -112,13 +112,21 @@ public class DBManager implements DBAPI{
             String password = db.getPassword(userEmail);
             String new_password = password.substring(8);
 			//new_password = md5(new_password);
-			new_password = PIMSecurityManager.md5Encoder(password.substring(8));
+			new_password = password.substring(8);
 			//member.setMbPassword( md5(new_password) );
             Member member = db.getMemberAsObject(mbID);
-			db.updateMember(member.getMbID(), member.mbEmail, new_password, member.mbName);
-			
-			new SendMail(userEmail, "Your Password in PIM", "Hello, " + userEmail + " Your New Password for PIM App is " + new_password);
-			return true;
+            if(member == null){
+                return false;
+            }
+			if(0 > db.updateMember(member.getMbID(), member.mbEmail, PIMSecurityManager.md5Encoder(password.substring(8)), member.mbName))
+            {
+                new SendMail(userEmail, "Your Password in PIM", "Hello, " + userEmail + " Your New Password for PIM App is " + new_password);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 		}
 	}
 	
@@ -127,6 +135,7 @@ public class DBManager implements DBAPI{
 		mbID = db.getMemberIDbyEmail(userEmail);	//to be modify
 		if(mbID!=-1)
 		{
+            System.out.print("failed, email exist");
 			return false;	//member existed
 		}
 		else
@@ -229,9 +238,18 @@ public class DBManager implements DBAPI{
         if (pjID != -1) {
             // PP1b.	new a pjmbTable (pjID, mbID, pjmbRole, pjmbIsManager)
             //				return 1
-            if(-1 != db.createPJMB(pjID, mbID, "Project Manager", 0, 1))
+            if(-1 == db.createPJMB(pjID, mbID, "Project Manager", 1, 1))
+            {
+                System.out.println("FAILED TO ADD INITIAL PROJECT MANAGER !!! (pjID:" + pjID + ")");
                 return false;
+            }
             else {
+                if(emaillist == null)
+                {
+                    System.out.println("invite email list is not given");
+                    return true;
+                }
+                System.out.println("invite email list size: " + emaillist.size());
                 for(String email:emaillist)
                 {
                     int invitedmbID = db.getMemberIDbyEmail(email) ;
@@ -296,14 +314,11 @@ public class DBManager implements DBAPI{
 		//member existed in pjmbtable
 		
 		try{
-			int existed = db.isActive(pjID, mbID);
+			if(db.getPJMB(pjID, mbID) != null)
 			return false;
 		} catch(SQLException e){}
-		
-		String pjmbRole = "";
-		int pjmbIsActive = 0;
-		int pjmbIsManager = 0;
-		int result = db.createPJMB(pjID, mbID, pjmbRole, pjmbIsActive, pjmbIsManager);
+
+		int result = db.createPJMB(pjID, mbID, "", 0, 0);
 		if (result == -1)
 			return false;
 		else
@@ -341,7 +356,7 @@ public class DBManager implements DBAPI{
 		
 	}
 	
-		public ArrayList<MeetingMinutesAbstract> get_timeline(int pjID){
+    public ArrayList<MeetingMinutesAbstract> get_timeline(int pjID){
 		List<Integer> mmidList;
 		ArrayList<MeetingMinutesAbstract> MMAlist = new ArrayList<MeetingMinutesAbstract>();
 		mmidList = db.getMMidList(pjID);
@@ -399,17 +414,14 @@ public class DBManager implements DBAPI{
 		
 		for (int i = 0; i <= pjmbIdList.size()-1; i++){
             int mbID = pjmbIdList.get(i);
-			Member member;
-			member = db.getMemberAsObject(mbID);
 			
-			String pjmbRole="";
-			int pjmbIsActive=0;
+			ProjectMember pjmb = null;
 			try{
-				pjmbRole = db.getPJMB(pjID, mbID);
-				pjmbIsActive = db.isActive(pjID, mbID);
-                if(pjmbIsActive==1) {
-                    ProjectMember temp = new ProjectMember(pjID, mbID, member.mbName, member.mbEmail, pjmbRole, (db.isManager(pjID, mbID) == 1), true);
-                    list.add(temp);
+                if(db.isActive(pjID, mbID) == 1) {
+                    pjmb = db.getPJMB(pjID, mbID);
+                    if (pjmb != null) {
+                        list.add(pjmb);
+                    }
                 }
             }catch(SQLException e){
                 //e.printStackTrace();
@@ -420,46 +432,38 @@ public class DBManager implements DBAPI{
 	}
 	
 	public ArrayList<ProjectMember> get_inactive_project_member_list(int pjID){
-		ResultSet pj;
-		pj = db.getProjectAsResultSet(pjID);
-		if(pj==null)
-			return null;
-		
-		List<Integer> pjmbIdList = new ArrayList<Integer>();
-		try{
-			pjmbIdList = db.getPjmbIdList(pjID);
-		}catch(SQLException e){
-			//e.printStackTrace();
-			return null;
-		}
-		
-		ArrayList<ProjectMember> list = new ArrayList<ProjectMember>();
-		
-		for (int i = 0; i <= pjmbIdList.size()-1; i++){
+        ResultSet pj;
+        pj = db.getProjectAsResultSet(pjID);
+        if(pj==null)
+            return null;
+
+        List<Integer> pjmbIdList = new ArrayList<Integer>();
+        try{
+            pjmbIdList = db.getPjmbIdList(pjID);
+        }catch(SQLException e){
+            //e.printStackTrace();
+            return null;
+        }
+
+        ArrayList<ProjectMember> list = new ArrayList<ProjectMember>();
+
+        for (int i = 0; i <= pjmbIdList.size()-1; i++){
             int mbID = pjmbIdList.get(i);
-			Member member;
-			member = db.getMemberAsObject(mbID);
-			
-			String pjmbRole="";
-			int pjmbIsActive=0;
-			try{
-				pjmbRole = db.getPJMB(pjID, mbID);
-			}catch(SQLException e){
-				//e.printStackTrace();
-				return null;
-			}
-			try{
-				pjmbIsActive = db.isActive(pjID, mbID);
-			}catch(SQLException e){
-				//e.printStackTrace();
-				return null;
-			}
-			if(pjmbIsActive==0) {
-                ProjectMember temp = new ProjectMember(pjID, mbID, member.mbName, member.mbEmail, pjmbRole, false, false);
-                list.add(temp);
+
+            ProjectMember pjmb = null;
+            try{
+                if(db.isActive(pjID, mbID) == 0) {
+                    pjmb = db.getPJMB(pjID, mbID);
+                    if (pjmb != null) {
+                        list.add(pjmb);
+                    }
+                }
+            }catch(SQLException e){
+                //e.printStackTrace();
+                return null;
             }
-		}
-		return list;
+        }
+        return list;
 	}
 	
 	//adtional method for invitation list
@@ -467,7 +471,7 @@ public class DBManager implements DBAPI{
         ArrayList<Integer> pjIDlist = null;
         ArrayList<Project> pjlist = null;
         try {
-            pjIDlist = db.getPjIdList(mbID);
+            pjIDlist = db.getPJidList(mbID, 0);
             pjlist = new ArrayList<Project>();
             for (Integer pjID : pjIDlist) {
                 if (-1 != db.isActive(pjID, mbID)) {

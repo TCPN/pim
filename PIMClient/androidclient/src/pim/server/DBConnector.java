@@ -18,6 +18,7 @@ import java.util.Calendar;
 
 import pim.MeetingMinutesContent;
 import pim.Member;
+import pim.ProjectMember;
 
 
 public class DBConnector {
@@ -78,7 +79,7 @@ public class DBConnector {
 ////-----------------------------------------------------------------// pjTable
 
     public int createProject(String PJname, String PJgoal, String PJmanager, java.util.Date PJdeadline) /*throws SQLException*/ {
-        int tempNum = 0;
+        System.out.println("creating project...");
         int last_inserted_pjID = -1;
         //int pjID = -1;
         try {
@@ -101,22 +102,19 @@ public class DBConnector {
 			pjID = pStm2.executeUpdate();
 			System.out.println("pjID = " + pjID);
 			*/
-            tempNum += 1;
-
         } catch (SQLException e) {
+            System.out.println(e);
+            System.out.println("failed, return " + -1);
             return -1;
             //e.printStackTrace();
         }
-        if (tempNum == 1){
-            return last_inserted_pjID;
-        } else {
-            return -1;
-        }
+        System.out.println("success, return " + last_inserted_pjID);
+        return last_inserted_pjID;
     }
 
     public int updateProject(int PJid, String PJname, String PJgoal, String PJmanager, java.sql.Date PJdeadline) /*throws SQLException*/ {
+        System.out.println("updating project...");
 
-        int tempNum = 0;
         try {
             String query = "UPDATE pjTable SET pjName = ?, pjGoal = ?, pjManager = ?, pjDeadline = ? WHERE pjID = ?";
             PreparedStatement pStm = conn.prepareStatement(query);
@@ -127,24 +125,19 @@ public class DBConnector {
             pStm.setInt(5, PJid);
             pStm.executeUpdate();
 
-            tempNum += 1;
-            System.out.println("renew " + tempNum + " rows in pjTable");
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return -1;
         }
-        if (tempNum == 1) {
-            return 1;
-        }
-        else {
-            return -1;
-        }
+        System.out.println("success");
+        return 1;
     }
 
     public ResultSet getProjectAsResultSet(int PJid) /*throws SQLException*/ {
+        System.out.println("retrieving project data...");
 
-        int tempNum = 0;
         ResultSet rSet = null;
         try{
             String query = "SELECT * FROM pjTable WHERE pjID = ?";
@@ -152,52 +145,20 @@ public class DBConnector {
             pStm.setInt(1, PJid);
             ResultSet rs = pStm.executeQuery();
             rSet = rs;
-            tempNum += 1;
+
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return null;
         }
-        if (tempNum == 1){
-            return rSet;
-        } else {
-            return null;
-        }
-    }
-
-    public ArrayList<Integer> getPJidList(int MBid, int MBactivity) /*throws SQLException*/ {
-
-        ArrayList<Integer> pjidList = new ArrayList<Integer>();
-        int tempNum = 0;
-
-        try {
-            String query = "SELECT pjID FROM pjmbTable WHERE (mbID = ? and pjmbIsActive = ?)";
-            PreparedStatement pStm = conn.prepareStatement(query);
-            pStm.setInt(1, MBid);
-            pStm.setInt(2, MBactivity);
-            ResultSet rs = pStm.executeQuery();
-
-            while(rs.next()) {
-                int pjID = rs.getInt("pjID");
-                //System.out.println("inside while loop. pjID = " + pjID);
-                pjidList.add(pjID);
-            }
-            tempNum += 1;
-        }
-        catch (SQLException e) {
-            //e.printStackTrace();
-            return null;
-        }
-        if (tempNum == 1){
-            return pjidList;
-        } else {
-            return null;
-        }
+        System.out.println("success");
+        return rSet;
     }
 
     public String getPjManager(int PJid) {
+        System.out.println("get project manager name ...");
 
-        int tempNum = 0;
         String mgr = null;
         try {
             String query = "SELECT pjManager from pjTable where pjID = ?";
@@ -207,22 +168,19 @@ public class DBConnector {
             while (rs.next()){
                 mgr = rs.getString("pjManager");
             }
-            tempNum += 1;
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return null;
         }
-        if (tempNum == 1){
-            return mgr;
-        } else {
-            return null;
-        }
+        System.out.println("success");
+        return mgr;
     }
 
     public int getPjManagerID(int PJid) {
+        System.out.println("get project manager ID ...");
 
-        int tempNum = 0;
         int mgrID = -1;
         try {
             String query = "SELECT mbID from pjmbTable where (pjID = ? and pjmbIsManager = 1)";
@@ -232,24 +190,21 @@ public class DBConnector {
             while (rs.next()){
                 mgrID = rs.getInt("mbID");
             }
-            tempNum += 1;
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return -1;
         }
-        if (tempNum == 1){
-            return mgrID;
-        } else {
-            return -1;
-        }
+        System.out.println("success");
+        return mgrID;
     }
 
 ////-----------------------------------------------------------------// mbTable
 
     public int createMember(String MBemail, String MBpassword, String MBname) /*throws SQLException*/ {
+        System.out.println("creating member ...");
 
-        int tempNum = 0;
         int mbID = -13;
         int rowAffected = 0;
         try {
@@ -268,22 +223,19 @@ public class DBConnector {
 			System.out.println("@pStm - " + pStm2);
 			mbID = pStm2.executeUpdate();
 			*/
-            tempNum += 1;
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return -1;
         }
-        if (tempNum == 1){
-            return rowAffected;
-        }
-        else {
-            return -1;
-        }
+        System.out.println("success");
+        return rowAffected;
 
     }
 
     public int updateMember(int MBid, String MBemail, String MBpassword, String MBname) /*throws SQLException*/ {
+        System.out.println("updating member ...");
 
         int rowAffected = 0;
 
@@ -299,14 +251,16 @@ public class DBConnector {
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return -1;
         }
+        System.out.println("success");
         return rowAffected;
     }
 
     public ResultSet getMemberAsResultSet(int MBid) /*throws SQLException*/ {
+        System.out.println("retrieving member data ...");
 
-        int tempNum = 0;
         ResultSet rSet = null;
 
         try {
@@ -316,84 +270,56 @@ public class DBConnector {
             ResultSet rs = pStm.executeQuery();
             rSet = rs;
 
-            tempNum += 1;
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return null;
         }
-        if (tempNum == 1){
-            //System.out.println("@return mb");
-            //return mb;
-            return rSet;
-        } else {
-            //System.out.println("@return null");
-            return null;
-        }
+        System.out.println("success");
+        return rSet;
     }
 
     public Member getMemberAsObject(int MBid) /*throws SQLException*/  {
-		System.out.println("start");
-        int tempNum = 0;
+        System.out.println("get member ...");
         ResultSet rSet = null;
 
+        int mbID = 0;
+        String mbEmail = "";
+        String mbPassword = "";
+        String mbName = "";
+        Timestamp mbLastModified = null;
         try {
             String query = "SELECT * FROM mbTable WHERE mbID = ?";
             PreparedStatement pStm = conn.prepareStatement(query);
             pStm.setInt(1, MBid);
             ResultSet rs = pStm.executeQuery();
-            int mbID = 0;
-            String mbEmail = "";
-            String mbPassword = "";
-            String mbName = "";
-            Timestamp mbLastModified = null;
             while(rs.next()) {
                 mbID = rs.getInt("mbID");
                 mbEmail = rs.getString("mbEmail");
                 mbPassword = rs.getString("mbPassword");
                 mbName = rs.getString("mbName");
                 mbLastModified = rs.getTimestamp("mbLastModified");
-				tempNum += 1;
-
             }
-			if (tempNum == 1){
 				System.out.println("return mb");
 				//return mb;
-				return new Member(mbID, mbEmail, mbName);
-			} else {
-				System.out.println("duplicate");
-				return null;
-			}
-            //System.out.println("before");
-            //this.mb = new Member(mbID, mbEmail, mbPassword, mbName, mbLastModified);
-            //mbID = mb.getMbID();
-            //System.out.println(mbID);
-            //System.out.println("after");
-            //--mbID = mb.getMbID();
-            //--mbEmail = mb.getMbEmail();
-            //--mbPassword = mb.getMbPassword();
-            //--mbName = mb.getMbName();
-            //--mbLastModified = mb.getMbLastModified();
-            //--System.out.println("@MB.mbID = " + mbID);
-            //--System.out.println("@MB.mbEmail = " + mbEmail);
-            //--System.out.println("@MB.mbPassword = " + mbPassword);
-            //--System.out.println("@MB.mbName = " + mbName);
-            //--System.out.println("@MB.mbLastModified = " + mbLastModified);
 
 
         }
         catch (SQLException e) {
             //e.printStackTrace();
-			System.out.println("login: ");
 			System.out.println(e);
+            System.out.println("failed");
             return null;
         }
+        System.out.println("success");
+        return new Member(mbID, mbEmail, mbName);
     }
 
     public int getMemberID(String USERemail, String USERpassword) /*throws SQLException*/ {
+        System.out.println("verifying password ...");
 
         int mbID = 0;
-        int tempNum = 0;
         try {
             String query = "SELECT mbID FROM mbTable WHERE (mbEmail = ? AND mbPassword = ?)";
             PreparedStatement pStm = conn.prepareStatement(query);
@@ -403,23 +329,25 @@ public class DBConnector {
             while(rs.next()) {
                 mbID = rs.getInt("mbID");
             }
-            tempNum += 1;
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return -1;
         }
         if (mbID == 0){
+            System.out.println("failed");
             return -1;
         } else {
+            System.out.println("success");
             return mbID;
         }
     }
 
     public int getMemberIDbyEmail(String MBemail) /*throws SQLException*/ {
+        System.out.println("get ID by email ...");
 
         int mbID = 0;
-        int tempNum = 0;
         try {
             String query = "SELECT mbID FROM mbTable WHERE (mbEmail = ?)";
             PreparedStatement pStm = conn.prepareStatement(query);
@@ -431,11 +359,14 @@ public class DBConnector {
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return -1;
         }
         if (mbID == 0){
+            System.out.println("failed");
             return -1;
         } else {
+            System.out.println("success");
             return mbID;
         }
     }
@@ -443,7 +374,6 @@ public class DBConnector {
     public int getMemberIDbyName(String MBname) /*throws SQLException*/ {
 
         int mbID = 0;
-        int tempNum = 0;
         try {
             String query = "SELECT mbID FROM mbTable WHERE (mbName = ?)";
             PreparedStatement pStm = conn.prepareStatement(query);
@@ -452,23 +382,20 @@ public class DBConnector {
             while(rs.next()) {
                 mbID = rs.getInt("mbID");
             }
-            tempNum += 1;
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return -1;
         }
-        if (tempNum == 1){
-            return mbID;
-        } else {
-            return -1;
-        }
+        System.out.println("success");
+        return mbID;
     }
 
     public String getPassword(String MBemail) /*throws SQLException*/ {
+        System.out.println("get password by email ...");
 
         String mbPassword = "";
-        int tempNum = 0;
         try {
             String query = "SELECT mbPassword FROM mbTable WHERE mbEmail = ?";
             PreparedStatement pStm = conn.prepareStatement(query);
@@ -477,38 +404,36 @@ public class DBConnector {
             while(rs.next()) {
                 mbPassword = rs.getString("mbPassword");
             }
-            tempNum += 1;
         }
         catch (SQLException e) {
-            return null;
             //e.printStackTrace();
-        }
-        if (tempNum == 1){
-            return mbPassword;
-        } else {
+            System.out.println("failed");
             return null;
         }
+        System.out.println("success");
+        return mbPassword;
     }
 
     public boolean matchEmail(String USERemail) {
+        System.out.println("verifying email duplication...");
 
-        int tempNum = 0;
         try {
             String query = "SELECT mbEmail FROM mbTable WHERE (mbEmail = ?)";
             PreparedStatement pStm = conn.prepareStatement(query);
             pStm.setString(1, USERemail);
             ResultSet rs = pStm.executeQuery();
             if ( USERemail.equals(rs.getString("mbEmail")) ) {
-                tempNum += 1;
+                System.out.println("success");
+                return true;
+            }
+            else {
+                System.out.println("success");
+                return false;
             }
         }
         catch (SQLException e) {
-            return false;
             //e.printStackTrace();
-        }
-        if (tempNum == 1){
-            return true;
-        } else {
+            System.out.println("failed");
             return false;
         }
     }
@@ -516,8 +441,8 @@ public class DBConnector {
 ////-----------------------------------------------------------------// pjmbTable
 
     public int createPJMB(int PJid, int MBid, String PJMBrole, int PJMBisActive, int PJMBisManager) /*throws SQLException*/ {
+        System.out.println("creating project member...");
 
-        int tempNum = 0;
         try{
             String query = "INSERT INTO pjmbTable (pjID, mbID, pjmbRole, PJMBisActive, pjmbIsManager) VALUES (?,?,?,?,?)";
             PreparedStatement pStm = this.conn.prepareStatement(query);
@@ -527,20 +452,19 @@ public class DBConnector {
             pStm.setInt(4, PJMBisActive);
             pStm.setInt(5, PJMBisManager);
             pStm.executeUpdate();
-            tempNum += 1;
         }
         catch (SQLException e) {
-            return -1;
             //e.printStackTrace();
-        }
-        if (tempNum == 1){
-            return 1;
-        } else {
+            System.out.println("failed");
             return -1;
         }
+        System.out.println("success");
+        return 1;
     }
 
     public int updatePJMB(int MBid, int PJid, String PJMBrole) throws SQLException {
+        System.out.println("updating project member...");
+
         String query = "UPDATE pjmbTable SET pjmbRole = ? WHERE pjID = ? and mbID = ?";
         PreparedStatement pStm = conn.prepareStatement(query);
         pStm.setString(1, PJMBrole);
@@ -548,10 +472,13 @@ public class DBConnector {
         pStm.setInt(3, MBid);
         int rowAffected = pStm.executeUpdate();
 
+        System.out.println("success");
         return rowAffected;
     }
 
     public int updatePJMBActivity(int MBid, int PJid, int PJMBActivity) throws SQLException {
+        System.out.println("updating project member Activity...");
+
         String query = "UPDATE pjmbTable SET pjmbIsActive = ? WHERE pjID = ? and mbID = ?";
         PreparedStatement pStm = conn.prepareStatement(query);
         pStm.setInt(1, PJMBActivity);
@@ -560,27 +487,45 @@ public class DBConnector {
         //System.out.println();
         int rowAffected = pStm.executeUpdate();
 
+        System.out.println("success");
         return rowAffected;
     }
 
-    public String getPJMB(int PJid, int MBid) throws SQLException {
-        String query = "SELECT pjmbRole FROM pjmbTable WHERE (pjID = ? AND mbID = ?)";
+    public ProjectMember getPJMB(int PJid, int MBid) throws SQLException {
+        System.out.println("get project member...");
+
+        String query = "SELECT pjmbRole, pjmbIsActive, pjmbIsManager FROM pjmbTable WHERE (pjID = ? AND mbID = ?)";
         PreparedStatement pStm = conn.prepareStatement(query);
         pStm.setInt(1, PJid);
         pStm.setInt(2, MBid);
         ResultSet rs = pStm.executeQuery();
 
-        String pjmbRole = "";
-        //int pjmbActivity = 0;
-        while(rs.next()) {
+        ProjectMember pjmb = null;
+        String pjmbRole = null;
+        int isactive = 0, ismanager = 0;
+        if(rs.next()) {
             pjmbRole = rs.getString("pjmbRole");
-            //pjmbActivity = rs.getInt("pjmbIsActive");
+            isactive = rs.getInt("pjmbIsActive");
+            ismanager = rs.getInt("pjmbIsManager");
         }
+        if(pjmbRole == null){
+            System.out.println("failed");
+            return null;
+        }
+        Member mb = this.getMemberAsObject(MBid);
+        if(mb == null) {
+            System.out.println("failed, meber not exist");
+            return null;
+        }
+        pjmb = new ProjectMember(PJid, MBid, mb.mbName, mb.mbEmail, pjmbRole, ismanager == 1, isactive == 1);
 
-        return pjmbRole;
+        System.out.println("success");
+        return pjmb;
     }
 
     public int isManager(int PJid, int MBid) throws SQLException {
+        System.out.println("get whether project member is Manager...");
+
         String query = "SELECT pjmbRole FROM pjmbTable WHERE (pjID = ? AND mbID = ?)";
         PreparedStatement pStm = conn.prepareStatement(query);
         pStm.setInt(1, PJid);
@@ -589,10 +534,13 @@ public class DBConnector {
 
         int isManager = -1;
         isManager = rs.getInt("pjmbIsManager");
+        System.out.println("success");
         return isManager;
     }
 
     public int isActive(int PJid, int MBid) throws SQLException {
+        System.out.println("get whether project member is Active...");
+
         String query = "SELECT pjmbIsActive FROM pjmbTable WHERE (pjID = ? AND mbID = ?)";
         PreparedStatement pStm = conn.prepareStatement(query);
         pStm.setInt(1, PJid);
@@ -604,10 +552,13 @@ public class DBConnector {
             isActive = rs.getInt("pjmbIsActive");
         }
 
+        System.out.println("success");
         return isActive;
     }
 
     public ArrayList<Integer> getPjmbIdList(int PJid) throws SQLException {
+        System.out.println("get all Members of project...");
+
         String query = "SELECT mbID FROM pjmbTable WHERE (pjID = ?)";
         PreparedStatement pStm = conn.prepareStatement(query);
         pStm.setInt(1, PJid);
@@ -617,49 +568,61 @@ public class DBConnector {
         while(rs.next()) {
             pjmbIdList.add(rs.getInt("mbID"));
         }
+        System.out.println("success");
         return pjmbIdList;
     }
 
-    public ArrayList<Integer> getPjIdList(int MBid) throws SQLException {
-        String query = "SELECT pjID FROM pjmbTable WHERE (mbID = ?)";
-        PreparedStatement pStm = conn.prepareStatement(query);
-        pStm.setInt(1, MBid);
-        ResultSet rs = pStm.executeQuery();
+    public ArrayList<Integer> getPJidList(int MBid, int MBactivity) /*throws SQLException*/ {
+        System.out.println("get " + (MBactivity==1?"joined":"inviteing") + " projects of member:" + MBid +" ...");
 
-        ArrayList<Integer> pjIdList = new ArrayList<Integer>();
-        while(rs.next()) {
-            pjIdList.add(rs.getInt("pjID"));
+        ArrayList<Integer> pjidList = new ArrayList<Integer>();
+
+        try {
+            String query = "SELECT pjID FROM pjmbTable WHERE (mbID = ? and pjmbIsActive = ?)";
+            PreparedStatement pStm = conn.prepareStatement(query);
+            pStm.setInt(1, MBid);
+            pStm.setInt(2, MBactivity);
+            ResultSet rs = pStm.executeQuery();
+
+            while(rs.next()) {
+                int pjID = rs.getInt("pjID");
+                //System.out.println("inside while loop. pjID = " + pjID);
+                pjidList.add(pjID);
+            }
         }
-        return pjIdList;
+        catch (SQLException e) {
+            //e.printStackTrace();
+            System.out.println("failed");
+            return null;
+        }
+        System.out.println("success");
+        return pjidList;
     }
 
     public int deletePJMB(int PJid, int MBid) /*throws SQLException*/ {
+        System.out.println("deleting project member...");
 
-        int tempNum = 0;
         try{
-            String query = "DELETE FROM pjmbTable where (pjID = ? and mmID = ?)";
+            String query = "DELETE FROM pjmbTable where (pjID = ? and mbID = ?)";
             PreparedStatement pStm = this.conn.prepareStatement(query);
             pStm.setInt(1, PJid);
             pStm.setInt(2, MBid);
             pStm.executeUpdate();
-            tempNum += 1;
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return -1;
         }
-        if (tempNum == 1){
-            return 1;
-        } else {
-            return -1;
-        }
+        System.out.println("success");
+        return 1;
     }
 
 ////------------------------------------------------
 
     public int updateManager(int PJid, int MBid_old, int MBid_new, String PJmanager_new) /*throws SQLException*/ {
+        System.out.println("updating Manager of project...");
 
-        int tempNum = 0;
         try {
             String query = "UPDATE pjTable SET pjManager = ? WHERE pjID = ?";
             PreparedStatement pStm = conn.prepareStatement(query);
@@ -682,17 +645,14 @@ public class DBConnector {
             pStm.setInt(3, MBid_old);
             pStm.executeUpdate();
 
-            tempNum += 1;
         }
         catch (SQLException e) {
             //e.printStackTrace();
+            System.out.println("failed");
             return -1;
         }
-        if (tempNum == 1){
-            return 1;
-        } else {
-            return -1;
-        }
+        System.out.println("success");
+        return 1;
     }
 
 
@@ -700,6 +660,7 @@ public class DBConnector {
 ////-----------------------------------------------------------------// mmTable
 
     public int createMM(int PJid, Object mmContent) {
+        System.out.println("creating MM...");
 
         int last_inserted_mmID = -1;
         int tempNum = 0;
@@ -725,6 +686,7 @@ public class DBConnector {
     }
 
     public boolean updateMM(int MMid, Object mmContent) {
+        System.out.println("updating MM...");
 
         boolean result = false;
         int tempNum = 0;
@@ -745,6 +707,8 @@ public class DBConnector {
     }
 
     public MeetingMinutesContent getMMcontent(int MMid) {
+        System.out.println("get MM...");
+
         MeetingMinutesContent mmblob = null;
         try {
             String query = "SELECT mmContent FROM mmTable WHERE (mmID = ?)";
@@ -777,6 +741,8 @@ public class DBConnector {
     }
 
     public int getPJIDofMM(int MMid) {
+        System.out.println("get belonging project of MM...");
+
         int pjID = -1;
         try {
             String query = "SELECT pjID FROM mmTable WHERE (mmID = ?)";
@@ -797,6 +763,8 @@ public class DBConnector {
     }
 
     public java.util.Date getMMLastModified(int MMid) {
+        System.out.println("get MM last modified time...");
+
         java.util.Date date=null;
         try {
             String query = "SELECT mmLastModified FROM mmTable WHERE (mmID = ?)";
@@ -820,6 +788,8 @@ public class DBConnector {
     }
 
     public boolean verifyMMcontent(int MMid) {
+        System.out.println("verifying MM belonging...");
+
         int getpjid=-1;
         try {
             String query = "SELECT pjID FROM mmTable WHERE (mmID = ?)";

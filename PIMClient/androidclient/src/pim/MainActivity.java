@@ -64,13 +64,14 @@ import java.util.Date;
                     ArrayList<ProjectMember> pml = null, ipml = null;
                     ArrayList<MeetingMinutes> mml = null;
 
+                    String elog = "";
                             //Account related
-                    mb = crm.logIn("boyenen@gmail.com",  "password");
+                    try{mb = crm.logIn("boyenen@gmail.com",  "password");}catch(Exception e){elog = elog + ";69:" + e;}
                     b = crm.createAccount("boyenen@gmail.com", "password", "USER");
                     b = crm.createAccount("b99b01062@ntu.edu.tw", "Forgotten", "Student");
                     b = crm.createAccount("this is an email address", "1234567890!@#$%^&*()", "~`_-+=|\\{[}]:;\"'<,>.?/");
                     b = crm.forgetPassword("b99b01062@ntu.edu.tw");
-                    mb = crm.logIn("b99b01062@ntu.edu.tw", "Forgotten");
+                    try{mb = crm.logIn("b99b01062@ntu.edu.tw", "Forgotten");}catch(Exception e){elog = elog + ";74:" + e;}
                     mb = crm.logIn("boyenen@gmail.com",  "password");
 
                     if(mb == null)
@@ -88,15 +89,15 @@ import java.util.Date;
                     b = crm.createProject(mb, new Project(0, "Project3", "3Goal!!", mb.getMbID(), "newUSER", new Date()), emaillist);
                     emaillist.remove(0);
                     emaillist.add("this is an email address");
-                    b = crm.createProject(mb, new Project(0, "newProject", "newGoal!!", 1234, "newUSER", new Date()), emaillist);
+                    try{b = crm.createProject(mb, new Project(0, "newProjectbad", "newbadGoal!!", 1234, "newUSER", new Date()), emaillist);}catch(Exception e){elog = elog + ";92:" + e;}
                     b = crm.createProject(mb, new Project(0, "newProject", "newGoal!!", mb.getMbID(), "newUSER", new Date()), emaillist);
                     b = crm.createProject(mb, new Project(0, "WrongProject", "FaultyGoal!!", mb.getMbID(), "CrackedUser", new Date()), emaillist);
                     pl = crm.getProjectList(mb);
                     ipl = crm.getInvitingProjectList(mb);
                     pml = crm.getMemberList(pl.get(0));
-                    ipml = crm.getMemberList(pl.get(0));
+                    ipml = crm.getInvitingMemberList(pl.get(0));
                     pml = crm.getMemberList(pl.get(1));
-                    ipml = crm.getMemberList(pl.get(1));
+                    ipml = crm.getInvitingMemberList(pl.get(1));
 
                     mb = crm.logIn("this is an email address",  "1234567890!@#$%^&*()");
                     pl = crm.getProjectList(mb);
@@ -110,9 +111,9 @@ import java.util.Date;
                     pl = crm.getProjectList(mb);
                     ipl = crm.getInvitingProjectList(mb);
                     pml = crm.getMemberList(pl.get(0));
-                    ipml = crm.getMemberList(pl.get(0));
+                    ipml = crm.getInvitingMemberList(pl.get(0));
                     pml = crm.getMemberList(pl.get(1));
-                    ipml = crm.getMemberList(pl.get(1));
+                    ipml = crm.getInvitingMemberList(pl.get(1));
 
                     pj = pl.get(0);
                     mml = crm.getMeetingMinutesList(pj);
