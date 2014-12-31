@@ -6,6 +6,7 @@ import java.util.Date;
 public class ActionItem implements Serializable {
 
     // 	ATTRIBUTES:
+    int number;
     String action;
     String responsibility;
     Date deadline;
@@ -19,6 +20,14 @@ public class ActionItem implements Serializable {
         this.deadline = deadline;
         this.status = status;
         this.remark = remark;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public String getAction() {

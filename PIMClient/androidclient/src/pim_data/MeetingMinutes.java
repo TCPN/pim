@@ -57,8 +57,8 @@ public class MeetingMinutes implements Serializable {
 	}
     public MeetingMinutes(int pjID, int mmID, Date lastModifyTime, MeetingMinutesContent mmc)
     {
-        this.mmID = mmID;
         this.pjID = pjID;
+        this.mmID = mmID;
         this.lastModifyTime = lastModifyTime;
         this.meetingTime = mmc.meetingTime;
         this.location = mmc.location;
