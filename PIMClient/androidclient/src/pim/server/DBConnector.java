@@ -16,9 +16,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import pim.MeetingMinutesContent;
-import pim.Member;
-import pim.ProjectMember;
+import pim_data.MeetingMinutesContent;
+import pim_data.Member;
+import pim_data.ProjectMember;
 
 
 public class DBConnector {
@@ -517,7 +517,7 @@ public class DBConnector {
             System.out.println("failed, meber not exist");
             return null;
         }
-        pjmb = new ProjectMember(PJid, MBid, mb.mbName, mb.mbEmail, pjmbRole, ismanager == 1, isactive == 1);
+        pjmb = new ProjectMember(PJid, MBid, mb.getMbName(), mb.getMbEmail(), pjmbRole, ismanager == 1, isactive == 1);
 
         System.out.println("success");
         return pjmb;

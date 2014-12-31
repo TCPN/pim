@@ -1,11 +1,11 @@
 package pim.server;
 import pim.*;
-import pim.MeetingMinutes;
-import pim.MeetingMinutesAbstract;
-import pim.MeetingMinutesContent;
-import pim.Member;
-import pim.Project;
-import pim.ProjectMember;
+import pim_data.MeetingMinutes;
+import pim_data.MeetingMinutesAbstract;
+import pim_data.MeetingMinutesContent;
+import pim_data.Member;
+import pim_data.Project;
+import pim_data.ProjectMember;
 
 import java.io.*;
 
@@ -118,7 +118,7 @@ public class DBManager implements DBAPI{
             if(member == null){
                 return false;
             }
-			if(0 > db.updateMember(member.getMbID(), member.mbEmail, PIMSecurityManager.md5Encoder(password.substring(8)), member.mbName))
+			if(0 > db.updateMember(member.getMbID(), member.getMbEmail(), PIMSecurityManager.md5Encoder(new_password), member.getMbName()))
             {
                 new SendMail(userEmail, "Your Password in PIM", "Hello, " + userEmail + " Your New Password for PIM App is " + new_password);
                 return true;
@@ -206,7 +206,7 @@ public class DBManager implements DBAPI{
         deadline.setTime(pjDeadline);
         java.sql.Date sqlDeadline = new java.sql.Date(deadline.getTimeInMillis());
 
-        int pjID = db.createProject(pjName, pjGoal, mb.mbName, sqlDeadline);
+        int pjID = db.createProject(pjName, pjGoal, mb.getMbName(), sqlDeadline);
         //int pjID = db.createProject(pjName, pjGoal, pjManager, sqlDeadline);
 
         if (pjID != -1) {
@@ -232,7 +232,7 @@ public class DBManager implements DBAPI{
         deadline.setTime(pjDeadline);
         java.sql.Date sqlDeadline = new java.sql.Date(deadline.getTimeInMillis());
 
-        int pjID = db.createProject(pjName, pjGoal, mb.mbName, sqlDeadline);
+        int pjID = db.createProject(pjName, pjGoal, mb.getMbName(), sqlDeadline);
         //int pjID = db.createProject(pjName, pjGoal, pjManager, sqlDeadline);
 
         if (pjID != -1) {
@@ -287,9 +287,9 @@ public class DBManager implements DBAPI{
 		java.sql.Date sqlDeadline = new java.sql.Date(deadline.getTimeInMillis());
 		
 		if(mbID!=newPjManagerID)	//need to change the manager
-			db.updateManager(pjID, mbID, newPjManagerID, newmb.mbName);
+			db.updateManager(pjID, mbID, newPjManagerID, newmb.getMbName());
 		
-		int update = db.updateProject(pjID, pjName, pjGoal, newmb.mbName, sqlDeadline);
+		int update = db.updateProject(pjID, pjName, pjGoal, newmb.getMbName(), sqlDeadline);
 		if(update==1)
 			return true;
 		else
@@ -366,7 +366,7 @@ public class DBManager implements DBAPI{
 		for (int i = 0; i <= mmidList.size()-1; i++){
             MeetingMinutes mm = read_MM(mmidList.get(i));
 			
-		    MeetingMinutesAbstract tempmma = new MeetingMinutesAbstract(pjID, mmidList.get(i), db.getMMLastModified(mmidList.get(i)), mm.content.meetingTime, mm.content.objective);
+		    MeetingMinutesAbstract tempmma = new MeetingMinutesAbstract(pjID, mmidList.get(i), db.getMMLastModified(mmidList.get(i)), mm.getMeetingTime(), mm.getObjective());
 
 		    MMAlist.add(tempmma);
 		}
@@ -505,7 +505,7 @@ public class DBManager implements DBAPI{
 						if(inputs[0].toLowerCase().equals("login"))
 						{
 							Member mb = dbcn.login(inputs[1], inputs[2]);
-							System.out.println("Member: id=" + mb.getMbID() +" name=" + mb.mbName);
+							System.out.println("Member: id=" + mb.getMbID() +" name=" + mb.getMbName());
 						}
 						else if(inputs[0].toLowerCase().equals("register"))
 						{

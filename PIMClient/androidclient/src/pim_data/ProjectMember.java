@@ -1,4 +1,4 @@
-package pim;
+package pim_data;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ public class ProjectMember implements Serializable {
 	int mbID;
 	String mbName;
 	String mbEmail;
-	String pjmbRole;
+    String pjmbRole;
 	boolean isManager;
     boolean isActive;
 	
@@ -57,6 +57,11 @@ public class ProjectMember implements Serializable {
     }
 
     //SETTERS:
-	
+
+    public void setPjmbRole(String pjmbRole) {
+        this.pjmbRole = pjmbRole;
+    }
+
+
 }
 

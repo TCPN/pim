@@ -1,4 +1,4 @@
-package pim;
+package pim_data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class MeetingMinutesContent implements Serializable{
     public String facilitator;
     public String recorder;
     public String objective;
-    public ArrayList<Participant> parList;
+    public ArrayList<String> parList;
     public String agenda;
     public String issue;
     public ArrayList<ActionItem> actList;
@@ -22,7 +22,7 @@ public class MeetingMinutesContent implements Serializable{
         String facilitator,
         String recorder,
         String objective,
-        ArrayList<Participant> parList,
+        ArrayList<String> parList,
         String agenda,
         String issue,
         ArrayList<ActionItem> actList
@@ -36,5 +36,16 @@ public class MeetingMinutesContent implements Serializable{
         this.agenda = agenda;
         this.issue = issue;
         this.actList = actList;
+    }
+    public MeetingMinutesContent(MeetingMinutes mm){
+        this.meetingTime = mm.meetingTime;
+        this.location = mm.location;
+        this.facilitator = mm.facilitator;
+        this.recorder = mm.recorder;
+        this.objective = mm.objective;
+        this.parList = mm.parList;
+        this.agenda = mm.agenda;
+        this.issue = mm.issue;
+        this.actList = mm.actList;
     }
 }

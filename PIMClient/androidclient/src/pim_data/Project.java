@@ -1,4 +1,4 @@
-package pim;
+package pim_data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,9 +10,9 @@ public class Project implements Serializable{
 	int pjID;
 	String pjName;
 	String pjGoal;
+    Date pjDeadline;
 	int pjManagerID;
 	String pjManagerName;
-	Date pjDeadline;
 	
 	//CONSTRUCTOR:
 	
@@ -50,5 +50,16 @@ public class Project implements Serializable{
     public int getPjManagerID() { return pjManagerID; }
 
     //SETTERS:
-	
+
+    public void setPjName(String pjName) {
+        this.pjName = pjName;
+    }
+
+    public void setPjGoal(String pjGoal) {
+        this.pjGoal = pjGoal;
+    }
+
+    public void setPjDeadline(Date pjDeadline) {
+        this.pjDeadline = pjDeadline;
+    }
 }

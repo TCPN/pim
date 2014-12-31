@@ -8,6 +8,11 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import pim_data.MeetingMinutes;
+import pim_data.Member;
+import pim_data.Project;
+import pim_data.ProjectMember;
+
 
 public class ClientRequestManager implements /*API,*/ ClientAPI {
     final String validateString = "imvalidate";
@@ -218,7 +223,7 @@ public class ClientRequestManager implements /*API,*/ ClientAPI {
     {
         Request request = new Request(
         		"modifyMeetingMinutes", 
-        		meetingMinutes.getmmid(), 
+        		meetingMinutes.getMmID(),
         		meetingMinutes.getContent()
         		);
         return (Boolean) sendRequest(request) ;

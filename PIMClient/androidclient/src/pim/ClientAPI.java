@@ -3,6 +3,11 @@ package pim;
  
 import java.util.ArrayList;
 
+import pim_data.MeetingMinutes;
+import pim_data.Member;
+import pim_data.Project;
+import pim_data.ProjectMember;
+
 public interface ClientAPI {
     
 	//Account related

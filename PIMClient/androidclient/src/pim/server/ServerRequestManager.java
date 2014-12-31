@@ -5,9 +5,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
-import pim.MeetingMinutes;
-import pim.MeetingMinutesAbstract;
-import pim.MeetingMinutesContent;
+import pim_data.MeetingMinutes;
+import pim_data.MeetingMinutesAbstract;
+import pim_data.MeetingMinutesContent;
 
 
 public class ServerRequestManager extends Thread implements Serializable
@@ -241,7 +241,7 @@ public class ServerRequestManager extends Thread implements Serializable
 	private Boolean createMeetingMinutes(MeetingMinutes newMeetingMinutes)
 	{
 		MeetingMinutesContent mmcontent = newMeetingMinutes.getContent() ;
-		int pjid = newMeetingMinutes.getpjid() ;
+		int pjid = newMeetingMinutes.getPJId() ;
         dbcn.createMM(pjid, mmcontent) ;
 		return false;
 	}
@@ -259,7 +259,7 @@ public class ServerRequestManager extends Thread implements Serializable
 	private Boolean modifyMeetingMinutes(MeetingMinutes newMeetingMinutes)
 	{
 		MeetingMinutesContent mmcontent = newMeetingMinutes.getContent() ;
-		int pjid = newMeetingMinutes.getmmid() ;
+		int pjid = newMeetingMinutes.getMMId() ;
         dbcn.updateMM(pjid, mmcontent) ;
         return  false;
 	}

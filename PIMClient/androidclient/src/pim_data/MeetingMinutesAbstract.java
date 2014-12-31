@@ -1,4 +1,4 @@
-package pim;
+package pim_data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,8 +26,8 @@ public class MeetingMinutesAbstract implements Serializable {
 	}
 
 	// GETTERS:
-    public int getpjid() { return pjID; }
-	public int getmmid() { return mmID; }
+    public int getPJId() { return pjID; }
+	public int getMMId() { return mmID; }
 	public Date getLastModifyTime() { return lastModifyTime; }
     public Date getMeetingTime() {return meetingTime;}
     public String getObjective() {return objective;}

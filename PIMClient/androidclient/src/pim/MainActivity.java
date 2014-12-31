@@ -14,6 +14,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 
+import pim_data.ActionItem;
+import pim_data.MeetingMinutes;
+import pim_data.MeetingMinutesContent;
+import pim_data.Member;
+import pim_data.Project;
+import pim_data.ProjectMember;
+
 // this Activity is for test
 @SuppressLint("NewApi") public class MainActivity extends Activity 
 {
@@ -121,11 +128,11 @@ import java.util.Date;
                             new MeetingMinutesContent(new Date(), "Here", "You", "Me", "OBJ", null, "A", "I", null)));
                     b = crm.createMeetingMinutes(pj, new MeetingMinutes(0, pj.getPjID(), new Date(),
                             new MeetingMinutesContent(new Date(), "there", "Youtoo", "MeTwo", "OBJ2",
-                                    new ArrayList<Participant>(), "A22", "22I", new ArrayList<ActionItem>())));
-                    ArrayList<Participant> pcl = new ArrayList<Participant>();
-                    pcl.add(new Participant("hi","my name", "is Joe", true));
-                    pcl.add(new Participant("I","ain't", "a man", false));
-                    pcl.add(new Participant("I","am", "a boy", true));
+                                    new ArrayList<String>(), "A22", "22I", new ArrayList<ActionItem>())));
+                    ArrayList<String> pcl = new ArrayList<String>();
+                    pcl.add("hi my name is Joe");
+                    pcl.add("I ain't a man");
+                    pcl.add("I am a boy");
                     ArrayList<ActionItem> acl = new ArrayList<ActionItem>();
                     acl.add(new ActionItem("hi1","my name4", new java.sql.Date(1400000000), "OnGoing",""));
                     acl.add(new ActionItem("hi2","my name5", new java.sql.Date(1500000000), "Suspend",""));
@@ -147,7 +154,7 @@ import java.util.Date;
                     pj = new Project(pj.getPjID(), pj.getPjName()+"yayaya", pj.getPjGoal(), pj.getPjManagerID()+1111,pj.getPjManager(),pj.getPjDeadline());
                     b = crm.modifyProject(mb, pj);
 
-                    mml.get(0).content.objective = mml.get(0).content.objective + "\nwhat's the problem?";
+                    mml.get(0).setObjective(mml.get(0).getObjective() + "\nwhat's the problem?");
                     b = crm.modifyMeetingMinutes(mml.get(0));
 
                     mb = crm.logIn("boyenen@gmail.com",  "password");

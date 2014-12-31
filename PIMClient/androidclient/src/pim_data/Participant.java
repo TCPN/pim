@@ -1,4 +1,4 @@
-package pim;
+package pim_data;
 
 import java.io.Serializable;
 
