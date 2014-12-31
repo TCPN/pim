@@ -2,7 +2,7 @@ package pim;
 
 import java.security.MessageDigest;
 
-public class SecurityManager {
+public class PIMSecurityManager {
 	//MD5 for password
 	//AES/SHA1 for the rest
  

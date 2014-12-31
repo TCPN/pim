@@ -22,6 +22,17 @@ public class Request implements Serializable {
     {
     	return parameterList ;
     }
+
+    @Override
+    public String toString() {
+        String ret = super.toString();
+        ret = ret + " Name:" + this.name;
+        for(int i = 0; i < this.parameterList.length; i ++)
+        {
+            ret = ret + " " + i + ":" + parameterList[i];
+        }
+        return ret;
+    }
     /*
     public Object findValue(String inputname)
     {

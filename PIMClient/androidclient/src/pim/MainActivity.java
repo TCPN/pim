@@ -55,7 +55,7 @@ import java.util.Date;
         		try { // for test
 					//ret = crm.test(pj);
                     //ret = crm.respondInvitation(mb, pj, true);
-                    ret = crm.test(ed.getText().toString());
+                    //ret = crm.test(ed.getText().toString());
 					//ret = crm.forget_password(input);
                     //ret = crm.update_old_MM(0,0,null,"",null);
                     Project pj = null ;

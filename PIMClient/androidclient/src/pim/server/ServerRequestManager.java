@@ -1,20 +1,11 @@
 package pim.server;
 import pim.* ;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-import pim.MeetingMinutes;
-import pim.MeetingMinutesAbstract;
-import pim.MeetingMinutesContent;
-import pim.Member;
-import pim.Project;
-import pim.Request;
+import pim.*;
 
 
 public class ServerRequestManager extends Thread implements Serializable
@@ -281,6 +272,7 @@ public class ServerRequestManager extends Thread implements Serializable
 			String returnObject = "return_of_";
 			Request r = null;
 			Request req = (Request) input.readObject() ;
+            System.out.println(req);
 			Object response = handleRequest(req) ;
 			/*
             while (true)
@@ -303,7 +295,7 @@ public class ServerRequestManager extends Thread implements Serializable
         }
 		catch (Exception e)
 		{
-			System.out.print("id:" + id + " ==> ");
+			System.out.print("SRM(id:" + id + ") ==> ");
 			System.out.println(e);
 			this.socket = null;
         }

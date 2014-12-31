@@ -1,6 +1,7 @@
 package pim.server;
-import pim.* ;
-import pim.SecurityManager;
+import pim.*;
+
+import java.io.*;
 
 import java.sql.Timestamp;
 import java.sql.ResultSet;
@@ -43,7 +44,9 @@ public class DBManager implements DBAPI{
 
 	
 	//connector to db
-	private  DBConnector db;
+	private  DBConnector db = new DBConnector("localhost:3306/pim", "root", "root");
+	
+	public boolean isConnected(){return db.isConnected();}
 	
 	private  Project getPJ(int pjid)	{
 		ResultSet rs = db.getProjectAsResultSet(pjid);
@@ -79,12 +82,16 @@ public class DBManager implements DBAPI{
 		if (mbID==-1)
 		{
 			//-----Login failed
+			System.out.println("login failed");
 			return null;
 		}
 		else
 		{
+			System.out.println("ID get");
 			Member member;
 			member=db.getMemberAsObject(mbID);
+			if(member == null)
+				System.out.println("get as Object failed");
 			return member;
 		}
 	}
@@ -98,7 +105,7 @@ public class DBManager implements DBAPI{
             String password = db.getPassword(userEmail);
             String new_password = password.substring(8);
 			//new_password = md5(new_password);
-			new_password = SecurityManager.md5Encoder(password.substring(8));
+			new_password = PIMSecurityManager.md5Encoder(password.substring(8));
 			//member.setMbPassword( md5(new_password) );
             Member member = db.getMemberAsObject(mbID);
 			db.updateMember(member.getMbID(), member.mbEmail, new_password, member.mbName);
@@ -449,8 +456,7 @@ public class DBManager implements DBAPI{
 	}
 	
 	//adtional method for invitation list
-	public ArrayList<Project> getInvitationList(int mbID)
-	{
+	public ArrayList<Project> getInvitationList(int mbID){
         ArrayList<Integer> pjIDlist = null;
         ArrayList<Project> pjlist = null;
         try {
@@ -468,5 +474,44 @@ public class DBManager implements DBAPI{
 		
 	}
 
+	
+	public static void main(String args[]){
+		BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+		String cin = "";
+		try{
+			DBManager dbcn = new DBManager();
+			if(!dbcn.isConnected())
+			{
+				System.out.println("Connect failed. Quit.");
+				return;
+			}
+			do{
+				try{
+					cin = r.readLine();
+					if(cin == null)
+						break;
+						String[] inputs = cin.split(" ");
+						if(inputs[0].toLowerCase().equals("login"))
+						{
+							Member mb = dbcn.login(inputs[1], inputs[2]);
+							System.out.println("Member: id=" + mb.getMbID() +" name=" + mb.mbName);
+						}
+						else if(inputs[0].toLowerCase().equals("register"))
+						{
+							boolean b = dbcn.register(inputs[1], inputs[2], inputs[3]);
+							System.out.println("Return: " + b );
+						}
+						else
+						{
+							System.out.println("Undefined command.");
+						}
+				} catch(Exception e) {
+					System.out.println(e);
+				}
+			}while(true);
+		}catch(Exception e){
+				System.out.println(e);
+		}
+	}
 }
 

@@ -33,45 +33,20 @@ public class DBConnector {
     String useUnicode;
     String characterEncoding;
 
-    ////ATTRIBUTES FOR QUERY STATUS //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    int rowAffected;
-    ////ATTRIBUTES FOR RETURN VALUE //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    boolean status;						// [02] Button Name: [Forget Password] --> DB return: TRUE ("email sent")
-    // [11] Button Name: [Create New Member] --> DB return: TRUE ("member created")
-    // [13] Button Name: [Update Member Setting] --> DB return: TRUE ("member updated")
-    // [31]	Button Name: [Send Project Invitation] --> DB return: TRUE ("project invitation sent")
-    // [33]	Button Name: [Decline Invitation] --> db return: TRUE ("invitation declined")
-    //-------------------------------------------------------------------------------------------------------------------------------------
-    Project pj;								// [21]	Button Name: [Create New Project] --> DB return: PROJECT OBJECT (new)
-    // [23]	Button Name: [Update Project Setting] --> DB return: PROJECT OBJECT (updated)
-    // [32]	Button Name: [Enter Invited Project Detail] --> DB return: PROJECT OBJECT
-    //-------------------------------------------------------------------------------------------------------------------------------------
-    MeetingMinutes mm;								// [42]	Button Name: [Enter MM View] --> DB return: MM OBJECT
-    // [43]	Button Name: [Create New MM from New] --> DB return: MM OBJECT (new from blank)
-    // [44]	Button Name: [Create New MM from Old] --> DB return: MM OBJECT (new from old)
-    // [45]	Button Name: [Update Old MM from Old] --> DB return: MM OBJECT (updated old)
-    //-------------------------------------------------------------------------------------------------------------------------------------
-    Member mb;								// [12]	Button Name: [Enter Member Setting] --> DB return: MEMBER OBJECT
-    //-------------------------------------------------------------------------------------------------------------------------------------
-    ArrayList<ArrayList<Project>> pjCombinedList;		// [01]	Button Name: [Submit Email & Password] --> DB return: MIXED PROJECT OBJECT LIST
-    //-------------------------------------------------------------------------------------------------------------------------------------
-    ArrayList<MeetingMinutes> mmList;					// [34]	Button Name: [Accept Invitation] --> DB return: MM BOJECT LIST
-    // [41]	Button Name: [Enter Timeline View] --> DB return: MM OBJECT LIST
-    //-------------------------------------------------------------------------------------------------------------------------------------
-    ArrayList<ProjectMember> pjmbList;				// [51]	Button Name: [Select Project Member] --> DB return: PJMB OBJECT LIST (PJMB = Project Member)
-    //-------------------------------------------------------------------------------------------------------------------------------------
-
     ////CONSTRUCTOR //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public DBConnector(String JdbcURL, String User, String Password /*, String UseUnicode, String CharacterEncoding*/) {
         this.jdbcURL = JdbcURL;		// jdbcURL = localhost:3306/pim
         this.user = User;			// User = root
-        this.password = Password;	// Password = cliurcp
+        this.password = Password;	// Password = root
         //this.useUnicode = UseUnicode;
         //this.characterEncoding = CharacterEncoding;
+		this.getConnection();
     }
 ////METHODS FOR CONNECTION TO DB /////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
-    public void getConnection() /*throws ClassNotFoundException, SQLException*/ {
+	public boolean isConnected(){return (this.conn != null);}
+	
+	public void getConnection() /*throws ClassNotFoundException, SQLException*/ {
 
         try	{
 
@@ -79,10 +54,14 @@ public class DBConnector {
             String connectionString = "jdbc:mysql://" + this.jdbcURL + "?user=" + this.user + "&password=" + this.password + "&useUnicode=true&characterEncoding=utf-8";
             Class.forName(jdbcDriverName);
             this.conn = DriverManager.getConnection(connectionString);
-            //System.out.println("conn created !");
+            if(this.conn != null)
+				System.out.println("connection created !");
+			else
+				System.out.println("connect failed !");
         }
         catch (ClassNotFoundException | SQLException e) {
             //e.printStackTrace();
+			System.out.println(e);
             System.out.println("[Warning] Connect to DB CANNOT be built");
         }
     }
@@ -357,6 +336,7 @@ public class DBConnector {
     }
 
     public Member getMemberAsObject(int MBid) /*throws SQLException*/  {
+		System.out.println("start");
         int tempNum = 0;
         ResultSet rSet = null;
 
@@ -376,11 +356,20 @@ public class DBConnector {
                 mbPassword = rs.getString("mbPassword");
                 mbName = rs.getString("mbName");
                 mbLastModified = rs.getTimestamp("mbLastModified");
+				tempNum += 1;
 
             }
+			if (tempNum == 1){
+				System.out.println("return mb");
+				//return mb;
+				return new Member(mbID, mbEmail, mbName);
+			} else {
+				System.out.println("duplicate");
+				return null;
+			}
             //System.out.println("before");
             //this.mb = new Member(mbID, mbEmail, mbPassword, mbName, mbLastModified);
-            mbID = mb.getMbID();
+            //mbID = mb.getMbID();
             //System.out.println(mbID);
             //System.out.println("after");
             //--mbID = mb.getMbID();
@@ -394,19 +383,12 @@ public class DBConnector {
             //--System.out.println("@MB.mbName = " + mbName);
             //--System.out.println("@MB.mbLastModified = " + mbLastModified);
 
-            tempNum += 1;
 
         }
         catch (SQLException e) {
             //e.printStackTrace();
-            return null;
-        }
-        if (tempNum == 1){
-            System.out.println("@return mb");
-            //return mb;
-            return mb;
-        } else {
-            System.out.println("@return null");
+			System.out.println("login: ");
+			System.out.println(e);
             return null;
         }
     }

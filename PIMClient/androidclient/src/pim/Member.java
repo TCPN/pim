@@ -18,13 +18,6 @@ public class Member implements Serializable{
 		this.mbName = mbName;
 	}
 	
-	
-	public Member(){
-		this.mbID = 123456789;
-		this.mbEmail = "next@mysql.org";
-		this.mbName = "Monday Blue";
-	}
-
 	//GETTERS:
 	
 	public int getMbID() {

@@ -7,7 +7,6 @@ import java.lang.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class ClientRequestManager implements /*API,*/ ClientAPI {
@@ -47,10 +46,10 @@ public class ClientRequestManager implements /*API,*/ ClientAPI {
 			System.out.println("Request sent.");
 			
 			Object receivedObject = input.readObject() ;
-			System.out.println("Response received. Type:" + receivedObject.getClass().toString());
+			//System.out.println("Response received. Type:" + receivedObject.getClass().toString());
 			
 			socket.close();
-            if(receivedObject.getClass().equals(Exception.class))
+            if(receivedObject!= null && receivedObject.getClass().equals(Exception.class))
                 throw (Exception)receivedObject;
 
 			return receivedObject;
@@ -85,7 +84,7 @@ public class ClientRequestManager implements /*API,*/ ClientAPI {
         Request request = new Request(
         		"logIn",
         		userEmail, 
-        		SecurityManager.md5Encoder(userPassword)
+        		PIMSecurityManager.md5Encoder(userPassword)
         		);
         return (Member) sendRequest(request) ;
     }
@@ -106,7 +105,7 @@ public class ClientRequestManager implements /*API,*/ ClientAPI {
         Request request = new Request(
         		"createAccount",
         		userEmail, 
-        		SecurityManager.md5Encoder(userPassword), 
+        		PIMSecurityManager.md5Encoder(userPassword),
         		userName
         		); 
         return (Boolean) sendRequest(request) ;
