@@ -38,20 +38,15 @@ public class Server
 
 			while(true)
 			{
-
 				Socket socket = serverSocket.accept();
 				Date connectTime = new Date() ;
 				System.out.println(connectTime +"\tA connection from ["+ socket.getInetAddress().getHostAddress() +"] comes...");
 				connectCount ++;
-				/*
-				if(validateConnection(socket) == false)
-				{
-					socket.close();
-					continue;
-				}
-				*/
-
-				
+//				if(validateConnection(socket) == false)
+//				{
+//					socket.close();
+//					continue;
+//				}
 				if(this.protocol.equals("http"))
 				{
 					System.out.println("A http request handler on");
