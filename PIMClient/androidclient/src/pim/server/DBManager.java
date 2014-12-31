@@ -47,13 +47,16 @@ import java.util.ArrayList;
 
 public class DBManager implements DBAPI{
 
-	
-	//connector to db
-	private  DBConnector db = new DBConnector("localhost:3306/pim", "root", "root");
+    public DBManager() throws Exception {
+        this.db = new DBConnector("localhost:3306/pim", "root", "root");
+    }
+
+    //connector to db
+	private  DBConnector db;
 	
 	public boolean isConnected(){return db.isConnected();}
 	
-	private Project getPJ(int pjid)	{
+	private Project getPJ(int pjid) throws Exception{
 		ResultSet rs = db.getProjectAsResultSet(pjid);
 		if(rs==null)
 			return null;
@@ -81,10 +84,10 @@ public class DBManager implements DBAPI{
 		}
 	}
 	
-	public Member login(String userEmail, String userPassword)	{
+	public Member login(String userEmail, String userPassword) throws Exception {
 		if (db.getMemberIDbyEmail(userEmail)==-1)
 			return null;
-		int mbID = db.getMemberID(userEmail, userPassword);
+		int mbID = db.getMemberIDByLogIn(userEmail, userPassword);
 		if (mbID==-1)
 		{
 			//-----Login failed
@@ -102,7 +105,7 @@ public class DBManager implements DBAPI{
 		}
 	}
 	
-	public  boolean forget_password(String userEmail){
+	public  boolean forget_password(String userEmail) throws Exception {
 		int mbID = db.getMemberIDbyEmail(userEmail);
 		if(mbID==-1)
 			return false;
@@ -118,7 +121,7 @@ public class DBManager implements DBAPI{
             if(member == null){
                 return false;
             }
-			if(0 > db.updateMember(member.getMbID(), member.getMbEmail(), PIMSecurityManager.md5Encoder(new_password), member.getMbName()))
+			if(0 < db.updateMember(member.getMbID(), member.getMbEmail(), PIMSecurityManager.md5Encoder(new_password), member.getMbName()))
             {
                 new SendMail(userEmail, "Your Password in PIM", "Hello, " + userEmail + " Your New Password for PIM App is " + new_password);
                 return true;
@@ -130,7 +133,7 @@ public class DBManager implements DBAPI{
 		}
 	}
 	
-	public boolean register(String userEmail, String userPassword, String userName)	{
+	public boolean register(String userEmail, String userPassword, String userName) throws Exception	{
 		int mbID;
 		mbID = db.getMemberIDbyEmail(userEmail);	//to be modify
 		if(mbID!=-1)
@@ -141,14 +144,14 @@ public class DBManager implements DBAPI{
 		else
 		{
 			if(-1 != db.createMember(userEmail, userPassword, userName))
-                return false;
+                return true;
             else
-			    return true;
+			    return false;
 		}
 		
 	}
 	
-	public Member get_member_setting(int mbID){
+	public Member get_member_setting(int mbID) throws Exception {
 		Member mb;
 		mb = db.getMemberAsObject(mbID);
 		if(mb==null)
@@ -157,7 +160,7 @@ public class DBManager implements DBAPI{
 		return mb;
 	}
 		
-	public boolean update_member_setting(int mbID, String mbEmail, String mbPassword, String mbName){
+	public boolean update_member_setting(int mbID, String mbEmail, String mbPassword, String mbName) throws Exception {
 		Member mb;
 		mb = db.getMemberAsObject(mbID);
 		if(mb==null)
@@ -166,7 +169,7 @@ public class DBManager implements DBAPI{
 		return true;
 	}
 		
-	public ArrayList<Project> get_project_List(int mbID) {
+	public ArrayList<Project> get_project_List(int mbID) throws Exception {
 		ArrayList<Project> pjList = new ArrayList<Project>();
 		List<Integer> pjidList = db.getPJidList(mbID, 1); 
 		if(pjidList==null)
@@ -177,7 +180,7 @@ public class DBManager implements DBAPI{
 		return pjList;
 	}
 
-	public ArrayList<Project> get_invitation_project_List(int mbID) {
+	public ArrayList<Project> get_invitation_project_List(int mbID) throws Exception {
 		ArrayList<Project> pjList = new ArrayList<Project>();
 		List<Integer> pjidList = db.getPJidList(mbID, 0); 
 		if(pjidList==null)
@@ -188,11 +191,11 @@ public class DBManager implements DBAPI{
 		return pjList;
 	}
 
-	public Project get_project_setting(int pjID) {
+	public Project get_project_setting(int pjID) throws Exception {
 		return getPJ(pjID);
 	}
 
-    public boolean create_new_project(int mbID, String pjName, String pjGoal, java.util.Date pjDeadline){
+    public boolean create_new_project(int mbID, String pjName, String pjGoal, java.util.Date pjDeadline) throws Exception {
         Member mb;
         mb = db.getMemberAsObject(mbID);
         if(mb==null)
@@ -223,7 +226,7 @@ public class DBManager implements DBAPI{
         //PJ newPJ = getPJ(pjID);
     }
 
-    public boolean create_new_project(int mbID, String pjName, String pjGoal, java.util.Date pjDeadline, ArrayList<String> emaillist){
+    public boolean create_new_project(int mbID, String pjName, String pjGoal, java.util.Date pjDeadline, ArrayList<String> emaillist) throws Exception {
         Member mb;
         mb = db.getMemberAsObject(mbID);
         if(mb==null)
@@ -265,38 +268,32 @@ public class DBManager implements DBAPI{
         //PJ newPJ = getPJ(pjID);
     }
 
-    @Override
     public boolean update_project_setting(int pjID, int mbID, String pjName, String pjGoal, Date pjDeadline, int newPjManagerID) throws Exception {
-		Member mb;
-		mb = db.getMemberAsObject(mbID);
-		if(mb==null)
-			return false;
-		
-		Member newmb;
-		newmb = db.getMemberAsObject(newPjManagerID);
-		if(newmb==null)
-			return false;
+		if(db.isManager(pjID, mbID) != 1) {
+            System.out.println("not authorized");
+            return false;
+        }
 		
 		ResultSet pj;
 		pj = db.getProjectAsResultSet(pjID);
-		if(pj==null)
-			return false;
+		if(pj == null) {
+            System.out.println("Invalid project ID");
+            return false;
+        }
+
+		java.sql.Date sqlDeadline = (java.sql.Date)pjDeadline;
 		
-		Calendar deadline = Calendar.getInstance();
-		deadline.setTime(pjDeadline);
-		java.sql.Date sqlDeadline = new java.sql.Date(deadline.getTimeInMillis());
+		if(mbID != newPjManagerID)	//need to change the manager
+			db.updateManager(pjID, mbID, newPjManagerID);
 		
-		if(mbID!=newPjManagerID)	//need to change the manager
-			db.updateManager(pjID, mbID, newPjManagerID, newmb.getMbName());
-		
-		int update = db.updateProject(pjID, pjName, pjGoal, newmb.getMbName(), sqlDeadline);
-		if(update==1)
+		int rowAffected = db.updateProject(pjID, pjName, pjGoal, sqlDeadline);
+		if(rowAffected == 1)
 			return true;
 		else
 			return false;
 	}
 		
-	public Member find_member_with_email(String userEmail){
+	public Member find_member_with_email(String userEmail) throws Exception {
 		
 		int mbID = db.getMemberIDbyEmail(userEmail);
 		if(mbID==-1)
@@ -305,7 +302,7 @@ public class DBManager implements DBAPI{
 		return mb;
 	}
 	
-	public boolean invite(int mbID, int pjID){
+	public boolean invite(int mbID, int pjID) throws Exception {
 		//member not existed
 		Member existing = db.getMemberAsObject(mbID);
 		if(existing == null)
@@ -325,7 +322,7 @@ public class DBManager implements DBAPI{
 			return true;
 	}
 		
-	public boolean respond_to_invitation(int mbID, int pjID, boolean accept){
+	public boolean respond_to_invitation(int mbID, int pjID, boolean accept) throws Exception {
 		int existed=-1;
 		try{
 			existed = db.isActive(pjID, mbID);
@@ -356,7 +353,7 @@ public class DBManager implements DBAPI{
 		
 	}
 	
-    public ArrayList<MeetingMinutesAbstract> get_timeline(int pjID){
+    public ArrayList<MeetingMinutesAbstract> get_timeline(int pjID) throws Exception {
 		List<Integer> mmidList;
 		ArrayList<MeetingMinutesAbstract> MMAlist = new ArrayList<MeetingMinutesAbstract>();
 		mmidList = db.getMMidList(pjID);
@@ -373,7 +370,7 @@ public class DBManager implements DBAPI{
 		return MMAlist;
 	}
 		
-	public boolean create_new_MM(int pjID, MeetingMinutesContent mmContent){
+	public boolean create_new_MM(int pjID, MeetingMinutesContent mmContent) throws Exception {
 		int result = db.createMM(pjID, (Object)mmContent);
 		if(result < 1)
 			return false;
@@ -381,22 +378,19 @@ public class DBManager implements DBAPI{
 		return true;
 	}
 		
-	public boolean update_old_MM(int mmID, MeetingMinutesContent mmContent){
-		if(db.verifyMMcontent(mmID)==false)
-			return false;
-		boolean result = db.updateMM(mmID, (Object)mmContent);
-		
+	public boolean update_old_MM(int mmID, MeetingMinutesContent mmContent) throws Exception {
+		boolean result = db.updateMM(mmID, mmContent);
 		return result;
 	}
 		
-	public MeetingMinutes read_MM(int mmID){
+	public MeetingMinutes read_MM(int mmID) throws Exception {
 		Object o = db.getMMcontent(mmID);
 		MeetingMinutesContent mmc = (MeetingMinutesContent)o;
-        MeetingMinutes mm = new MeetingMinutes(mmID, db.getPJIDofMM(mmID), db.getMMLastModified(mmID), mmc);
+        MeetingMinutes mm = new MeetingMinutes(db.getPJIDofMM(mmID), mmID, db.getMMLastModified(mmID), mmc);
         return mm;
 	}
 
-    public ArrayList<ProjectMember> get_active_project_member_list(int pjID){
+    public ArrayList<ProjectMember> get_active_project_member_list(int pjID) throws Exception {
 		ResultSet pj;
 		pj = db.getProjectAsResultSet(pjID);
 		if(pj==null)
@@ -431,7 +425,7 @@ public class DBManager implements DBAPI{
 		return list;
 	}
 	
-	public ArrayList<ProjectMember> get_inactive_project_member_list(int pjID){
+	public ArrayList<ProjectMember> get_inactive_project_member_list(int pjID) throws Exception {
         ResultSet pj;
         pj = db.getProjectAsResultSet(pjID);
         if(pj==null)
@@ -465,27 +459,7 @@ public class DBManager implements DBAPI{
         }
         return list;
 	}
-	
-	//adtional method for invitation list
-	public ArrayList<Project> getInvitationList(int mbID){
-        ArrayList<Integer> pjIDlist = null;
-        ArrayList<Project> pjlist = null;
-        try {
-            pjIDlist = db.getPJidList(mbID, 0);
-            pjlist = new ArrayList<Project>();
-            for (Integer pjID : pjIDlist) {
-                if (-1 != db.isActive(pjID, mbID)) {
-                    pjlist.add(getPJ(pjID));
-                }
 
-            }
-        }catch (SQLException e) {
-        }
-		return pjlist ;
-		
-	}
-
-	
 	public static void main(String args[]){
 		BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 		String cin = "";
