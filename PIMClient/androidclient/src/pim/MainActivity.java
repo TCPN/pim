@@ -3,6 +3,7 @@ package pim;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,96 +74,142 @@ import pim_data.ProjectMember;
 
                     String elog = "";
                             //Account related
-                    try{mb = crm.logIn("boyenen@gmail.com",  "password");}catch(Exception e){elog = elog + ";69:" + e;}
-                    b = crm.createAccount("boyenen@gmail.com", "password", "USER");
-                    b = crm.createAccount("b99b01062@ntu.edu.tw", "Forgotten", "Student");
-                    b = crm.createAccount("this is an email address", "1234567890!@#$%^&*()", "~`_-+=|\\{[}]:;\"'<,>.?/");
-                    b = crm.forgetPassword("b99b01062@ntu.edu.tw");
-                    try{mb = crm.logIn("b99b01062@ntu.edu.tw", "Forgotten");}catch(Exception e){elog = elog + ";74:" + e;}
-                    mb = crm.logIn("boyenen@gmail.com",  "password");
+                    int i = 77;
+i++;                    try{mb = crm.logIn("boyenen@gmail.com",  "password");}catch(Exception e){elog = elog + ";69:" + e;}
+i++;                    if(BuildConfig.DEBUG &&!( mb == null)) throw new Exception(""+ i);
+i++;                    b = crm.createAccount("boyenen@gmail.com", "password", "USER");
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    b = crm.createAccount("b99b01062@ntu.edu.tw", "Forgotten", "Student");
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    b = crm.createAccount("this is an email address", "1234567890!@#$%^&*()", "~`_-+=|\\{[}]:;\"'<,>.?/");
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    b = crm.forgetPassword("b99b01062@ntu.edu.tw");
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    try{mb = crm.logIn("b99b01062@ntu.edu.tw", "Forgotten");}catch(Exception e){elog = elog + ";74:" + e;}
+i++;                    if(BuildConfig.DEBUG &&!(  mb == null )) throw new Exception(""+ i);
+i++;                    mb = crm.logIn("boyenen@gmail.com",  "password");
+i++;                    if(BuildConfig.DEBUG &&!(  mb != null )) throw new Exception(""+ i);
+i++;
+i++;                    //Read related
+i++;                    pl = crm.getProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  pl != null && pl.size() == 0 )) throw new Exception(""+ i);
+i++;                    ipl = crm.getInvitingProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  ipl != null && ipl.size() == 0 )) throw new Exception(""+ i);
+i++;                    ArrayList<String> emaillist= new ArrayList<String>() ;
+i++;                    emaillist.add("b99b01062@ntu.edu.tw");
+i++;                    emaillist.add("this is an email address");
+i++;                    b = crm.createProject(mb, new Project(9876, "TestProject", "Goal!!", mb.getMbID(), "NoNameMember", new Date()), emaillist);
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    b = crm.createProject(mb, new Project(0, "TestProject", "Goal!!", mb.getMbID(), "USER", new Date()), null);
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    emaillist.add("boyenen@gmail.com");
+i++;                    b = crm.createProject(mb, new Project(0, "Project3", "3Goal!!", mb.getMbID(), "newUSER", new Date()), emaillist);
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    emaillist.remove(0);
+i++;                    emaillist.add("this is an email address");
+i++;                    try{b = crm.createProject(mb, new Project(0, "newProjectbad", "newbadGoal!!", 1234, "newUSER", new Date()), emaillist);}catch(Exception e){elog = elog + ";92:" + e;}
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    b = crm.createProject(mb, new Project(0, "newProject", "newGoal!!", mb.getMbID(), "newUSER", new Date()), emaillist);
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    b = crm.createProject(mb, new Project(0, "WrongProject", "FaultyGoal!!", mb.getMbID(), "CrackedUser", new Date()), emaillist);
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    pl = crm.getProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  pl != null && pl.size() == 6 )) throw new Exception(""+ i);
+i++;                    ipl = crm.getInvitingProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  ipl != null && ipl.size() == 0 )) throw new Exception(""+ i);
+i++;                    pml = crm.getMemberList(pl.get(0));
+i++;                    if(BuildConfig.DEBUG &&!(  pml != null && pml.size() == 1 )) throw new Exception(""+ i);
+i++;                    ipml = crm.getInvitingMemberList(pl.get(0));
+i++;                    if(BuildConfig.DEBUG &&!(  ipml != null && ipml.size() == 2 )) throw new Exception(""+ i);
+i++;                    pml = crm.getMemberList(pl.get(1));
+i++;                    if(BuildConfig.DEBUG &&!(  pml != null && pml.size() == 1 )) throw new Exception(""+ i);
+i++;                    ipml = crm.getInvitingMemberList(pl.get(1));
+i++;                    if(BuildConfig.DEBUG &&!(  ipml != null && ipml.size() == 0 )) throw new Exception(""+ i);
+i++;                    pml = crm.getMemberList(pl.get(2));
+i++;                    if(BuildConfig.DEBUG &&!(  pml != null && pml.size() == 1 )) throw new Exception(""+ i);
+i++;                    ipml = crm.getInvitingMemberList(pl.get(2));
+i++;                    if(BuildConfig.DEBUG &&!(  ipml != null && ipml.size() == 2 )) throw new Exception(""+ i);
+i++;
+i++;                    mb = crm.logIn("this is an email address",  "1234567890!@#$%^&*()");
+i++;                    if(BuildConfig.DEBUG &&!(  mb != null )) throw new Exception(""+ i);
+i++;                    pl = crm.getProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  pl != null && pl.size() == 0 )) throw new Exception(""+ i);
+i++;                    ipl = crm.getInvitingProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  ipl != null && ipl.size() == 5 )) throw new Exception(""+ i);
+i++;                    b = crm.respondInvitation(mb, ipl.get(0), true);
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    b = crm.respondInvitation(mb, ipl.get(1), false);
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    pl = crm.getProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  pl != null && pl.size() == 1 )) throw new Exception(""+ i);
+i++;                    ipl = crm.getInvitingProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  ipl != null && ipl.size() == 3 )) throw new Exception(""+ i);
+i++;
+i++;                    mb = crm.logIn("boyenen@gmail.com",  "password");
+i++;                    if(BuildConfig.DEBUG &&!(  mb != null )) throw new Exception(""+ i);
+i++;                    pl = crm.getProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  pl != null && pl.size() == 6 )) throw new Exception(""+ i);
+i++;                    ipl = crm.getInvitingProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  ipl != null && ipl.size() == 0 )) throw new Exception(""+ i);
+i++;                    pml = crm.getMemberList(pl.get(0));
+i++;                    if(BuildConfig.DEBUG &&!(  pml != null && pml.size() == 2 )) throw new Exception(""+ i);
+i++;                    ipml = crm.getInvitingMemberList(pl.get(0));
+i++;                    if(BuildConfig.DEBUG &&!(  ipml != null && ipml.size() == 1 )) throw new Exception(""+ i);
+i++;                    pml = crm.getMemberList(pl.get(1));
+i++;                    if(BuildConfig.DEBUG &&!(  pml != null && pml.size() == 1 )) throw new Exception(""+ i);
+i++;                    ipml = crm.getInvitingMemberList(pl.get(1));
+i++;                    if(BuildConfig.DEBUG &&!(  ipml != null && ipml.size() == 0 )) throw new Exception(""+ i);
+i++;                    pml = crm.getMemberList(pl.get(2));
+i++;                    if(BuildConfig.DEBUG &&!(  pml != null && pml.size() == 1 )) throw new Exception(""+ i);
+i++;                    ipml = crm.getInvitingMemberList(pl.get(2));
+i++;                    if(BuildConfig.DEBUG &&!(  ipml != null && ipml.size() == 1 )) throw new Exception(""+ i);
+i++;
+i++;                    pj = pl.get(0);
+i++;                    mml = crm.getMeetingMinutesList(pj);
+i++;                    if(BuildConfig.DEBUG &&!(  mml != null && mml.size() == 0 )) throw new Exception(""+ i);
+i++;                    b = crm.createMeetingMinutes(pj, new MeetingMinutes(0, pj.getPjID(), new Date(),new MeetingMinutesContent(new Date(), "Here", "You", "Me", "OBJ", null, "A", "I", null)));
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    b = crm.createMeetingMinutes(pj, new MeetingMinutes(0, pj.getPjID(), new Date(),new MeetingMinutesContent(new Date(), "there", "Youtoo", "MeTwo", "OBJ2",new ArrayList<String>(), "A22", "22I", new ArrayList<ActionItem>())));
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;                    ArrayList<String> pcl = new ArrayList<String>();
+i++;                    pcl.add("hi my name is Joe");
+i++;                    pcl.add("I ain't a man");
+i++;                    pcl.add("I am a boy");
+i++;                    ArrayList<ActionItem> acl = new ArrayList<ActionItem>();
+i++;                    acl.add(new ActionItem("hi1","my name4", new java.sql.Date(1400000000), "OnGoing",""));
+i++;                    acl.add(new ActionItem("hi2","my name5", new java.sql.Date(1500000000), "Suspend",""));
+i++;                    acl.add(new ActionItem("hi2","my name6", new java.sql.Date(1600000000), "Colsed",""));
+i++;                    b = crm.createMeetingMinutes(pj, new MeetingMinutes(0, pj.getPjID(), new Date(),new MeetingMinutesContent(new Date(), "there", "Youtoo", "MeTwo", "OBJ2", pcl, "A22", "22I", acl)));
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;
+i++;                    mb = crm.logIn("this is an email address",  "1234567890!@#$%^&*()");
+i++;                    if(BuildConfig.DEBUG &&!(  mb != null )) throw new Exception(""+ i);
+i++;                    pl = crm.getProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  pl != null && pl.size() == 1 )) throw new Exception(""+ i);
+i++;                    ipl = crm.getInvitingProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  ipl != null && ipl.size() == 3 )) throw new Exception(""+ i);
+i++;                    pj = pl.get(0);
+i++;                    pj.getPjDeadline().setTime(1300000000);
+i++;                    pj = new Project(pj.getPjID(), pj.getPjName()+"yayaya", pj.getPjGoal(), pj.getPjManagerID()+1111,pj.getPjManager(),pj.getPjDeadline());
+i++;                    b = crm.modifyProject(mb, pj);
+i++;                    if(BuildConfig.DEBUG &&!(  !b )) throw new Exception(""+ i);
+i++;
+i++;                    mml = crm.getMeetingMinutesList(pj);
+i++;                    if(BuildConfig.DEBUG &&!(  mml != null && mml.size() == 3 )) throw new Exception(""+ i);
+i++;                    mml.get(0).setObjective(mml.get(0).getObjective() + "\nwhat's the problem?");
+i++;                    b = crm.modifyMeetingMinutes(mml.get(0));
+i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
+i++;
+i++;                    mb = crm.logIn("boyenen@gmail.com",  "password");
+i++;                    if(BuildConfig.DEBUG &&!(  mb != null )) throw new Exception(""+ i);
+i++;                    pl = crm.getProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  pl != null && pl.size() == 6 )) throw new Exception(""+ i);
+i++;                    ipl = crm.getInvitingProjectList(mb);
+i++;                    if(BuildConfig.DEBUG &&!(  ipl != null && ipl.size() == 0 )) throw new Exception(""+ i);
+i++;                    mml = crm.getMeetingMinutesList(pj);
+i++;                    if(BuildConfig.DEBUG &&!(  mml != null && mml.size() == 3 )) throw new Exception(""+ i);
 
-                    if(mb == null)
-                        return;
-
-                    //Read related
-                    pl = crm.getProjectList(mb);
-                    ipl = crm.getInvitingProjectList(mb);
-                    ArrayList<String> emaillist= new ArrayList<String>() ;
-                    emaillist.add("b99b01062@ntu.edu.tw");
-                    emaillist.add("this is an email address");
-                    b = crm.createProject(mb, new Project(9876, "TestProject", "Goal!!", mb.getMbID(), "NoNameMember", new Date()), emaillist);
-                    b = crm.createProject(mb, new Project(0, "TestProject", "Goal!!", mb.getMbID(), "USER", new Date()), null);
-                    emaillist.add("boyenen@gmail.com");
-                    b = crm.createProject(mb, new Project(0, "Project3", "3Goal!!", mb.getMbID(), "newUSER", new Date()), emaillist);
-                    emaillist.remove(0);
-                    emaillist.add("this is an email address");
-                    try{b = crm.createProject(mb, new Project(0, "newProjectbad", "newbadGoal!!", 1234, "newUSER", new Date()), emaillist);}catch(Exception e){elog = elog + ";92:" + e;}
-                    b = crm.createProject(mb, new Project(0, "newProject", "newGoal!!", mb.getMbID(), "newUSER", new Date()), emaillist);
-                    b = crm.createProject(mb, new Project(0, "WrongProject", "FaultyGoal!!", mb.getMbID(), "CrackedUser", new Date()), emaillist);
-                    pl = crm.getProjectList(mb);
-                    ipl = crm.getInvitingProjectList(mb);
-                    pml = crm.getMemberList(pl.get(0));
-                    ipml = crm.getInvitingMemberList(pl.get(0));
-                    pml = crm.getMemberList(pl.get(1));
-                    ipml = crm.getInvitingMemberList(pl.get(1));
-
-                    mb = crm.logIn("this is an email address",  "1234567890!@#$%^&*()");
-                    pl = crm.getProjectList(mb);
-                    ipl = crm.getInvitingProjectList(mb);
-                    b = crm.respondInvitation(mb, ipl.get(0), true);
-                    b = crm.respondInvitation(mb, ipl.get(1), false);
-                    pl = crm.getProjectList(mb);
-                    ipl = crm.getInvitingProjectList(mb);
-
-                    mb = crm.logIn("boyenen@gmail.com",  "password");
-                    pl = crm.getProjectList(mb);
-                    ipl = crm.getInvitingProjectList(mb);
-                    pml = crm.getMemberList(pl.get(0));
-                    ipml = crm.getInvitingMemberList(pl.get(0));
-                    pml = crm.getMemberList(pl.get(1));
-                    ipml = crm.getInvitingMemberList(pl.get(1));
-
-                    pj = pl.get(0);
-                    mml = crm.getMeetingMinutesList(pj);
-                    b = crm.createMeetingMinutes(pj, new MeetingMinutes(0, pj.getPjID(), new Date(),
-                            new MeetingMinutesContent(new Date(), "Here", "You", "Me", "OBJ", null, "A", "I", null)));
-                    b = crm.createMeetingMinutes(pj, new MeetingMinutes(0, pj.getPjID(), new Date(),
-                            new MeetingMinutesContent(new Date(), "there", "Youtoo", "MeTwo", "OBJ2",
-                                    new ArrayList<String>(), "A22", "22I", new ArrayList<ActionItem>())));
-                    ArrayList<String> pcl = new ArrayList<String>();
-                    pcl.add("hi my name is Joe");
-                    pcl.add("I ain't a man");
-                    pcl.add("I am a boy");
-                    ArrayList<ActionItem> acl = new ArrayList<ActionItem>();
-                    acl.add(new ActionItem("hi1","my name4", new java.sql.Date(1400000000), "OnGoing",""));
-                    acl.add(new ActionItem("hi2","my name5", new java.sql.Date(1500000000), "Suspend",""));
-                    acl.add(new ActionItem("hi2","my name6", new java.sql.Date(1600000000), "Colsed",""));
-                    b = crm.createMeetingMinutes(pj, new MeetingMinutes(0, pj.getPjID(), new Date(),
-                            new MeetingMinutesContent(new Date(), "there", "Youtoo", "MeTwo", "OBJ2", pcl, "A22", "22I", acl)));
-
-                    // modify project and meeting minutes
-                    // if you're going to use this, please new a new instance of Project,
-                    // ths new manager ID and Name can get from ProjectMember List
-                    // Backend needs member to verified
-
-
-                    mb = crm.logIn("this is an email address",  "1234567890!@#$%^&*()");
-                    pl = crm.getProjectList(mb);
-                    ipl = crm.getInvitingProjectList(mb);
-                    pj = pl.get(0);
-                    pj.getPjDeadline().setTime(1300000000);
-                    pj = new Project(pj.getPjID(), pj.getPjName()+"yayaya", pj.getPjGoal(), pj.getPjManagerID()+1111,pj.getPjManager(),pj.getPjDeadline());
-                    b = crm.modifyProject(mb, pj);
-
-                    mml.get(0).setObjective(mml.get(0).getObjective() + "\nwhat's the problem?");
-                    b = crm.modifyMeetingMinutes(mml.get(0));
-
-                    mb = crm.logIn("boyenen@gmail.com",  "password");
-                    pl = crm.getProjectList(mb);
-                    ipl = crm.getInvitingProjectList(mb);
-                    mml = crm.getMeetingMinutesList(pj);
-
-
+                           ret = "Totally done!";
                 } catch (Exception e) {
                     System.out.println(e.toString());
                     e.printStackTrace();
