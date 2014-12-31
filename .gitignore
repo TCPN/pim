@@ -25,3 +25,5 @@ proguard/
 # Log Files
 *.log
 *.lnk
+PIMClient/androidclient/src/javax.mail.jar
+PIMClient/androidclient/src/mysql-connector-java-5.1.34-bin.jar
