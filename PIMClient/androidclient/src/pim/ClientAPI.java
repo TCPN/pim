@@ -2,7 +2,7 @@ package pim;
  
  
 import java.util.ArrayList;
- 
+
 public interface ClientAPI {
     
 	//Account related

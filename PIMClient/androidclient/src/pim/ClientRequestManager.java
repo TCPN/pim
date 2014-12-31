@@ -79,7 +79,7 @@ public class ClientRequestManager implements /*API,*/ ClientAPI {
     //implements ClientAPI
 
     @Override
-    public Member logIn(String userEmail, String userPassword) throws Exception 
+    public Member logIn(String userEmail, String userPassword) throws Exception
     {
         Request request = new Request(
         		"logIn",
@@ -132,7 +132,7 @@ public class ClientRequestManager implements /*API,*/ ClientAPI {
     }
 
     @Override
-    public ArrayList<MeetingMinutes> getMeetingMinutesList(Project project) throws Exception 
+    public ArrayList<MeetingMinutes> getMeetingMinutesList(Project project) throws Exception
     {
         Request request = new Request(
         		"getMeetingMinutesList",
@@ -142,7 +142,7 @@ public class ClientRequestManager implements /*API,*/ ClientAPI {
     }
 
     @Override
-    public Boolean respondInvitation(Member member, Project project, Boolean accept) throws Exception 
+    public Boolean respondInvitation(Member member, Project project, Boolean accept) throws Exception
     {
         Request request = new Request(
         		"respondInvitation", 
@@ -154,7 +154,7 @@ public class ClientRequestManager implements /*API,*/ ClientAPI {
     }
 
     @Override
-    public Boolean createProject(Member member, Project newProject, ArrayList<String> emailList) throws Exception 
+    public Boolean createProject(Member member, Project newProject, ArrayList<String> emailList) throws Exception
     {
         Request request = new Request(
         		"createProject", 
@@ -208,7 +208,7 @@ public class ClientRequestManager implements /*API,*/ ClientAPI {
         		project.getPjName(), 
         		project.getPjGoal(), 
         		project.getPjDeadline(), 
-        		project.pjManagerID
+        		project.getPjManagerID()
         		);
         return (Boolean) sendRequest(request) ;
     }

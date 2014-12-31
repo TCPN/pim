@@ -46,7 +46,9 @@ public class Project implements Serializable{
 	public String getPjManager() {
 		return pjManagerName;
 	}
-	
-	//SETTERS:
+
+    public int getPjManagerID() { return pjManagerID; }
+
+    //SETTERS:
 	
 }

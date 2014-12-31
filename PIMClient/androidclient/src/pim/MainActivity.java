@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 // this Activity is for test
@@ -143,8 +142,8 @@ import java.util.Date;
                     pl = crm.getProjectList(mb);
                     ipl = crm.getInvitingProjectList(mb);
                     pj = pl.get(0);
-                    pj.pjDeadline.setTime(1300000000);
-                    pj = new Project(pj.getPjID(), pj.pjName+"yayaya", pj.pjGoal, pj.pjManagerID+1111,pj.pjManagerName,pj.getPjDeadline());
+                    pj.getPjDeadline().setTime(1300000000);
+                    pj = new Project(pj.getPjID(), pj.getPjName()+"yayaya", pj.getPjGoal(), pj.getPjManagerID()+1111,pj.getPjManager(),pj.getPjDeadline());
                     b = crm.modifyProject(mb, pj);
 
                     mml.get(0).content.objective = mml.get(0).content.objective + "\nwhat's the problem?";
