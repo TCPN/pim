@@ -12,7 +12,13 @@ package pim.server;
 
 import java.util.ArrayList;
 import java.util.Date;
-import pim.*;
+
+import pim.MeetingMinutes;
+import pim.MeetingMinutesAbstract;
+import pim.MeetingMinutesContent;
+import pim.Member;
+import pim.Project;
+import pim.ProjectMember;
 
 public interface DBAPI {
     /**[01] will "No Matched" be an Exception ????????? */

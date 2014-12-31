@@ -54,5 +54,4 @@ public class SendMail extends java.lang.Thread {
             throw new RuntimeException(e);  
         }
 	}
-    public static void main(String[] args) {}  
 }  

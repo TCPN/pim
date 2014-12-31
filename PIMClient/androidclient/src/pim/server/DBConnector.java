@@ -16,11 +16,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import pim.MeetingMinutes;
 import pim.MeetingMinutesContent;
 import pim.Member;
-import pim.Project;
-import pim.ProjectMember;
 
 
 public class DBConnector {

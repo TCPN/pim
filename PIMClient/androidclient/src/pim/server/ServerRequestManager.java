@@ -5,7 +5,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
-import pim.*;
+import pim.MeetingMinutes;
+import pim.MeetingMinutesAbstract;
+import pim.MeetingMinutesContent;
 
 
 public class ServerRequestManager extends Thread implements Serializable

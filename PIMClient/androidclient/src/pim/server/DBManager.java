@@ -1,9 +1,14 @@
 package pim.server;
 import pim.*;
+import pim.MeetingMinutes;
+import pim.MeetingMinutesAbstract;
+import pim.MeetingMinutesContent;
+import pim.Member;
+import pim.Project;
+import pim.ProjectMember;
 
 import java.io.*;
 
-import java.sql.Timestamp;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -48,7 +53,7 @@ public class DBManager implements DBAPI{
 	
 	public boolean isConnected(){return db.isConnected();}
 	
-	private  Project getPJ(int pjid)	{
+	private Project getPJ(int pjid)	{
 		ResultSet rs = db.getProjectAsResultSet(pjid);
 		if(rs==null)
 			return null;
@@ -71,11 +76,12 @@ public class DBManager implements DBAPI{
 			return pj;
 		} catch (SQLException e) {
 			//e.printStackTrace();
+            System.out.println(e);
 			return null;
 		}
 	}
 	
-	public  Member login(String userEmail, String userPassword)	{
+	public Member login(String userEmail, String userPassword)	{
 		if (db.getMemberIDbyEmail(userEmail)==-1)
 			return null;
 		int mbID = db.getMemberID(userEmail, userPassword);
@@ -102,6 +108,7 @@ public class DBManager implements DBAPI{
 			return false;
 		else
 		{
+            System.out.println("Found match user. Send new password");
             String password = db.getPassword(userEmail);
             String new_password = password.substring(8);
 			//new_password = md5(new_password);
