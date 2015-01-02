@@ -74,6 +74,7 @@ import pim_data.ProjectMember;
 
                     String elog = "";
                             //Account related
+                    crm.test("YA");
                     int i = 77;
 i++;                    try{mb = crm.logIn("boyenen@gmail.com",  "password");}catch(Exception e){elog = elog + ";69:" + e;}
 i++;                    if(BuildConfig.DEBUG &&!( mb == null)) throw new Exception(""+ i);

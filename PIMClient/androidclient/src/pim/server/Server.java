@@ -35,18 +35,12 @@ public class Server
 	{
 		try
 		{
-
 			while(true)
 			{
 				Socket socket = serverSocket.accept();
 				Date connectTime = new Date() ;
 				System.out.println(connectTime +"\tA connection from ["+ socket.getInetAddress().getHostAddress() +"] comes...");
 				connectCount ++;
-//				if(validateConnection(socket) == false)
-//				{
-//					socket.close();
-//					continue;
-//				}
 				if(this.protocol.equals("http"))
 				{
 					System.out.println("A http request handler on");
@@ -54,11 +48,8 @@ public class Server
 				}
 				else
 				{
-					System.out.println("An object message handler on");
 					(new ServerRequestManager(socket, connectCount, connectTime)).start();
 				}
-				System.out.println("New Thread " + connectCount + " is started to handle it...");
-
 			}
 		}
 		catch (Exception e)

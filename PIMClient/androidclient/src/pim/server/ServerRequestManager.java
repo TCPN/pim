@@ -31,12 +31,6 @@ public class ServerRequestManager extends Thread implements Serializable
 	
 	private Object handleRequest(Request request)
 	{
-//		String aMethod = "myMethod";
-//		Object iClass = pim.server.ServerRequestManager.newInstance();
-//		// get the method
-//		Method thisMethod = this.getDeclaredMethod(aMethod, params);
-//		// call the method
-//		thisMethod.invoke(iClass, paramsObj);
 		try{
 			String reqName = request.getName() ;
 			Object params[] = request.getParameterList() ;
@@ -54,7 +48,6 @@ public class ServerRequestManager extends Thread implements Serializable
 			}
 			else if(reqName.equals("logIn"))
 			{
-
 				return dbcn.login(
 						(String)params[0], 
 						(String)params[1]
@@ -171,144 +164,33 @@ public class ServerRequestManager extends Thread implements Serializable
 		}
 	}
 
-//	private Member logIn(String userEmail, String userPassword)
-//	{
-//		if(userPassword.equals(dbcn.getPassword(userEmail)))
-//		{
-//			int memberid = dbcn.getMemberIDByLogIn(userEmail, userPassword) ;
-//			Member member = dbcn.getMemberAsObject(memberid) ;
-//			return member ;
-//		}
-//		else return null ;//login failed
-//
-//	}
-//	private int createAccount(String userEmail, String userPassword, String userName)
-//	{
-//		return dbcn.createMember(userEmail, userPassword, userName) ;
-//	}
-//	private ArrayList<Project>getMemberProjectList(Member member)
-//	{
-//		//resultset to object?
-//        return null;
-//	}
-//
-//	private ArrayList<MeetingMinutesContent>getMeetingMinutesList(Project project)
-//	{
-//        ArrayList<MeetingMinutesContent> mmlist = new ArrayList<MeetingMinutesContent>();
-//        ArrayList<Integer> mmidlist = dbcn.getMMidList(project.getPjID()) ;
-//		for(int mmid:mmidlist)
-//		{
-//			mmlist.add(dbcn.getMMcontent(mmid)) ;
-//		}
-//
-//		return mmlist ;
-//	}
-//
-//	private ArrayList<Project>getMemberInvitationList(Member member)
-//	{
-//		//not done yet?
-//        return null;
-//	}
-//
-//	private int respondInvitation(Member member, Project project)
-//	{
-//		//not done yet?
-//        return 0;
-//	}
-//
-//	private int createProject(Project newProject)
-//	{
-//		String pjname = newProject.getPjName() ;
-//		String pjgoal = newProject.getPjGoal() ;
-//		String pjmanager = newProject.getPjManager() ;
-//		Date pjdeadline = newProject.getPjDeadline() ;
-//		int success = dbcn.createProject(pjname, pjgoal, pjmanager, pjdeadline) ;
-//		return success ;
-//	}
-//	private Boolean createProjectMemberList(List<String> emailList)
-//	{
-//		//Not sure yet
-//        return false;
-//	}
-//	private Boolean createMeetingMinutes(MeetingMinutes newMeetingMinutes)
-//	{
-//		MeetingMinutesContent mmcontent = newMeetingMinutes.getContent() ;
-//		int pjid = newMeetingMinutes.getPJId() ;
-//        dbcn.createMM(pjid, mmcontent) ;
-//		return false;
-//	}
-//	private int modifyProject(Project project)
-//	{
-//        int pjid = project.getPjID();
-//		String pjname = project.getPjName() ;
-//		String pjgoal = project.getPjGoal() ;
-//		String pjmanager = project.getPjManager() ;
-//		java.sql.Date pjdeadline = (java.sql.Date) project.getPjDeadline();
-//		int success = dbcn.updateProject(pjid, pjname, pjgoal, pjmanager, pjdeadline) ;
-//		return success ;
-//
-//	}
-//	private Boolean modifyMeetingMinutes(MeetingMinutes newMeetingMinutes)
-//	{
-//		MeetingMinutesContent mmcontent = newMeetingMinutes.getContent() ;
-//		int pjid = newMeetingMinutes.getMMId() ;
-//        dbcn.updateMM(pjid, mmcontent) ;
-//        return  false;
-//	}
-
     public void run()
 	{
+        System.out.println(new Date() + "\t" + "An object message handler start...");
         try
         {
             input = new ObjectInputStream(socket.getInputStream());
             output = new ObjectOutputStream(socket.getOutputStream());
             dbcn = new DBManager();
+
+			Request req = (Request) input.readObject() ;
+            System.out.println(new Date() +"\t" + "Request received.");
+            System.out.println(req);
+			Object response = handleRequest(req) ;
+			output.writeObject(response) ;
+            System.out.println(new Date() +"\t" + "Response sent.");
         }
         catch(Exception e)
         {
-            System.out.print("SRM(id:" + id + ") ==> ");
-            System.out.println(e);
-            try{
-                this.socket.close();
-            }catch (Exception e2){
-                System.out.println(e2);
-            }
-            this.socket = null;
-            return;
+            System.out.print("handle request of connect:" + id + " failed, " + e);
         }
-
-		try
-		{
-            // 
-			byte[] line = new byte[4096];
-			String received = "";
-			String returnObject = "return_of_";
-			Request r = null;
-			Request req = (Request) input.readObject() ;
-            System.out.println(req);
-			Object response = handleRequest(req) ;
-//            while (true)
-//			{
-//                int len = input.read(line, 0, 4096);
-//				//System.out.println(line);
-//                if (len <= 0) {
-//                    break;
-//                }
-//				received += String.valueOf(line, 0, len);
-//            }
-			//System.out.println(received + "\n");
-			System.out.println(new Date() +"\tMsg received");
-			
-			output.writeObject(response) ;
-			//output.writeBytes(returnObject + received + "\n");
-			System.out.println(new Date() +"\tclose id:" + id + "\n");
-			this.socket.close();
+        try{
+            System.out.println("closing connect:" + id + "...");
+            this.socket.close();
+        }catch (Exception e){
+            System.out.print("close connect:" + id + " failed, " + e);
         }
-		catch (Exception e)
-		{
-			System.out.print("SRM(id:" + id + ") ==> ");
-			System.out.println(e);
-			this.socket = null;
-        }
+        this.socket = null;
+        System.out.println(new Date() +"\t" + "Thread for connect:" + id + " end.");
     }
 }
