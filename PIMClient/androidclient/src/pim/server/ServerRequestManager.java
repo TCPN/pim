@@ -9,6 +9,7 @@ import java.util.*;
 import pim_data.MeetingMinutes;
 import pim_data.MeetingMinutesAbstract;
 import pim_data.MeetingMinutesContent;
+import pim_data.Member;
 
 
 public class ServerRequestManager extends Thread implements Serializable
@@ -151,11 +152,25 @@ public class ServerRequestManager extends Thread implements Serializable
 						(MeetingMinutesContent)params[1]
 								) ;
 			}
+            else if(reqName.equals("modifyMemberPassword"))
+            {
+                return dbcn.modifyMemberPassword(
+                        (int)params[0],
+                        (String)params[1]
+                ) ;
+            }
+            else if(reqName.equals("modifyMemberName"))
+            {
+                return dbcn.modifyMemberName(
+                        (int)params[0],
+                        (String)params[1]
+                ) ;
+            }
 			//else if...for all DbConnector API
 			else
 			{
 				//for error
-				return new Exception("Request Name No Match.");
+				return new Exception("Request Name modifyMemberName Match.");
 			}
 		}
 		catch(Exception e){
@@ -167,30 +182,51 @@ public class ServerRequestManager extends Thread implements Serializable
     public void run()
 	{
         System.out.println(new Date() + "\t" + "An object message handler start...");
-        try
-        {
-            input = new ObjectInputStream(socket.getInputStream());
-            output = new ObjectOutputStream(socket.getOutputStream());
-            dbcn = new DBManager();
+        try {
+            try {
+                input = new ObjectInputStream(socket.getInputStream());
+                output = new ObjectOutputStream(socket.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.print("build Streams for connect:" + id + " failed, " + e);
+            }
+            try {
+                dbcn = new DBManager();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.print("build connection to database for connect:" + id + " failed, " + e);
+                // TODO : write error to client
+            }
 
-			Request req = (Request) input.readObject() ;
-            System.out.println(new Date() +"\t" + "Request received.");
-            System.out.println(req);
-			Object response = handleRequest(req) ;
-			output.writeObject(response) ;
-            System.out.println(new Date() +"\t" + "Response sent.");
+            try
+            {
+                Request req = (Request) input.readObject() ;
+                System.out.println(new Date() +"\t" + "Request received.");
+                System.out.println(req);
+                Object response = handleRequest(req) ;
+                output.writeObject(response) ;
+                System.out.println(new Date() +"\t" + "Response sent.");
+            }
+            catch(Exception e)
+            {
+                System.out.print("handle request of connect:" + id + " failed, " + e);
+                // TODO : write error to client
+            }
+        } catch(Exception e){
+
+        } finally {
+            close();
         }
-        catch(Exception e)
-        {
-            System.out.print("handle request of connect:" + id + " failed, " + e);
-        }
+        this.socket = null;
+        System.out.println(new Date() +"\t" + "Thread for connect:" + id + " end.");
+    }
+
+    private void close() {
         try{
             System.out.println("closing connect:" + id + "...");
             this.socket.close();
         }catch (Exception e){
             System.out.print("close connect:" + id + " failed, " + e);
         }
-        this.socket = null;
-        System.out.println(new Date() +"\t" + "Thread for connect:" + id + " end.");
     }
 }

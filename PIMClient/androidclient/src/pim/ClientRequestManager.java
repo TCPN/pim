@@ -229,4 +229,23 @@ public class ClientRequestManager implements ClientAPI {
         return (Boolean) sendRequest(request) ;
     }
 
+    @Override
+    public boolean modifyMemberPassword(Member member, String password) throws Exception {
+        Request request = new Request(
+                "modifyMemberPassword",
+                member.getMbID(),
+                PIMSecurityManager.md5Encoder(password)
+        );
+        return (Boolean) sendRequest(request) ;
+    }
+
+    @Override
+    public boolean modifyMemberName(Member member, String newMemberName) throws Exception {
+        Request request = new Request(
+                "modifyMemberName",
+                member.getMbID(),
+                newMemberName
+        );
+        return (Boolean) sendRequest(request) ;
+    }
 }

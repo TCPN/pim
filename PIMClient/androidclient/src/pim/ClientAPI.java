@@ -41,5 +41,9 @@ public interface ClientAPI {
     Boolean modifyProject(Member member, Project project) throws Exception;
      
     Boolean modifyMeetingMinutes(MeetingMinutes minutes) throws Exception;
-     
+
+    boolean modifyMemberPassword(Member member, String password) throws Exception;
+
+    boolean modifyMemberName(Member member, String newMemberName) throws Exception;
+
 }

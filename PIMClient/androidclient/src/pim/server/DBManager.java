@@ -85,7 +85,7 @@ public class DBManager implements DBAPI{
             String password = db.getPassword(userEmail);
             String new_password = password.substring(8);
 			//new_password = md5(new_password);
-			new_password = password.substring(8);
+			new_password = password.substring(0, 8);
 			//member.setMbPassword( md5(new_password) );
             Member member = db.getMemberAsObject(mbID);
             if(member == null){
@@ -397,6 +397,14 @@ public class DBManager implements DBAPI{
         return list;
 	}
 
+    public boolean modifyMemberPassword(int mbID, String password) {
+        return db.changeMemberPassowrd(mbID, password);
+    }
+
+    public boolean modifyMemberName(int mbID, String name) {
+        return db.changeMemberName(mbID, name);
+    }
+
 	public static void main(String args[]){
 		BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 		String cin = "";
@@ -435,5 +443,6 @@ public class DBManager implements DBAPI{
 				System.out.println(e);
 		}
 	}
+
 }
 

@@ -74,8 +74,13 @@ import pim_data.ProjectMember;
 
                     String elog = "";
                             //Account related
-                    crm.test("YA");
+                    //crm.test("YA");
                     int i = 77;
+                    mb = crm.logIn("boyenen@gmail.com",  "password");
+                    b = crm.modifyMemberPassword(mb, "hithere");
+                    b = crm.modifyMemberName(mb, "you you you");
+                    mb = crm.logIn("boyenen@gmail.com",  "hithere");
+
 i++;                    try{mb = crm.logIn("boyenen@gmail.com",  "password");}catch(Exception e){elog = elog + ";69:" + e;}
 i++;                    if(BuildConfig.DEBUG &&!( mb == null)) throw new Exception(""+ i);
 i++;                    b = crm.createAccount("boyenen@gmail.com", "password", "USER");

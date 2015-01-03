@@ -449,6 +449,66 @@ public class DBConnector {
         }
     }
 
+    public boolean changeMemberPassowrd(int mbID, String newPassword) /*throws SQLException */{
+        System.out.println("change member password ...");
+
+        int rowAffected = -1;
+        try {
+            String query = "UPDATE mbTable SET mbPassword = ? WHERE mbID = ?";
+            PreparedStatement pStm = conn.prepareStatement(query);
+            pStm.setString(1, newPassword);
+            pStm.setInt(2, mbID);
+            rowAffected = pStm.executeUpdate();
+        }
+        catch (SQLException e) {
+            //e.printStackTrace();
+            System.out.println("failed");
+            return false;
+        }
+        if (rowAffected < 1){
+            System.out.println("ID " + mbID + " probably not registered.");
+            System.out.println("failed");
+            return false;
+        } else if (rowAffected > 1){
+            System.out.println("ID duplicate!!!! " + " rows modified.");
+            System.out.println("finish");
+            return true;
+        } else {
+            System.out.println("success");
+            return true;
+        }
+    }
+
+    public boolean changeMemberName(int mbID, String newName) /*throws SQLException */{
+        System.out.println("change member name ...");
+
+        int rowAffected = -1;
+        try {
+            String query = "UPDATE mbTable SET mbName = ? WHERE mbID = ?";
+            PreparedStatement pStm = conn.prepareStatement(query);
+            pStm.setString(1, newName);
+            pStm.setInt(2, mbID);
+            rowAffected = pStm.executeUpdate();
+        }
+        catch (SQLException e) {
+            //e.printStackTrace();
+            System.out.println("failed");
+            return false;
+        }
+        if (rowAffected < 1){
+            System.out.println("ID " + mbID + " probably not registered.");
+            System.out.println("failed");
+            return false;
+        } else if (rowAffected > 1){
+            System.out.println("ID duplicate!!!! " + " rows modified.");
+            System.out.println("finish");
+            return true;
+        } else {
+            System.out.println("success");
+            return true;
+        }
+    }
+
     public boolean matchEmail(String USERemail) /*throws SQLException */{
         System.out.println("verifying email duplication...");
 
