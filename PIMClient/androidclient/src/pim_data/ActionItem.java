@@ -6,15 +6,16 @@ import java.util.Date;
 public class ActionItem implements Serializable {
 
     // 	ATTRIBUTES:
-    int number;
-    String action;
-    String responsibility;
-    Date deadline;
-    String status;
-    String remark;
+    int		number;
+    String	action;
+    String	responsibility;
+    Date	deadline;
+    String	status;
+    String	remark;
 
     // CONSTRUCTOR for Front-End:
-    public ActionItem(String action, String responsibility, java.sql.Date deadline, String status, String remark){
+    public ActionItem(int number, String action, String responsibility, Date deadline, String status, String remark) {
+    	this.number = number;
         this.action = action;
         this.responsibility = responsibility;
         this.deadline = deadline;
