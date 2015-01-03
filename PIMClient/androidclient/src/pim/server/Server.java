@@ -39,11 +39,11 @@ public class Server
 			{
 				Socket socket = serverSocket.accept();
 				Date connectTime = new Date() ;
-				System.out.println(connectTime +"\tA connection from ["+ socket.getInetAddress().getHostAddress() +"] comes...");
+				System.out.println(connectTime +"\tA connection from ["+ socket.getInetAddress().getHostAddress() +"] comes (connect: "+connectCount+")...");
 				connectCount ++;
 				if(this.protocol.equals("http"))
 				{
-					System.out.println("A http request handler on");
+                    System.out.println("A http request handler on");
 					(new HttpRequestHandler(socket)).start();
 				}
 				else

@@ -181,7 +181,7 @@ public class ServerRequestManager extends Thread implements Serializable
 
     public void run()
 	{
-        System.out.println(new Date() + "\t" + "An object message handler start...");
+        System.out.println(new Date() + "\t" + "An object message handler for connect: "+id+" start...");
         try {
             try {
                 input = new ObjectInputStream(socket.getInputStream());

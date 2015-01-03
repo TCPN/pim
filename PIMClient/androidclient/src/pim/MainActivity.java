@@ -76,10 +76,14 @@ import pim_data.ProjectMember;
                             //Account related
                     //crm.test("YA");
                     int i = 77;
-                    mb = crm.logIn("boyenen@gmail.com",  "password");
+                    mb = crm.logIn("boyenen@gmail.com", ed.getText().toString());
                     b = crm.modifyMemberPassword(mb, "hithere");
                     b = crm.modifyMemberName(mb, "you you you");
                     mb = crm.logIn("boyenen@gmail.com",  "hithere");
+                    b = crm.modifyMemberPassword(mb, ed.getText().toString());
+                    b = crm.forgetPassword("boyenen@gmail.com");
+                    if(b)
+                        throw new Exception("Nothing, just end.");
 
 i++;                    try{mb = crm.logIn("boyenen@gmail.com",  "password");}catch(Exception e){elog = elog + ";69:" + e;}
 i++;                    if(BuildConfig.DEBUG &&!( mb == null)) throw new Exception(""+ i);
