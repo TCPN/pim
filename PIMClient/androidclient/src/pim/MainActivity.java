@@ -77,13 +77,15 @@ import pim_data.ProjectMember;
                     //crm.test("YA");
                     int i = 77;
                     mb = crm.logIn("boyenen@gmail.com", ed.getText().toString());
-                    b = crm.modifyMemberPassword(mb, "hithere");
-                    b = crm.modifyMemberName(mb, "you you you");
-                    mb = crm.logIn("boyenen@gmail.com",  "hithere");
-                    b = crm.modifyMemberPassword(mb, ed.getText().toString());
-                    b = crm.forgetPassword("boyenen@gmail.com");
-                    if(b)
-                        throw new Exception("Nothing, just end.");
+//                    b = crm.modifyMemberPassword(mb, "hithere");
+//                    b = crm.modifyMemberName(mb, "you you you");
+//                    mb = crm.logIn("boyenen@gmail.com",  "hithere");
+//                    b = crm.modifyMemberPassword(mb, ed.getText().toString());
+//                    b = crm.forgetPassword("boyenen@gmail.com");
+                    if(mb != null)
+                        throw new Exception("Login succeed");
+                    else if(mb == null)
+                        throw new Exception("Login failed.");
 
 i++;                    try{mb = crm.logIn("boyenen@gmail.com",  "password");}catch(Exception e){elog = elog + ";69:" + e;}
 i++;                    if(BuildConfig.DEBUG &&!( mb == null)) throw new Exception(""+ i);
@@ -186,9 +188,9 @@ i++;                    pcl.add("hi my name is Joe");
 i++;                    pcl.add("I ain't a man");
 i++;                    pcl.add("I am a boy");
 i++;                    ArrayList<ActionItem> acl = new ArrayList<ActionItem>();
-i++;                    acl.add(new ActionItem("hi1","my name4", new java.sql.Date(1400000000), "OnGoing",""));
-i++;                    acl.add(new ActionItem("hi2","my name5", new java.sql.Date(1500000000), "Suspend",""));
-i++;                    acl.add(new ActionItem("hi2","my name6", new java.sql.Date(1600000000), "Colsed",""));
+i++;                    acl.add(new ActionItem(1, "hi1","my name4", new java.sql.Date(1400000000), "OnGoing",""));
+i++;                    acl.add(new ActionItem(5, "hi2","my name5", new java.sql.Date(1500000000), "Suspend",""));
+i++;                    acl.add(new ActionItem(10, "hi2","my name6", new java.sql.Date(1600000000), "Colsed",""));
 i++;                    b = crm.createMeetingMinutes(pj, new MeetingMinutes(0, pj.getPjID(), new Date(),new MeetingMinutesContent(new Date(), "there", "Youtoo", "MeTwo", "OBJ2", pcl, "A22", "22I", acl)));
 i++;                    if(BuildConfig.DEBUG &&!(  b )) throw new Exception(""+ i);
 i++;
