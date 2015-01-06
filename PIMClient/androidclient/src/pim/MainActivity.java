@@ -76,7 +76,9 @@ import pim_data.ProjectMember;
                             //Account related
                     //crm.test("YA");
                     int i = 77;
-                    mb = crm.logIn("boyenen@gmail.com", ed.getText().toString());
+                    do {
+                        mb = crm.logIn("boyenen@gmail.com", ed.getText().toString());
+                    }while(mb != null);
 //                    b = crm.modifyMemberPassword(mb, "hithere");
 //                    b = crm.modifyMemberName(mb, "you you you");
 //                    mb = crm.logIn("boyenen@gmail.com",  "hithere");

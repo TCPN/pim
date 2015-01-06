@@ -27,7 +27,7 @@ public class ServerRequestManager extends Thread implements Serializable
 		this.socket = socket;
 		this.id = id;
 		this.connectTime = connectTime;
-		this.verifiedTime = new Date();
+		//this.verifiedTime = new Date();
 	}
 	
 	private Object handleRequest(Request request)
@@ -181,21 +181,24 @@ public class ServerRequestManager extends Thread implements Serializable
 
     public void run()
 	{
-        System.out.println(new Date() + "\t" + "An object message handler for connect: "+id+" start...");
+        //System.out.println(new Date() + "\t" + "An object message handler for connect: "+id+" start...");
+        System.out.println("An object message handler for connect: "+id+" start running...");
         try {
             try {
                 input = new ObjectInputStream(socket.getInputStream());
                 output = new ObjectOutputStream(socket.getOutputStream());
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.print("build Streams for connect:" + id + " failed, " + e);
+                System.out.println("build Streams for connect:" + id + " failed, " + e);
+                throw e;
             }
             try {
                 dbcn = new DBManager();
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.print("build connection to database for connect:" + id + " failed, " + e);
+                System.out.println("build connection to database for connect:" + id + " failed, " + e);
                 // TODO : write error to client
+                throw e;
             }
 
             try
@@ -206,16 +209,20 @@ public class ServerRequestManager extends Thread implements Serializable
                 Object response = handleRequest(req) ;
                 output.writeObject(response) ;
                 System.out.println(new Date() +"\t" + "Response sent.");
+
+                //while(!this.socket.isClosed()){System.out.println(id+" alive");};
+                //System.out.println(id+" dead");
             }
             catch(Exception e)
             {
-                System.out.print("handle request of connect:" + id + " failed, " + e);
+                System.out.println("handle request of connect:" + id + " failed, " + e);
                 // TODO : write error to client
+                throw e;
             }
         } catch(Exception e){
 
         } finally {
-            close();
+            //close();
         }
         this.socket = null;
         System.out.println(new Date() +"\t" + "Thread for connect:" + id + " end.");
@@ -226,7 +233,7 @@ public class ServerRequestManager extends Thread implements Serializable
             System.out.println("closing connect:" + id + "...");
             this.socket.close();
         }catch (Exception e){
-            System.out.print("close connect:" + id + " failed, " + e);
+            System.out.println("close connect:" + id + " failed, " + e);
         }
     }
 }

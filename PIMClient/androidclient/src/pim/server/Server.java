@@ -37,18 +37,23 @@ public class Server
 		{
 			while(true)
 			{
+                System.out.println("waiting connect...");
 				Socket socket = serverSocket.accept();
 				Date connectTime = new Date() ;
-				System.out.println(connectTime +"\tA connection from ["+ socket.getInetAddress().getHostAddress() +"] comes (connect: "+connectCount+")...");
-				connectCount ++;
+				System.out.println(connectTime +"\tA connection from ["+ socket.getInetAddress().getHostAddress() +"] comes (connect: "+
+                        (++connectCount)+
+                        ")...");
 				if(this.protocol.equals("http"))
 				{
-                    System.out.println("A http request handler on");
+                    System.out.println("Start a http request handler...");
 					(new HttpRequestHandler(socket)).start();
 				}
 				else
 				{
-					(new ServerRequestManager(socket, connectCount, connectTime)).start();
+                    System.out.println("Build an object message handler (connect: "+(connectCount)+")...");
+                    ServerRequestManager srm = new ServerRequestManager(socket, connectCount, connectTime);
+                    System.out.println("Handler built (connect: "+(connectCount)+")");
+					srm.start();
 				}
 			}
 		}
